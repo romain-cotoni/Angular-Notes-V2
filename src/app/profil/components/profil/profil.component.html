@@ -1,0 +1,37 @@
+
+<div class="w-full flex flex-col">
+    <h1 class="ms-4 mb-4 font-bold text-center text-4xl">PROFIL</h1>
+    <h2 class="ms-4 mb-2 font-bold text-lg">CONFIGURATION</h2>
+    <mat-slide-toggle labelPosition="after" 
+                      class="ms-4 mb-2"
+                      [(ngModel)]="profil.isToolTips"
+                      (change)="onToolTipsToggleChange($event)">
+        Tooltips
+    </mat-slide-toggle>
+    <mat-slide-toggle labelPosition="after"
+                      class="ms-4 mb-2" 
+                      [(ngModel)]="profil.isDevMode"
+                      (change)="onDevModeToggleChange($event)">
+        Developer mode
+    </mat-slide-toggle>
+    <h2 class="ms-4 mt-4 mb-2 font-bold text-lg">NOTIFICATIONS SUBSCRIPTIONS</h2>
+    <mat-slide-toggle class="ms-4" labelPosition="after"><!--TODO-->
+        Sharing demands
+    </mat-slide-toggle>
+    <h2 class="ms-4 mt-4 mb-2 font-bold text-lg">NOTIFICATION RECEIVED</h2>
+        <mat-label class="ms-4">Demand on note "notetitle" from "username"</mat-label><!--TODO-->
+    <h2 class="ms-4 mt-4 mb-2 font-bold text-lg">IDENTITY</h2>
+    <mat-label class="ms-4 mb-2">Firstname</mat-label>
+    <mat-label class="ms-4 mb-2">Lastname</mat-label>
+    <mat-label class="ms-4 mb-2">Username</mat-label>
+    <mat-label class="ms-4 mb-2">Email</mat-label>
+</div>
+
+<!-- <div *ngIf="isTest" allResult; else noResult>
+    <ng-template #allResult>
+        <p>all results</p>
+    </ng-template>
+    <ng-template #noResult>
+        <p>no results</p>
+    </ng-template>
+</div> -->

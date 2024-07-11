@@ -1,0 +1,138 @@
+<mat-dialog-content class="w-full min-h-56 bg-red-100">
+    <h2 class="flex font-bold text-xl text-center bg-blue-100" mat-dialog-title>
+        <mat-icon>share</mat-icon>
+        Share Note
+    </h2>
+
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Select usernames to share with</mat-label>
+        <!-- <mat-chip-grid #chipGrid>
+            <mat-chip-row *ngFor="let item of chipUsers" (removed)="removeChip(item)">
+                {{ item }}
+                <button matChipRemove [attr.aria-label]="'remove ' + item">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+        </mat-chip-grid> -->
+        <!-- <input placeholder="New User..." 
+            #userInput 
+            [formControl]="userControl"
+            [matChipInputFor]="chipGrid" 
+            [matAutocomplete]="auto1"
+            (matChipInputTokenEnd)="addChip($event)"/>
+        <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayOptionUser" (optionSelected)="onUserOptionsSelectionChanged($event)">
+            <div *ngFor="let optionuser of filteredUsersOptions | async">
+                <mat-option *ngIf="optionuser.username !== this.user.username" [value]="optionuser">{{ optionuser.username }}</mat-option>
+            </div>
+        </mat-autocomplete> -->
+        <mat-chip-grid #chipGrid>
+        </mat-chip-grid>
+        <input placeholder="New User...">
+    </mat-form-field>
+
+    <!--<mat-form-field appearance="outline" color="primary" class="self-start">
+        <mat-label>Select a right</mat-label>
+        <mat-select (selectionChange)="onRightOptionsSelectionChanged($event)">
+            <mat-option [value]="right.READ">Read</mat-option>
+            <mat-option [value]="right.WRITE">Write</mat-option>
+            <mat-option [value]="right.OWNER">Owner</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary" class="w-full">
+        <mat-label>Send a message (optional)</mat-label>
+        <input matInput/>
+    </mat-form-field>-->
+
+
+</mat-dialog-content>
+<mat-dialog-actions class="bg-green-200">
+    <div class="w-full flex justify-center">
+        <button mat-raised-button mat-dialog-close (click)="onCancel()">Cancel</button>
+        <button mat-raised-button mat-dialog-close (click)="onOk()">Ok</button>
+    </div>
+</mat-dialog-actions>
+
+<!-- <div class="h-full">
+    <div class="flex justify-center">
+        <div class="flex flex-col items-center w-1/3">
+            <h1 class="flex font-bold text-xl my-8">
+                <mat-icon class="me-1">share</mat-icon>
+                <div>Share Note {{ noteTitle }}</div>
+            </h1>
+
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Select usernames to share with</mat-label>
+                <mat-chip-grid #chipGrid>
+                    <mat-chip-row *ngFor="let item of chipUsers" (removed)="removeChip(item)">
+                        {{item}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + item">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                </mat-chip-grid>
+                <input placeholder="New User..." #userInput [formControl]="userControl"
+                    [matChipInputFor]="chipGrid" 
+                    [matAutocomplete]="auto1"
+                    (matChipInputTokenEnd)="addChip($event)"/>
+                <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayOptionUser" (optionSelected)="onUserOptionsSelectionChanged($event)">
+                    <div *ngFor="let optionuser of filteredUsersOptions | async">
+                        <mat-option *ngIf="optionuser.username !== this.user.username" [value]="optionuser">{{ optionuser.username }}</mat-option>
+                    </div>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" color="primary" class="self-start">
+                <mat-label>Select a right</mat-label>
+                <mat-select (selectionChange)="onRightOptionsSelectionChanged($event)">
+                    <mat-option [value]="right.READ">Read</mat-option>
+                    <mat-option [value]="right.WRITE">Write</mat-option>
+                    <mat-option [value]="right.OWNER">Owner</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" color="primary" class="w-full">
+                <mat-label>Send a message (optional)</mat-label>
+                <input matInput/>
+            </mat-form-field>
+
+            <div class="self-center">
+                <button mat-raised-button color="primary" (click)="shareNote()" class="h-full w-52 mb-6">
+                    Share
+                </button>
+            </div>
+
+            <h2 class="my-4 font-bold text-lg text-black">List of sharing users for this note</h2>
+            <div *ngIf="!slider.checked" class="self-center w-full min-h-[25%] max-h-[25%] mb-12 border rounded-md overflow-y-auto text-black">
+                <div *ngFor="let sharedUser of sharedUsers">
+                    <div *ngIf="sharedUser.username !== this.user.username" class="grid grid-cols-5">
+                        <div class="col-start-1 col-span-2 pt-1 ps-2">{{ sharedUser.username }}</div>
+                        <div class="col-start-3 col-span-2 pt-1 ps-2">{{ sharedUser.right | lowercase }}</div>
+                        <div class="col-start-5 col-span-1 pt-1" (click)="unshareNote(sharedUser.username)">
+                            <mat-icon class="w-6 h-6 active:w-5 active:h-5 active:my-0.5 active:me-0.5 hover:cursor-pointer">delete</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="sharedUsers.length === 0" class="font-light italic mb-12">
+                This note is not actually shared with anyone
+            </div>
+            <div class="flex items-center justify-between w-full mb-4 font-light">
+                <mat-slide-toggle #slider class="" color="primary" [checked]="false" [disabled]="false">
+                    Make this note public link
+                </mat-slide-toggle>
+                <a *ngIf="slider.checked" [href]="" class="flex items-center">
+                    <mat-icon>content_copy</mat-icon>
+                    <div class="px-2">Copy link</div>
+                </a>
+            </div>
+            <div class="self-start">
+                <button mat-raised-button color="warn" [disabled]="!selectedNote" class="h-full w-52 mt-8 mb-8">
+                    Delete this note
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+

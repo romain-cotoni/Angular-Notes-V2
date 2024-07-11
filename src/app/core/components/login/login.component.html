@@ -1,0 +1,28 @@
+<div class="flex flex-col justify-center items-center w-screen h-screen bg-gray-200">
+    <!--TODO: error message-->
+    <h1 class="mb-8 font-bold text-center text-3xl">
+        Login
+    </h1>
+    <form [formGroup]="form" class="flex flex-col items-center">
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="usernameControl"/>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="passwordControl"/>
+        </mat-form-field>
+        <button mat-raised-button type="submit" color="primary" (click)="onLogin()" class="w-full">
+            <mat-icon>login</mat-icon>
+            Login
+        </button>
+    </form>
+    <div class="mt-8 text-center">
+        No account yet !
+        <span class="hover:text-sky-400 hover:cursor-pointer"
+              (keydown.enter)="onRegister()"
+              (click)="onRegister()">
+            Sign Up
+        </span>
+    </div>
+</div>

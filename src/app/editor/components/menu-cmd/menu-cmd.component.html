@@ -1,0 +1,17 @@
+<div class="h-12 flex justify-start items-center" [ngClass]="{ 'bg-red-100': isDevMode }">
+    <button mat-icon-button (click)="delete()" [disabled]="!deletable" [matTooltipDisabled]="!isToolTips" matTooltip="Delete note">
+        <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-icon-button (click)="clear()" [matTooltipDisabled]="!isToolTips" matTooltip="Clear note">
+        <mat-icon>clear_all</mat-icon>
+    </button>
+    <button mat-icon-button (click)="save()" [disabled]="!editable" [matTooltipDisabled]="!isToolTips" matTooltip="Save note">
+        <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button (click)="share()" [disabled]="!sharable" [matTooltipDisabled]="!isToolTips" matTooltip="Share note">
+        <mat-icon>share</mat-icon>
+    </button>
+    <button mat-icon-button (click)="edit()" [disabled]="!editable" [matTooltipDisabled]="!isToolTips" matTooltip="Edit note">
+        <mat-icon>edit_note</mat-icon>
+    </button>
+</div>    

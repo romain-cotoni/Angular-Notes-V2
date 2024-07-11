@@ -1,0 +1,14 @@
+<!--DESKTOP-->
+<div class="max-s:hidden h-12 my-auto flex items-center font-bold" [ngClass]="{ 'bg-blue-100': isDevMode }">
+    <div class="ms-4 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/dashboard']">
+        Dashboard
+    </div>
+    <div class="mx-4 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/editor']">
+        Editor
+    </div>
+</div>
+<!--MOBILE-->
+<div class="s:hidden h-12 flex items-center ms-1" [ngClass]="{ 'bg-blue-100': isDevMode }">
+    <mat-icon [routerLink]="['/dashboard']">home</mat-icon>
+    <mat-icon [routerLink]="['/editor']">edit_note</mat-icon>
+</div>    

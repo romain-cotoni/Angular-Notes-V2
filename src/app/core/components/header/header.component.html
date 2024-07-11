@@ -1,0 +1,43 @@
+<!--LARGE SCREEN-->
+
+<!--DESKTOP-->
+<div class="max-s:hidden grid grid-cols-4">
+    <div class="col-start-1 col-span-1">
+        <app-menu-view></app-menu-view>
+    </div>
+    <div *ngIf="isEditor" class="col-start-2 col-span-2 flex">
+        <app-menu-cmd></app-menu-cmd>
+        <app-menu-search></app-menu-search>
+    </div>
+    <div class="col-start-4 col-span-1">
+        <app-menu-profil></app-menu-profil>
+    </div>
+</div>
+
+<!--TABLET-->
+
+<!--MOBILE-->
+<div class="s:hidden">
+    <div *ngIf="isEditor" class="grid grid-cols-2 grid-rows-3">
+        <div class="col-start-1 col-span-1 row-start-1 row-span-1">
+            <app-menu-view></app-menu-view>
+        </div>
+        <div class="col-start-2 col-span-1 row-start-1 row-span-1">
+            <app-menu-profil></app-menu-profil>
+        </div>
+        <div *ngIf="isEditor" class="col-start-1 col-span-2 row-start-2 row-span-1">
+            <app-menu-cmd></app-menu-cmd>
+        </div>
+        <div class="col-start-1 col-span-2 row-start-3 row-span-1">
+            <app-menu-search></app-menu-search>
+        </div>
+    </div>
+    <div *ngIf="!isEditor" class="grid grid-cols-2">
+        <div class="col-start-1 col-span-1">
+            <app-menu-view></app-menu-view>
+        </div>
+        <div class="col-start-2 col-span-1">
+            <app-menu-profil></app-menu-profil>
+        </div>
+    </div>
+</div>
