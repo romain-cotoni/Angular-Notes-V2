@@ -1,4 +1,206 @@
-<mat-dialog-content class="w-full min-h-56 bg-red-100">
+<!-- <div class="h-full bg-gray-400">
+    <div class="h-12 flex items-center bg-orange-200">
+        <h1>title</h1>
+    </div>
+    <div class="flex max-s:flex-col bg-purple-200">
+        <div class="s:w-1/2 bg-red-200">
+            <h2 class="h-12 bg-red-500">Left</h2>
+            <form class="flex flex-col justify-center bg-green-300">
+                <mat-form-field appearance="outline" class="mx-2 mt-2">
+                    <mat-label>Select user to share with</mat-label>
+                    <input matInput/>
+                </mat-form-field>
+                <mat-form-field appearance="outline" color="primary" class="mx-2 mt-2">
+                    <mat-label>Select a privilege</mat-label>
+                    <mat-select (selectionChange)="onRightsSelectionChanged($event)">
+                        <mat-option [value]="right">Read</mat-option>
+                        <mat-option [value]="right">Write</mat-option>
+                        <mat-option [value]="right">Owner</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mx-2 mt-2">
+                    <mat-label>Send a message (optional)</mat-label>
+                    <input matInput/>
+                </mat-form-field>
+                <div class="my-4">extra space</div>
+            </form>
+        </div>
+        <div class="s:w-1/2 bg-green-200">
+            <h2 class="h-12 bg-blue-200">Right</h2>
+            <div class="flex">
+                <div class="w-1/3">
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                </div>
+                <div class="w-1/3">Two</div>
+                <div class="w-1/3">Three</div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="h-full" [ngClass]="{ 'bg-gray-400': isDevMode }">
+    <div class="h-12" [ngClass]="{ 'bg-orange-200': isDevMode }">
+        <h1>title</h1>
+    </div>
+    <div class="s:h-[calc(100%-48px)] flex max-s:flex-col" [ngClass]="{ 'bg-purple-200': isDevMode }">
+        <div class="s:w-1/2 max-s:mb-32" [ngClass]="{ 'bg-red-200': isDevMode }">
+            <h2 class="h-12" [ngClass]="{ 'bg-red-500': isDevMode }">Left</h2>
+            <form class="flex flex-col justify-center" [ngClass]="{ 'bg-green-300': isDevMode }">
+                <mat-form-field appearance="outline" class="mx-2 mt-2">
+                    <mat-label>Select user to share with</mat-label>
+                    <input matInput/>
+                </mat-form-field>
+                <mat-form-field appearance="outline" color="primary" class="mx-2 mt-2">
+                    <mat-label>Select a privilege</mat-label>
+                    <mat-select (selectionChange)="onRightsSelectionChanged($event)">
+                        <mat-option [value]="right">Read</mat-option>
+                        <mat-option [value]="right">Write</mat-option>
+                        <mat-option [value]="right">Owner</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mx-2 mt-2">
+                    <mat-label>Send a message (optional)</mat-label>
+                    <input matInput/>
+                </mat-form-field>
+                <mat-slide-toggle class="ms-4" labelPosition="after">
+                    Make this note public
+                </mat-slide-toggle>
+                <button mat-raised-button class="w-1/4 ms-4 mt-4">
+                    <mat-icon>delete</mat-icon>
+                    Unshare All
+                </button>
+            </form>
+        </div>
+        <div class="s:w-1/2 max-s:h-[calc(50%+48px)]" [ngClass]="{ 'bg-green-200': isDevMode }">
+            <h2 class="h-12" [ngClass]="{ 'bg-blue-200': isDevMode }">Right</h2>
+            <div class="h-[calc(100%-48px)] flex overflow-auto">
+                <div class="w-1/3">
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                    <div>HELLO</div>
+                </div>
+                <div class="w-1/3">Two</div>
+                <div class="w-1/3">Three</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="max-w-full bg-red-200">
+    <h1 class="h-12 flex font-bold text-xl ps-2 py-2 bg-orange-300">
+        <mat-icon class="my-auto me-1">share</mat-icon>
+        <div>Share Note 'noteTitle'</div>
+    </h1>
+    <div class="flex bg-purple-600">
+        <form class="w-1/2 flex flex-col bg-green-300">
+            <mat-form-field appearance="outline" class="mx-2 mt-2">
+                <mat-label>Select user to share with</mat-label>
+                <input matInput/>
+            </mat-form-field>
+            <mat-form-field appearance="outline" color="primary" class="mx-2 mt-2">
+                <mat-label>Select a privilege</mat-label>
+                <mat-select (selectionChange)="onRightsSelectionChanged($event)">
+                    <mat-option [value]="right">Read</mat-option>
+                    <mat-option [value]="right">Write</mat-option>
+                    <mat-option [value]="right">Owner</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="mx-2 mt-2">
+                <mat-label>Send a message (optional)</mat-label>
+                <input matInput/>
+            </mat-form-field>
+        </form>
+        <div class="w-1/2 px-2 pt-2 bg-blue-300">
+            <div class="overflow-auto">
+                <div>HELLO</div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<!--<div class="h-full bg-red-200">
+    <h1 class="flex font-bold text-xl ps-2 pt-4">
+        <mat-icon class="me-1">share</mat-icon>
+        <div>Share Note 'noteTitle'</div>
+    </h1>
+    <form>
+        <mat-form-field class="w-full">
+            <mat-label>Select usernames to share with</mat-label>
+            <mat-chip-grid #chipGrid aria-label="User selection">
+                @for (user of users(); track $index) {
+                <mat-chip-row (removed)="remove(user)">
+                    {{ user }}
+                    <button matChipRemove [attr.aria-label]="'remove ' + user">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+                }
+            </mat-chip-grid>
+            <input
+                name="currentUser"
+                placeholder="New User..."
+                #userInput
+                [(ngModel)]="currentUser"
+                [matChipInputFor]="chipGrid"
+                [matAutocomplete]="auto"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)"
+            />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                @for (user of filteredUsers(); track user) {
+                    <mat-option [value]="user">{{ user }}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+    </form>
+</div>-->
+
+<!-- <mat-dialog-content class="w-full min-h-56 bg-red-100">
     <h2 class="flex font-bold text-xl text-center bg-blue-100" mat-dialog-title>
         <mat-icon>share</mat-icon>
         Share Note
@@ -6,44 +208,10 @@
 
     <mat-form-field appearance="outline" class="w-full">
         <mat-label>Select usernames to share with</mat-label>
-        <!-- <mat-chip-grid #chipGrid>
-            <mat-chip-row *ngFor="let item of chipUsers" (removed)="removeChip(item)">
-                {{ item }}
-                <button matChipRemove [attr.aria-label]="'remove ' + item">
-                    <mat-icon>cancel</mat-icon>
-                </button>
-            </mat-chip-row>
-        </mat-chip-grid> -->
-        <!-- <input placeholder="New User..." 
-            #userInput 
-            [formControl]="userControl"
-            [matChipInputFor]="chipGrid" 
-            [matAutocomplete]="auto1"
-            (matChipInputTokenEnd)="addChip($event)"/>
-        <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayOptionUser" (optionSelected)="onUserOptionsSelectionChanged($event)">
-            <div *ngFor="let optionuser of filteredUsersOptions | async">
-                <mat-option *ngIf="optionuser.username !== this.user.username" [value]="optionuser">{{ optionuser.username }}</mat-option>
-            </div>
-        </mat-autocomplete> -->
         <mat-chip-grid #chipGrid>
         </mat-chip-grid>
         <input placeholder="New User...">
     </mat-form-field>
-
-    <!--<mat-form-field appearance="outline" color="primary" class="self-start">
-        <mat-label>Select a right</mat-label>
-        <mat-select (selectionChange)="onRightOptionsSelectionChanged($event)">
-            <mat-option [value]="right.READ">Read</mat-option>
-            <mat-option [value]="right.WRITE">Write</mat-option>
-            <mat-option [value]="right.OWNER">Owner</mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" color="primary" class="w-full">
-        <mat-label>Send a message (optional)</mat-label>
-        <input matInput/>
-    </mat-form-field>-->
-
 
 </mat-dialog-content>
 <mat-dialog-actions class="bg-green-200">
@@ -51,88 +219,6 @@
         <button mat-raised-button mat-dialog-close (click)="onCancel()">Cancel</button>
         <button mat-raised-button mat-dialog-close (click)="onOk()">Ok</button>
     </div>
-</mat-dialog-actions>
-
-<!-- <div class="h-full">
-    <div class="flex justify-center">
-        <div class="flex flex-col items-center w-1/3">
-            <h1 class="flex font-bold text-xl my-8">
-                <mat-icon class="me-1">share</mat-icon>
-                <div>Share Note {{ noteTitle }}</div>
-            </h1>
-
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Select usernames to share with</mat-label>
-                <mat-chip-grid #chipGrid>
-                    <mat-chip-row *ngFor="let item of chipUsers" (removed)="removeChip(item)">
-                        {{item}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + item">
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip-row>
-                </mat-chip-grid>
-                <input placeholder="New User..." #userInput [formControl]="userControl"
-                    [matChipInputFor]="chipGrid" 
-                    [matAutocomplete]="auto1"
-                    (matChipInputTokenEnd)="addChip($event)"/>
-                <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayOptionUser" (optionSelected)="onUserOptionsSelectionChanged($event)">
-                    <div *ngFor="let optionuser of filteredUsersOptions | async">
-                        <mat-option *ngIf="optionuser.username !== this.user.username" [value]="optionuser">{{ optionuser.username }}</mat-option>
-                    </div>
-                </mat-autocomplete>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" color="primary" class="self-start">
-                <mat-label>Select a right</mat-label>
-                <mat-select (selectionChange)="onRightOptionsSelectionChanged($event)">
-                    <mat-option [value]="right.READ">Read</mat-option>
-                    <mat-option [value]="right.WRITE">Write</mat-option>
-                    <mat-option [value]="right.OWNER">Owner</mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" color="primary" class="w-full">
-                <mat-label>Send a message (optional)</mat-label>
-                <input matInput/>
-            </mat-form-field>
-
-            <div class="self-center">
-                <button mat-raised-button color="primary" (click)="shareNote()" class="h-full w-52 mb-6">
-                    Share
-                </button>
-            </div>
-
-            <h2 class="my-4 font-bold text-lg text-black">List of sharing users for this note</h2>
-            <div *ngIf="!slider.checked" class="self-center w-full min-h-[25%] max-h-[25%] mb-12 border rounded-md overflow-y-auto text-black">
-                <div *ngFor="let sharedUser of sharedUsers">
-                    <div *ngIf="sharedUser.username !== this.user.username" class="grid grid-cols-5">
-                        <div class="col-start-1 col-span-2 pt-1 ps-2">{{ sharedUser.username }}</div>
-                        <div class="col-start-3 col-span-2 pt-1 ps-2">{{ sharedUser.right | lowercase }}</div>
-                        <div class="col-start-5 col-span-1 pt-1" (click)="unshareNote(sharedUser.username)">
-                            <mat-icon class="w-6 h-6 active:w-5 active:h-5 active:my-0.5 active:me-0.5 hover:cursor-pointer">delete</mat-icon>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="sharedUsers.length === 0" class="font-light italic mb-12">
-                This note is not actually shared with anyone
-            </div>
-            <div class="flex items-center justify-between w-full mb-4 font-light">
-                <mat-slide-toggle #slider class="" color="primary" [checked]="false" [disabled]="false">
-                    Make this note public link
-                </mat-slide-toggle>
-                <a *ngIf="slider.checked" [href]="" class="flex items-center">
-                    <mat-icon>content_copy</mat-icon>
-                    <div class="px-2">Copy link</div>
-                </a>
-            </div>
-            <div class="self-start">
-                <button mat-raised-button color="warn" [disabled]="!selectedNote" class="h-full w-52 mt-8 mb-8">
-                    Delete this note
-                </button>
-            </div>
-        </div>
-    </div>
-</div> -->
+</mat-dialog-actions> -->
 
 

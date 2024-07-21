@@ -7,7 +7,12 @@
     </div>
     <div *ngIf="isEditor" class="col-start-2 col-span-2 flex">
         <app-menu-cmd></app-menu-cmd>
-        <app-menu-search></app-menu-search>
+        <div class="w-full"><app-menu-search></app-menu-search></div>
+    </div>
+    <div *ngIf="!isEditor" class="col-start-2 col-span-2 flex">
+        <div class="w-full">
+            <app-menu-extra></app-menu-extra>
+        </div>
     </div>
     <div class="col-start-4 col-span-1">
         <app-menu-profil></app-menu-profil>

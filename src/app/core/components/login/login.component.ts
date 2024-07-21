@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { Account } from '../../../shared/models/account';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,9 @@ import { MatInputModule } from '@angular/material/input';
 export class LoginComponent {
 
   form!: FormGroup;
-  
+  account!: Account;
+  //private authService = inject(AuthService);
+
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -35,7 +38,22 @@ export class LoginComponent {
   }
 
   onLogin() {
-
+    console.log("onLogin()");
+    this.account = {
+      "username": "rom1",
+      "password": "ssap"
+    };
+    this.authService.login(this.account).subscribe({
+      next: (response) => {
+        console.log("subscribe next onLogin()")
+        console.log("authService.login : ", response);
+        this.authService.setAuthenticated(true);
+        this.router.navigate(['/editor']);
+        console.log("authService.login -> navigate to editor")
+      },
+      error   : (error) => { console.log("error onLogin(): ", error) },
+      complete: () => {}
+    })
   }
 
   onRegister() {

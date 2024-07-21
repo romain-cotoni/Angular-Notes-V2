@@ -1,7 +1,7 @@
 <quill-editor [(ngModel)]="editorContent"
               [modules]="{ toolbar: toolbarOptions }"
-              class="w-full">
+              class="w-full"
+              [ngClass]="{ 'custom-editor-bg-color': isDevMode }">
 </quill-editor>
-
-<!--(click)="onEditorClick($event)"-->
   
+<!--(click)="onEditorClick($event)"-->

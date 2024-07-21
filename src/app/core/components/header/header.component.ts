@@ -12,22 +12,24 @@ import { MenuViewComponent } from '../../../editor/components/menu-view/menu-vie
 import { MenuCmdComponent } from '../../../editor/components/menu-cmd/menu-cmd.component';
 import { MenuSearchComponent } from '../../../editor/components/menu-search/menu-search.component';
 import { MenuProfilComponent } from '../../../editor/components/menu-profil/menu-profil.component';
+import { MenuExtraComponent } from '../../../editor/components/menu-extra/menu-extra.component';
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [NgIf,
-            MatSlideToggleModule,
-            RouterModule,
-            MatIconModule,
-            MatMenuModule,
-            MatFormFieldModule,
-            EditorMenuComponent,
-            MenuViewComponent,
-            MenuCmdComponent,
-            MenuSearchComponent,
-            MenuProfilComponent],
+    MatSlideToggleModule,
+    RouterModule,
+    MatIconModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    EditorMenuComponent,
+    MenuViewComponent,
+    MenuCmdComponent,
+    MenuSearchComponent,
+    MenuProfilComponent, 
+    MenuExtraComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

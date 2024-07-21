@@ -1,6 +1,5 @@
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+// Custom Theming for Angular Material (For more information: https://material.angular.io/guide/theming)
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 
@@ -43,6 +42,7 @@ $Angular-NotesV2-theme: mat.define-theme((
 }
 
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 input {
@@ -50,25 +50,83 @@ input {
 }
 
 // QUILL EDITOR OVERRIDE CSS
-quill-editor, quill-editor .ql-container, quill-editor .ql-editor {
+quill-editor {
   height: 100%;
 }
 
-.ql-container {
+// quill-editor .ql-container {
+//   background-color: blue;
+// }
+
+quill-editor .ql-editor {
+  height: calc(100% - 3rem);
+  overflow: auto;
   font-size: 18px;
 }
 
-.ql-toolbar {
-  //background-color: yellow;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.custom-editor-bg-color .ql-editor {
+  background-color: rgb(234, 109, 109);
 }
 
-.ql-editor {
-  //background-color: red;
-  overflow: auto;
+// QUILL-EDITOR TABLET & MOBILE TOOLBAR AND EDITOR BREAKPOINTS FOR DYNAMIC HEIGHT RELATIVE TO SCREEN WIDTH
+@media all and (min-width: 901px) {
+  quill-editor .ql-toolbar.ql-snow {
+    min-height: 3rem;
+    max-height: 3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .custom-editor-bg-color .ql-toolbar {
+    background-color: rgb(159, 187, 239);
+  }
+}  
+
+@media all and (max-width: 900px) {
+  quill-editor .ql-toolbar.ql-snow {
+    min-height: 4rem;
+    max-height: 4rem;
+  }
+  
+  .custom-editor-bg-color .ql-toolbar {
+    background-color: aqua;
+  }
+  
+  quill-editor .ql-editor {
+    height: calc(100% - 4rem);
+  }
 }
+
+@media all and (max-width: 470px) {
+  quill-editor .ql-toolbar.ql-snow {
+    min-height: 6rem;
+    max-height: 6rem;
+  }
+  
+  .custom-editor-bg-color .ql-toolbar {
+    background-color: greenyellow;
+  }
+
+  quill-editor .ql-editor{
+    height: calc(100% - 6rem);
+  }
+}
+
+@media all and (max-width: 343px) {
+  quill-editor .ql-toolbar.ql-snow {
+    min-height: 8rem;
+    max-height: 8rem;
+  }
+  
+  .custom-editor-bg-color .ql-toolbar {
+    background-color: palevioletred;
+  }
+  
+  quill-editor .ql-editor {
+    height: calc(100% - 8rem);
+  }
+}
+
 
 //ANGULAR MATERIAL COMPONENTS
 button {
@@ -103,16 +161,11 @@ button {
 .custom-floating-label .mdc-text-field .mdc-floating-label {
   transform: translateY(-120%);
   // top: 50%;
-  //pointer-events: none;
+  // pointer-events: none;
 }
 
 
 
 
-// Comment out the line below if you want to use the pre-defined typography utility classes.
-// For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
+// Comment out the line below if you want to use the pre-defined typography utility classes. // For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
 // @include mat.typography-hierarchy($Angular-NotesV2-theme);
-
-// Comment out the line below if you want to use the deprecated `color` inputs.
-// @include mat.color-variants-backwards-compatibility($Angular-NotesV2-theme);
-/* You can add global styles to this file, and also import other style files */
