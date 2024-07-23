@@ -38,7 +38,8 @@ export class HeaderComponent {
   @Input() isToolTips: boolean = false;
   @Input() isDevMode: boolean = false;
   //@Output() isDevModeEmit: EventEmitter<boolean> = new EventEmitter();
-
+  isMobile: boolean = false;
+  
   constructor() {}
 
   // onToggleChange(event: any): void {

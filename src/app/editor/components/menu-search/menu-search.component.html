@@ -2,7 +2,17 @@
 <div class="h-12 flex justify-start items-center" [ngClass]="{ 'bg-green-100': isDevMode }">
     <mat-form-field appearance="outline" class="ms-5 rounded-field custom-field-no-bottom-padding custom-floating-label">
         <mat-label>{{ search }}</mat-label>
-        <input type="text" matInput>
+        <input type="text" matInput [formControl]='noteControl' [matAutocomplete]="noteAutocomplete">
+        <mat-autocomplete #noteAutocomplete="matAutocomplete" 
+                          [displayWith]="displayOptionNote" 
+                          (optionSelected)="onNoteOptionsSelectionChanged($event)">
+            <!--<mat-option *ngFor="let noteOption of notes" [value]="noteOption">
+                {{noteOption?.title}}
+            </mat-option>-->
+            <mat-option *ngFor="let noteOption of filteredNotesOptions | async" [value]="noteOption">
+                {{noteOption?.title}}
+            </mat-option>
+        </mat-autocomplete>
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
     <button mat-icon-button>

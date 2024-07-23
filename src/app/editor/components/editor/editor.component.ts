@@ -6,6 +6,8 @@ import { EditorMenuComponent } from "../editor-menu/editor-menu.component";
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { ProfilService } from '../../../shared/services/profil.service';
+import { NoteService } from '../../../shared/services/note.service';
+import { Note } from '../../../shared/models/note';
 
 @Component({
     selector: 'app-editor',
@@ -17,11 +19,12 @@ import { ProfilService } from '../../../shared/services/profil.service';
 
 
 export class EditorComponent {
-  isMobile: boolean = false;
+  //isMobile: boolean = false;  
   
   readonly dialog = inject(MatDialog);
 
-  editorContent = '';
+  selectedNote: Note | null = null;
+  editorContent = 'hello world';
   
   toolbarOptions = [
     ['bold', 'italic', 'underline'],                  // toggled buttons
@@ -41,11 +44,20 @@ export class EditorComponent {
 
   isDevMode: boolean = false;
 
-  constructor(private profilService: ProfilService) {}
+  constructor(private noteService: NoteService,
+              private profilService: ProfilService) {}
 
   ngOnInit(): void {
     this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
+    });
+
+    //subscribe to selectedNote
+    this.noteService.selectedNote$.subscribe(value => {
+      this.selectedNote = value;
+      if(this.selectedNote?.content) {
+        this.editorContent = this.selectedNote.content;
+      }
     });
   }
   

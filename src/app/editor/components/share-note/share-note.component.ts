@@ -12,13 +12,9 @@ import { MatChipInput, MatChipInputEvent, MatChipsModule } from '@angular/materi
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { ProfilService } from '../../../shared/services/profil.service';
+import { Right } from '../../../shared/enums/right';
 //import { MatDialogTitle, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 
-export enum Right {
-  READ = "READ",
-  WRITE = "WRITE",
-  OWNER = "OWNER"
-}
 
 export interface User {
   id?: number;
