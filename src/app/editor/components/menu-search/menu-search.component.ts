@@ -56,25 +56,13 @@ export class MenuSearchComponent {
               private storageService: StorageService) {}
 
   ngOnInit(): void {
-    console.log("init menu-search.component");
     this.profilService.isToolTips$.subscribe(value => {
       this.isToolTips = value;
     });
     this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
     });
-
-    
-    // get all Notes from session storage if already fetched
-    this.allNotesOfUser = this.storageService.getNotes();
-    console.log("storageService getNotes: ", this.allNotesOfUser)
-    // or get all Notes from db if first fetch
-    if(!this.allNotesOfUser) {
-      this.getNotes();
-    }
-    
-   //this.getNotes();
-
+    this.getAllNotes();
   }
 
   setBy(choice: string) {
@@ -98,14 +86,31 @@ export class MenuSearchComponent {
     }
   }
 
+  getAllNotes() {
+    if(!this.getNotesFromStorage()) {
+      this.getNotesFromDb();
+    }
+  }
 
-  getNotes() { 
+  getNotesFromStorage(): boolean {
+    this.allNotesOfUser = this.storageService.getNotes();
+    if(this.allNotesOfUser) {
+      this.getFilteredNotesOptions(this.allNotesOfUser);
+      console.log("getNotes() from storage: ", this.allNotesOfUser)
+      return true;
+    } 
+    else {
+      return false;
+    }
+  }
+
+  getNotesFromDb() {
     this.noteService.getNotes().subscribe({
       next: (response) => {
         this.allNotesOfUser = response;
-        //this.storageService.setNotes(this.allNotesOfUser);
         this.getFilteredNotesOptions(this.allNotesOfUser);
-        console.log("menu-search.component getNotes(): ", this.allNotesOfUser)
+        this.storageService.setNotes(this.allNotesOfUser);
+        console.log("getNotes() from db: ", this.allNotesOfUser)
       },
       error: (error) => {
         console.log("error menu-search.component getNotes(): ", error);

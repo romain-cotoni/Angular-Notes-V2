@@ -49,13 +49,17 @@ export class AuthService {
   }
 
   isAuthenticated() {
+    if(this.storageService.getIsAuth()) {
+      this.isAuthenticatedFlag = this.storageService.getIsAuth();
+    }
     console.log("isAuthenticated: ", this.isAuthenticatedFlag)
-    return this.isAuthenticatedFlag;
+    return this.isAuthenticatedFlag ;
+    //return this.httpClient.get(BASE_URL + 'isAuth', { withCredentials: true });
   }
 
   setAuthenticated(authenticated: boolean): void {
     this.isAuthenticatedFlag = authenticated;
-    console.log("setAuthenticated: ", this.isAuthenticatedFlag)
+    this.storageService.setIsAuth(authenticated);
   }
 
 

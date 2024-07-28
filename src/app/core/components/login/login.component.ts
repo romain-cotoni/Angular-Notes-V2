@@ -26,7 +26,7 @@ export class LoginComponent {
               private formBuilder: FormBuilder,
               private authService: AuthService,
               private storageService: StorageService) {
-
+    this.checkIsAuth();
   }
 
   ngOnInit() {
@@ -35,6 +35,10 @@ export class LoginComponent {
       'passwordControl': ['ssap'],
       'roleControl'    : ['USER'],   
     })
+  }
+
+  checkIsAuth() {
+    
   }
 
   onLogin() {
@@ -48,8 +52,10 @@ export class LoginComponent {
         console.log("subscribe next onLogin()")
         console.log("authService.login : ", response);
         this.authService.setAuthenticated(true);
+        
         this.router.navigate(['/editor']);
-        console.log("authService.login -> navigate to editor")
+        console.log("onlogin -> navigate to editor")
+        console.log("onlogin: ", this.storageService.getIsAuth());
       },
       error   : (error) => { console.log("error onLogin(): ", error) },
       complete: () => {}

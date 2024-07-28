@@ -24,7 +24,7 @@ export class EditorComponent {
   readonly dialog = inject(MatDialog);
 
   selectedNote: Note | null = null;
-  editorContent = 'hello world';
+  editorContent = '';
   
   toolbarOptions = [
     ['bold', 'italic', 'underline'],                  // toggled buttons

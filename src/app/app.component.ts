@@ -22,6 +22,7 @@ export class AppComponent {
               private profilService: ProfilService) {}
 
   ngOnInit(): void {
+    sessionStorage.clear(); //clear all storage at start of app
     this.profilService.isToolTips$.subscribe(value => {
       this.isToolTips = value;
     });
