@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgClass, AsyncPipe, NgFor, NgForOf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NoteService } from '../../../shared/services/note.service';
@@ -39,6 +39,10 @@ import { StorageService } from '../../../shared/services/storage.service';
   styleUrl: './menu-search.component.scss'
 })
 export class MenuSearchComponent {
+  private storageService = inject(StorageService);
+  private profilService = inject(ProfilService);
+  private noteService = inject(NoteService);
+
   noteControl = new FormControl('');
   allNotesOfUser: Note[] | null = null;
   selectedNote: Note | null = null;
@@ -51,10 +55,6 @@ export class MenuSearchComponent {
   isToolTips: boolean = false;
   isDevMode: boolean = false;
 
-  constructor(private profilService: ProfilService,
-              private noteService: NoteService,
-              private storageService: StorageService) {}
-
   ngOnInit(): void {
     this.profilService.isToolTips$.subscribe(value => {
       this.isToolTips = value;
@@ -62,6 +62,8 @@ export class MenuSearchComponent {
     this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
     });
+    this.isDevMode = this.storageService.getIsDevMode();
+    
     this.getAllNotes();
   }
 

@@ -36,11 +36,9 @@ import { MenuExtraComponent } from '../../../editor/components/menu-extra/menu-e
 export class HeaderComponent {
   @Input() isEditor!: boolean;
   @Input() isToolTips: boolean = false;
-  @Input() isDevMode: boolean = false;
+  //@Input() isDevMode: boolean = false;
   //@Output() isDevModeEmit: EventEmitter<boolean> = new EventEmitter();
   isMobile: boolean = false;
-  
-  constructor() {}
 
   // onToggleChange(event: any): void {
   //   this.isDevModeEmit.emit(event.checked);

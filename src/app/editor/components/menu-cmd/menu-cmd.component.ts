@@ -6,6 +6,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { ShareNoteComponent } from '../share-note/share-note.component';
 import { ProfilService } from '../../../shared/services/profil.service';
+import { StorageService } from '../../../shared/services/storage.service';
 
 @Component({
   selector: 'app-menu-cmd',
@@ -20,6 +21,9 @@ import { ProfilService } from '../../../shared/services/profil.service';
 export class MenuCmdComponent {
   //@Input() isToolTips: boolean = false;
   //@Input() isDevMode: boolean = false;
+  private profilService = inject(ProfilService);
+  private storageService = inject(StorageService);
+  readonly dialog = inject(MatDialog);
 
   isToolTips: boolean = false;
   isDevMode: boolean = false;
@@ -28,9 +32,6 @@ export class MenuCmdComponent {
   deletable: boolean = true;
   sharable: boolean = true;
 
-  readonly dialog = inject(MatDialog);
-  
-  constructor(private profilService: ProfilService) {}
 
   ngOnInit(): void {
     this.profilService.isToolTips$.subscribe(value => {
@@ -39,6 +40,7 @@ export class MenuCmdComponent {
     this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
     });
+    this.isDevMode = this.storageService.getIsDevMode();
   }
 
   delete() {

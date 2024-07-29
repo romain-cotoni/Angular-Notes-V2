@@ -3,6 +3,7 @@ import { Note } from '../models/note';
 
 const ALL_NOTES_KEY  = 'allNotesOfUser';
 const IS_AUTH_KEY    = 'isAuth';
+const IS_DEVMODE_KEY = 'isDevMode';
 
 @Injectable({
   providedIn: 'root'
@@ -24,23 +25,42 @@ export class StorageService {
   }
 
   getIsAuth(): boolean {
-    return !sessionStorage.getItem(IS_AUTH_KEY);
+    return Boolean(sessionStorage.getItem(IS_AUTH_KEY));
   }
 
   setIsAuth(isAuth: boolean) {
-    sessionStorage.removeItem(IS_AUTH_KEY);
-    sessionStorage.setItem(IS_AUTH_KEY, JSON.stringify(isAuth));
+    if(isAuth) {
+      sessionStorage.setItem(IS_AUTH_KEY, JSON.stringify(isAuth));
+    } else {
+      sessionStorage.removeItem(IS_AUTH_KEY);
+    }
+  }
+
+  getIsDevMode(): boolean {
+    return Boolean(sessionStorage.getItem(IS_DEVMODE_KEY));
+  }
+
+  setIsDevMode(isDevMode: boolean) {
+    if(isDevMode) {
+      sessionStorage.setItem(IS_DEVMODE_KEY, JSON.stringify(isDevMode));
+    } else {
+      sessionStorage.removeItem(IS_DEVMODE_KEY);
+    }
+  }
+
+  clear(): void {
+    sessionStorage.clear();
   }
 
   /**
    * generic get item
    */
-  getItem(item: string) {
+  /*getItem(item: string) {
     let value = window.sessionStorage.getItem(item);
     if(value) { 
       return JSON.parse(value); 
     }
     return null;
-  }
+  }*/
 
 }

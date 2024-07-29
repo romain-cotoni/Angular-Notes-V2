@@ -13,6 +13,7 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { ProfilService } from '../../../shared/services/profil.service';
 import { Right } from '../../../shared/enums/right';
+import { StorageService } from '../../../shared/services/storage.service';
 //import { MatDialogTitle, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 
 
@@ -59,6 +60,8 @@ export interface UserShared {
   styleUrl: './share-note.component.scss'
 })
 export class ShareNoteComponent {
+  private storageService = inject(StorageService);
+  
   isToolTips: boolean = false;
   isDevMode: boolean = false;
   right: Right = Right.READ;
@@ -70,9 +73,10 @@ export class ShareNoteComponent {
     this.profilService.isToolTips$.subscribe(value => {
       this.isToolTips = value;
     });
-    this.profilService.isDevMode$.subscribe(value => {
+    /*this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
-    });
+    });*/
+    this.isDevMode = this.storageService.getIsDevMode();
   }
   
   

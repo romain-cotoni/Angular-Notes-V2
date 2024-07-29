@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { StorageService } from '../../../shared/services/storage.service';
 
 @Component({
   selector: 'app-logout',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class LogoutComponent {
 
   authService = inject(AuthService);
+  storageService = inject(StorageService);
   router = inject(Router);
 
   ngOnInit() {
@@ -19,11 +21,11 @@ export class LogoutComponent {
   }
 
   onLogout(): void {
-    console.log("onLogout()")
+    console.log("logout component onLogout()")
     this.authService.logout().subscribe({
       next: (response) => {
-        console.log("Logged out successfully", response);
-        this.authService.setAuthenticated(false);
+        console.log(response);
+        this.storageService.clear();
         this.router.navigate(['/login']);
       },
       error: (error) => { 

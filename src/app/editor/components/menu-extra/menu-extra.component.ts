@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { ProfilService } from '../../../shared/services/profil.service';
+import { StorageService } from '../../../shared/services/storage.service';
 
 @Component({
   selector: 'app-menu-extra',
@@ -10,13 +11,16 @@ import { ProfilService } from '../../../shared/services/profil.service';
   styleUrl: './menu-extra.component.scss'
 })
 export class MenuExtraComponent {
+  private profilService = inject(ProfilService);
+  private storageService = inject(StorageService);
+
   isDevMode: boolean = false;
   
-  constructor(private profilService: ProfilService) {}
-
   ngOnInit(): void {
     this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
     });
+    this.isDevMode = this.storageService.getIsDevMode();
   }
+
 }

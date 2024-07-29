@@ -8,6 +8,7 @@ import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component'
 import { ProfilService } from '../../../shared/services/profil.service';
 import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
+import { StorageService } from '../../../shared/services/storage.service';
 
 @Component({
     selector: 'app-editor',
@@ -20,7 +21,9 @@ import { Note } from '../../../shared/models/note';
 
 export class EditorComponent {
   //isMobile: boolean = false;  
-  
+  private noteService = inject(NoteService);
+  //private profilService = inject(ProfilService);
+  private storageService = inject(StorageService);
   readonly dialog = inject(MatDialog);
 
   selectedNote: Note | null = null;
@@ -44,13 +47,11 @@ export class EditorComponent {
 
   isDevMode: boolean = false;
 
-  constructor(private noteService: NoteService,
-              private profilService: ProfilService) {}
-
   ngOnInit(): void {
-    this.profilService.isDevMode$.subscribe(value => {
+    /*this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
-    });
+    });*/
+    this.isDevMode = this.storageService.getIsDevMode();
 
     //subscribe to selectedNote
     this.noteService.selectedNote$.subscribe(value => {

@@ -13,6 +13,7 @@ import { AppComponent } from '../../../app.component';
 import { ProfilService } from '../../../shared/services/profil.service';
 import { Profil } from '../../../shared/models/profil';
 import { NotificationsService } from '../../../shared/services/notifications.service';
+import { StorageService } from '../../../shared/services/storage.service';
 
 @Component({
   selector: 'app-profil',
@@ -30,21 +31,27 @@ import { NotificationsService } from '../../../shared/services/notifications.ser
   styleUrl: './profil.component.scss'
 })
 export class ProfilComponent {
+  private profilService = inject(ProfilService);
+  private storageService = inject(StorageService);
+  readonly dialog = inject(MatDialog);
+
   //@Output() isDevModeEmit: EventEmitter<boolean> = new EventEmitter();
   
   profil: Profil = {};
   
-  readonly dialog = inject(MatDialog);
-
-  constructor(private profilService: ProfilService) {}
   
   ngOnInit(): void {
+    console.log("ProfilComponent ngOnInit()")
     this.profilService.isToolTips$.subscribe(value => {
       this.profil.isToolTips = value;
     });
+    // Check for isDevMode from service first then from storage
     this.profilService.isDevMode$.subscribe(value => {
       this.profil.isDevMode = value;
     });
+    if(!this.profil.isDevMode) {
+      this.profil.isDevMode = this.storageService.getIsDevMode();
+    } 
   }
 
   ngOnDestroy() {

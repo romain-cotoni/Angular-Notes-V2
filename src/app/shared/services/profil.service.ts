@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfilService {
-  
+  private storageService = inject(StorageService);
+
   private isToolTipsSubject = new BehaviorSubject<boolean>(false);
   private isDevModeSubject = new BehaviorSubject<boolean>(false);
   
@@ -16,8 +18,15 @@ export class ProfilService {
     this.isToolTipsSubject.next(value);
   }
 
+  getIsDevMode() {
+    this.storageService.getIsDevMode();
+  }
+
   setIsDevMode(value: boolean): void {
+    console.log("ProfilService setIsDevMode() value: ",value)
+    this.storageService.setIsDevMode(value);
     this.isDevModeSubject.next(value);
+    console.log("ProfilService setIsDevMode() ", this.storageService.getIsDevMode());
   }
 
 

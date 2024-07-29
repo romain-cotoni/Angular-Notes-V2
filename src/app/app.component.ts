@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./core/components/header/header.component";
 import { FooterComponent } from "./core/components/footer/footer.component";
 import { ProfilComponent } from './profil/components/profil/profil.component';
 import { ProfilService } from './shared/services/profil.service';
+import { StorageService } from './shared/services/storage.service';
 
 @Component({
     selector: 'app-root',
@@ -14,21 +15,22 @@ import { ProfilService } from './shared/services/profil.service';
     imports: [NgIf, NgClass, RouterOutlet, HeaderComponent, FooterComponent, ProfilComponent]
 })
 export class AppComponent {
+  private router = inject(Router);
+  //private profilService = inject(ProfilService);
+  //private storageService = inject(StorageService);
+
   title = 'notes-write-V2';
   isDevMode: boolean = false;
   isToolTips: boolean = false;
 
-  constructor(private router: Router,
-              private profilService: ProfilService) {}
-
   ngOnInit(): void {
-    sessionStorage.clear(); //clear all storage at start of app
-    this.profilService.isToolTips$.subscribe(value => {
+    /*this.profilService.isToolTips$.subscribe(value => {
       this.isToolTips = value;
-    });
-    this.profilService.isDevMode$.subscribe(value => {
+    });*/
+    /*this.profilService.isDevMode$.subscribe(value => {
       this.isDevMode = value;
-    });
+    });*/
+    //this.isDevMode = this.storageService.getIsDevMode();
   }
 
   showComponent(component:string): boolean {
@@ -44,9 +46,9 @@ export class AppComponent {
     return this.router.url === "/editor";
   }
 
-  checkIsDevMode(isDevMode: any) {
+  /*checkIsDevMode(isDevMode: any) {
     this.isDevMode = isDevMode;
-  }
+  }*/
 
   
 }
