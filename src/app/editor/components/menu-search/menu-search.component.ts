@@ -14,7 +14,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Note } from '../../../shared/models/note';
 import { Right } from '../../../shared/enums/right';
-import { filter, map, Observable, of, startWith } from 'rxjs';
+import { filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { StorageService } from '../../../shared/services/storage.service';
 
 
@@ -44,7 +44,7 @@ export class MenuSearchComponent {
   private noteService = inject(NoteService);
 
   noteControl = new FormControl('');
-  allNotesOfUser: Note[] | null = null;
+  notes: Note[] | null = null;
   selectedNote: Note | null = null;
   filteredNotesOptions: Observable<Note[]> = of([]);
   editable: boolean = true;
@@ -54,18 +54,53 @@ export class MenuSearchComponent {
   search: string = "Search by title";
   isToolTips: boolean = false;
   isDevMode: boolean = false;
+  notesList: Note[] = [];
 
   ngOnInit(): void {
-    this.profilService.isToolTips$.subscribe(value => {
-      this.isToolTips = value;
+    console.log("menu-search.component");
+
+    this.profilService.isToolTips$.subscribe(isToolTips => {
+      this.isToolTips = isToolTips;
     });
-    this.profilService.isDevMode$.subscribe(value => {
-      this.isDevMode = value;
+
+    this.profilService.isDevMode$.subscribe(isDevMode => {
+      this.isDevMode = isDevMode;
     });
+
+    this.noteService.notesList$.subscribe(notes => {
+      this.notesList = notes;
+    });
+
+
     this.isDevMode = this.storageService.getIsDevMode();
     
-    this.getAllNotes();
+    //this.getAllNotes(); // from session or db
+
+    this.noteService.getNotes().subscribe({
+      next: (notes) => {
+        this.noteService.updateNotesListObservable(notes)
+      },
+      error: (error) => {
+        console.log("error menu-search.component getNotes(): ", error);
+      },
+      complete: () => {
+        this.filteredNotesOptions = this.noteControl.valueChanges.pipe(
+          startWith(''),
+          filter(value => typeof value === 'string'), // Ensure value is a string
+          switchMap(value => this.noteService.notesList$.pipe(
+            map(notes => this.filterNotes(value as string, notes))
+          ))
+        );
+      }
+    })
+    
   }
+
+  private filterNotes(value: string, options: Note[]): Note[] {
+    const filterValue = (value || '').toLowerCase();
+    return options?.filter(option => (option.title as string).toLowerCase().includes(filterValue));
+  }
+
 
   setBy(choice: string) {
     switch(choice) {
@@ -88,17 +123,17 @@ export class MenuSearchComponent {
     }
   }
 
-  getAllNotes() {
+  /*getAllNotes() {
     if(!this.getNotesFromStorage()) {
       this.getNotesFromDb();
     }
   }
 
   getNotesFromStorage(): boolean {
-    this.allNotesOfUser = this.storageService.getNotes();
-    if(this.allNotesOfUser) {
-      this.getFilteredNotesOptions(this.allNotesOfUser);
-      console.log("getNotes() from storage: ", this.allNotesOfUser)
+    let notes: Note[] = this.storageService.getNotes();
+    if(notes) {
+      this.getFilteredNotesOptions(notes);
+      console.log("getNotes() from storage: ", notes)
       return true;
     } 
     else {
@@ -108,11 +143,10 @@ export class MenuSearchComponent {
 
   getNotesFromDb() {
     this.noteService.getNotes().subscribe({
-      next: (response) => {
-        this.allNotesOfUser = response;
-        this.getFilteredNotesOptions(this.allNotesOfUser);
-        this.storageService.setNotes(this.allNotesOfUser);
-        console.log("getNotes() from db: ", this.allNotesOfUser)
+      next: (notes) => {
+        this.getFilteredNotesOptions(notes);
+        console.log("getNotes() from db: ", notes)
+        this.noteService.updateNotesListObservable(notes)
       },
       error: (error) => {
         console.log("error menu-search.component getNotes(): ", error);
@@ -126,7 +160,7 @@ export class MenuSearchComponent {
       filter(value => typeof value === 'string'),
       map(value => options?.filter(option => (option.title as string).toLowerCase().includes(value?.toLowerCase() || '') ))
     );
-  }
+  }*/
 
   displayOptionNote(note: Note): string {
     return note ? note.title as string : '';
@@ -136,26 +170,7 @@ export class MenuSearchComponent {
     let selectedNote = event.option.value as Note;
     this.selectedNote = selectedNote;
     console.log("selectedNote: ", selectedNote);
-    this.noteService.setSelectedNote(selectedNote);
-    //this.memorizeSelectedNote(this.selectedNote);
-    //this.editable  = this.selectedNote.right === Right.WRITE || this.selectedNote.right === Right.OWNER;
-    //this.deletable = this.selectedNote.right === Right.OWNER;
-    //this.sharable  = this.selectedNote.right === Right.OWNER;
-    //this.displayNote();
-    //this.clearSearchInput();
+    this.noteService.updateSelectedNoteObservable(selectedNote);
   }
-
-  memorizeSelectedNote(note: Note) {
-    //this.noteService.setSelectedNote(note);
-    //this.sessionStorageService.setSelectedNote(note);
-  }
-
-  displayNote() {
-    //Set title in viewer
-    //this.renderer.setProperty(this.editableTitle.nativeElement  , "innerText", this.selectedNote?.title);
-    //Set content in viewer
-    //this.renderer.setProperty(this.editableContent.nativeElement, "innerHTML", this.selectedNote?.content);
-  }
-
 
 }
