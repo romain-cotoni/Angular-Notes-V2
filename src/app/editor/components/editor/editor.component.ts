@@ -11,6 +11,7 @@ import { Note } from '../../../shared/models/note';
 import { StorageService } from '../../../shared/services/storage.service';
 import { Subscription } from 'rxjs';
 import { SharedEventService } from '../../../shared/services/shared-event.service';
+import { EventService } from '../../../shared/services/event.service';
 
 @Component({
     selector: 'app-editor',
@@ -22,20 +23,22 @@ import { SharedEventService } from '../../../shared/services/shared-event.servic
 
 
 export class EditorComponent {
-  //isMobile: boolean = false;  
-  private noteService = inject(NoteService);
-  //private profilService = inject(ProfilService);
-  private storageService = inject(StorageService);
+  //isMobile: boolean        = false;  
+  private noteService        = inject(NoteService);
+  //private profilService    = inject(ProfilService);
+  private storageService     = inject(StorageService);
   private sharedEventService = inject(SharedEventService);
-  readonly dialog = inject(MatDialog);
+  private eventService       = inject(EventService);
+  readonly dialog            = inject(MatDialog);
 
-
+  private subscriptions: Subscription[] = [];
+  
+  isDevMode: boolean = false;
   selectedNote!: Note | null;
   editorTitle: string = '';
   editorContent: string = '';
-  isDevMode: boolean = false;
 
-  private subscription!: Subscription;
+  //private subscription!: Subscription;
 
   toolbarOptions = [
     ['bold', 'italic', 'underline'],                  // toggled buttons
@@ -58,7 +61,7 @@ export class EditorComponent {
     console.log("editor.component");
     this.isDevMode = this.storageService.getIsDevMode();
     
-    this.noteService.selectedNote$.subscribe(selectedNote => {
+    /*this.noteService.selectedNote$.subscribe(selectedNote => {
       if(selectedNote?.title) {
         this.editorTitle = selectedNote.title;
       }
@@ -71,18 +74,37 @@ export class EditorComponent {
       this.editorTitle = "";
       this.editorContent = "";
       this.selectedNote = null;
-    });
+    });*/
+
+
+    this.subscriptions.push(
+      this.eventService.noteSelected$.subscribe(note => this.loadNoteIntoEditor(note)),
+      this.eventService.notesList$.subscribe(notes => this.updateNotesList(notes)),
+      this.eventService.editorContent$.subscribe(content => this.editorContent = content),
+      this.eventService.editorTitle$.subscribe(title => this.editorTitle = title)
+    );
 
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  loadNoteIntoEditor(note: Note) {
+    if(note?.title) { this.editorTitle = note.title; }
+    if(note?.content) { this.editorContent = note.content; }
+  }
+
+  updateNotesList(notes: Note[]) {
+    // Handle notes list update
+  }
+
+  onEditorContentChange() {
+    this.eventService.updateEditorContent(this.editorContent);
+  }
+
+  onEditorTitleChange(title: string) {
+    this.eventService.updateEditorTitle(title);
   }
 
 
-  onContentChange() {
+  /*onContentChange() {
     this.noteService.updateEditorContentObservable(this.editorContent);
   }
   
@@ -105,6 +127,15 @@ export class EditorComponent {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The dialog was closed ', result);
     });
+  }*/
+
+
+  ngOnDestroy() {
+    /*if (this.subscription) {
+      this.subscription.unsubscribe();
+    }*/
+
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 

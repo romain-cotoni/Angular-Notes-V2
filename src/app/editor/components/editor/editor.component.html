@@ -1,5 +1,5 @@
 <quill-editor [(ngModel)]="editorContent"  
-              (ngModelChange)="onContentChange()"  
+              (ngModelChange)="onEditorContentChange()"  
               [modules]="{ toolbar: toolbarOptions }" 
               class="w-full" 
               [ngClass]="{ 'custom-editor-bg-color': isDevMode }">

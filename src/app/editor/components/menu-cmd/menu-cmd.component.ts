@@ -10,6 +10,7 @@ import { StorageService } from '../../../shared/services/storage.service';
 import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
 import { SharedEventService } from '../../../shared/services/shared-event.service';
+import { EventService } from '../../../shared/services/event.service';
 
 @Component({
   selector: 'app-menu-cmd',
@@ -22,11 +23,12 @@ import { SharedEventService } from '../../../shared/services/shared-event.servic
   styleUrl: './menu-cmd.component.scss'
 })
 export class MenuCmdComponent {  
-  private profilService = inject(ProfilService);
-  private storageService = inject(StorageService);
-  private noteService = inject(NoteService);
+  private profilService      = inject(ProfilService);
+  private storageService     = inject(StorageService);
+  private noteService        = inject(NoteService);
   private sharedEventService = inject(SharedEventService);
-  readonly dialog = inject(MatDialog);
+  private eventService       = inject(EventService);
+  readonly dialog            = inject(MatDialog);
 
   isToolTips: boolean = false;
   isDevMode: boolean = false;
@@ -54,7 +56,7 @@ export class MenuCmdComponent {
     //   this.isDevMode = isDevMode;
     // });
     
-    this.noteService.notesList$.subscribe(notes => {
+    /*this.noteService.notesList$.subscribe(notes => {
       this.notesList = notes;
     });
 
@@ -68,7 +70,7 @@ export class MenuCmdComponent {
     
     this.noteService.selectedNote$.subscribe(note => {
       this.selectedNote = note;
-    });
+    });*/
 
 
     // Get saved past states
@@ -76,28 +78,10 @@ export class MenuCmdComponent {
     
   }
 
-  
-  delete() {
-    //TODO
-  }
-
-  clear() {
-    this.sharedEventService.emitButtonClick();
-  }
-  
-  edit() {
-    //TODO
-  }
-
-  sort() {
-    //TODO
-  }
-
-
   /**
    * Update or create
    */
-  save() {
+  /*save() {
     //IF THE NOTE ALREADY EXIST
     if(this.selectedNote?.id) {
       this.selectedNote.title   = this.editorTitle;
@@ -151,7 +135,7 @@ export class MenuCmdComponent {
   
   share() {
     this.openDialog();
-  }
+  }*/
   
 
   openDialog(): void {
@@ -162,6 +146,32 @@ export class MenuCmdComponent {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The dialog was closed ', result);
     });
+  }
+
+
+  delete() {
+    this.eventService.emitEvent({ type: 'menuCmd', action: 'delete' });
+  }
+
+  clear() {
+    this.eventService.emitEvent({ type: 'menuCmd', action: 'clear' });
+    this.sharedEventService.emitButtonClick();
+  }
+
+  save() {
+    this.eventService.emitEvent({ type: 'menuCmd', action: 'save' });
+  }
+
+  share() {
+    this.eventService.emitEvent({ type: 'menuCmd', action: 'share' });
+  }
+
+  edit() {
+    this.eventService.emitEvent({ type: 'menuCmd', action: 'edit' });
+  }
+  
+  sort() {
+    //TODO
   }
 
 
