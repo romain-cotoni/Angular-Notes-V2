@@ -11,7 +11,8 @@
     <button mat-icon-button (click)="share()" [disabled]="!sharable" [matTooltipDisabled]="!isToolTips" matTooltip="Share note">
         <mat-icon>share</mat-icon>
     </button>
-    <button mat-icon-button (click)="edit()" [disabled]="!editable" [matTooltipDisabled]="!isToolTips" matTooltip="Edit note">
-        <mat-icon>edit_note</mat-icon>
+    <button mat-icon-button (click)="unlock()" [disabled]="!editable" [matTooltipDisabled]="!isToolTips" matTooltip="Edit note">
+        <mat-icon *ngIf="lock">lock_open</mat-icon>
+        <mat-icon *ngIf="!lock">lock</mat-icon>
     </button>
 </div>    

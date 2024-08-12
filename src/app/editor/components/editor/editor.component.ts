@@ -23,65 +23,50 @@ import { EventService } from '../../../shared/services/event.service';
 
 
 export class EditorComponent {
-  //isMobile: boolean        = false;  
   private noteService        = inject(NoteService);
-  //private profilService    = inject(ProfilService);
   private storageService     = inject(StorageService);
+  private profilService      = inject(ProfilService);
   private sharedEventService = inject(SharedEventService);
   private eventService       = inject(EventService);
   readonly dialog            = inject(MatDialog);
-
+  
   private subscriptions: Subscription[] = [];
   
-  isDevMode: boolean = false;
-  selectedNote!: Note | null;
-  editorTitle: string = '';
-  editorContent: string = '';
-
-  //private subscription!: Subscription;
+  //isMobile: boolean = false; //TODO: set mobile breakpoint subscription
+  
+  isDevMode    : boolean = false;
+  editorTitle  : string  = ''   ;
+  editorContent: string  = ''   ;
 
   toolbarOptions = [
-    ['bold', 'italic', 'underline'],                  // toggled buttons
-    ['blockquote', 'code-block'],
-    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    [{ 'script': 'sub' }, { 'script': 'super' }],     // superscript/subscript
-    [{ 'indent': '-1' }, { 'indent': '+1' }],         // outdent/indent
-    // [{ 'direction': 'rtl' }],                      // text direction
-    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-    [{ 'font': [] }],
-    // [{ 'align': [] }],
-    //['clean']                                       // remove formatting button
+    [  'bold', 'italic', 'underline'                ], // toggled buttons
+    [  'blockquote', 'code-block'                   ], 
+    [{ 'header': 1 }, { 'header': 2 }               ], // custom button values
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }        ],
+    [{ 'list'  : 'ordered' }, { 'list': 'bullet' }  ],
+    [{ 'script': 'sub' }, { 'script': 'super' }     ], // superscript/subscript
+    [{ 'indent': '-1' }, { 'indent': '+1' }         ], // outdent/indent
+    [{ 'size'  : ['small', false, 'large', 'huge'] }], // custom dropdown
+    [{ 'color' : [] }, { 'background': [] }         ], // dropdown with defaults from theme
+    [{ 'font'  : [] }                               ],
+    //[{ 'direction': 'rtl' }                       ], // text direction
+    //[{ 'align': [] }                              ], 
+    //['clean'                                      ]  // remove formatting button
   ];
   
 
   ngOnInit(): void {
     console.log("editor.component");
+
+    // Get cache storage //TODO: Maybe improve for global with subscription
     this.isDevMode = this.storageService.getIsDevMode();
-    
-    /*this.noteService.selectedNote$.subscribe(selectedNote => {
-      if(selectedNote?.title) {
-        this.editorTitle = selectedNote.title;
-      }
-      if(selectedNote?.content) {
-        this.editorContent = selectedNote.content;
-      }
-    });
 
-    this.subscription = this.sharedEventService.buttonClick$.subscribe(() => {
-      this.editorTitle = "";
-      this.editorContent = "";
-      this.selectedNote = null;
-    });*/
-
-
+    // Subscriptions
     this.subscriptions.push(
-      this.eventService.noteSelected$.subscribe(note => this.loadNoteIntoEditor(note)),
-      this.eventService.notesList$.subscribe(notes => this.updateNotesList(notes)),
-      this.eventService.editorContent$.subscribe(content => this.editorContent = content),
-      this.eventService.editorTitle$.subscribe(title => this.editorTitle = title)
+      this.noteService.noteSelected$.subscribe(note => this.loadNoteIntoEditor(note)),
+      //this.noteService.notesList$.subscribe(notes => this.updateNotesList(notes)),
+      //this.noteService.editorContent$.subscribe(content => this.editorContent = content),
+      //this.noteService.editorTitle$.subscribe(title => this.editorTitle = title)
     );
 
   }
@@ -91,25 +76,22 @@ export class EditorComponent {
     if(note?.content) { this.editorContent = note.content; }
   }
 
-  updateNotesList(notes: Note[]) {
-    // Handle notes list update
-  }
-
   onEditorContentChange() {
-    this.eventService.updateEditorContent(this.editorContent);
-  }
-
-  onEditorTitleChange(title: string) {
-    this.eventService.updateEditorTitle(title);
-  }
-
-
-  /*onContentChange() {
     this.noteService.updateEditorContentObservable(this.editorContent);
   }
-  
 
-  onEditorClick(event: MouseEvent) {
+  onEditorTitleChange() {
+    this.noteService.updateEditorTitleObservable(this.editorTitle);
+  }
+  
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+
+}
+
+  /*onEditorClick(event: MouseEvent) {
     //event.preventDefault(); // Prevent the default context menu from appearing
     
     //if (event.button == 2) { // Check if the right mouse button was clicked
@@ -128,15 +110,3 @@ export class EditorComponent {
       console.log('The dialog was closed ', result);
     });
   }*/
-
-
-  ngOnDestroy() {
-    /*if (this.subscription) {
-      this.subscription.unsubscribe();
-    }*/
-
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
-
-
-}

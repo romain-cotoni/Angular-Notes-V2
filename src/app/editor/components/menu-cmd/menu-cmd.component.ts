@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { NgIf, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -9,13 +9,13 @@ import { ProfilService } from '../../../shared/services/profil.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
-import { SharedEventService } from '../../../shared/services/shared-event.service';
 import { EventService } from '../../../shared/services/event.service';
 
 @Component({
   selector: 'app-menu-cmd',
   standalone: true,
-  imports: [NgClass,
+  imports: [NgIf,
+            NgClass,
             MatIconModule,
             MatButtonModule,
             MatTooltip],
@@ -23,22 +23,21 @@ import { EventService } from '../../../shared/services/event.service';
   styleUrl: './menu-cmd.component.scss'
 })
 export class MenuCmdComponent {  
-  private profilService      = inject(ProfilService);
-  private storageService     = inject(StorageService);
-  private noteService        = inject(NoteService);
-  private sharedEventService = inject(SharedEventService);
-  private eventService       = inject(EventService);
-  readonly dialog            = inject(MatDialog);
+  private profilService  = inject(ProfilService);
+  private storageService = inject(StorageService);
+  private noteService    = inject(NoteService);
+  private eventService   = inject(EventService);
+  readonly dialog        = inject(MatDialog);
 
-  isToolTips: boolean = false;
-  isDevMode: boolean = false;
-  editorTitle: string = '';
-  editorContent: string = '';
+  isToolTips   : boolean = false;
+  isDevMode    : boolean = false;
+  editorTitle  : string  = '';
+  editorContent: string  = '';
 
-
-  editable: boolean = true;
+  lock     : boolean = false;
+  editable : boolean = true;
   deletable: boolean = true;
-  sharable: boolean = true;
+  sharable : boolean = true;
 
   selectedNote!: Note;
   editNote!: Note;
@@ -47,7 +46,7 @@ export class MenuCmdComponent {
   ngOnInit(): void {
     console.log("menu-cmd.component");
 
-    // Subscribe to futur events
+    // Subscribe
     this.profilService.isToolTips$.subscribe(isToolTips => {
       this.isToolTips = isToolTips;
     });
@@ -73,7 +72,7 @@ export class MenuCmdComponent {
     });*/
 
 
-    // Get saved past states
+    // Get saved states
     this.isDevMode = this.storageService.getIsDevMode();
     
   }
@@ -155,21 +154,21 @@ export class MenuCmdComponent {
 
   clear() {
     this.eventService.emitEvent({ type: 'menuCmd', action: 'clear' });
-    this.sharedEventService.emitButtonClick();
   }
 
   save() {
-    this.eventService.emitEvent({ type: 'menuCmd', action: 'save' });
+    this.noteService.save();
   }
 
+  
   share() {
     this.eventService.emitEvent({ type: 'menuCmd', action: 'share' });
   }
-
-  edit() {
-    this.eventService.emitEvent({ type: 'menuCmd', action: 'edit' });
-  }
   
+  unlock() {
+    //TODO: unlock & lock editor
+  }
+
   sort() {
     //TODO
   }
