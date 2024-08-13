@@ -8,12 +8,14 @@ import { Subject } from 'rxjs';
 export class EventService {
 
   private eventSubject         = new Subject<any>();
+  private eventSaveNoteSubject = new Subject<boolean>();
   private noteSelectedSubject  = new Subject<Note>();
   private notesListSubject     = new Subject<Note[]>();
   private editorContentSubject = new Subject<string>();
   private editorTitleSubject   = new Subject<string>();
 
   event$         = this.eventSubject.asObservable();
+  eventSaveNote$ = this.eventSaveNoteSubject.asObservable();
   noteSelected$  = this.noteSelectedSubject.asObservable();
   notesList$     = this.notesListSubject.asObservable();
   editorContent$ = this.editorContentSubject.asObservable();
@@ -29,10 +31,18 @@ export class EventService {
   }
 
   /**
+   * Emits a generic event with any type of data to subscribers.
+   * @param data The data or event payload to emit.
+   */
+  emitSaveNoteEvent() {
+    this.eventSaveNoteSubject.next(true);
+  }
+
+  /**
    * Emits the selected note to all subscribers.
    * @param note - The Note object that was selected.
    */
-  selectNote(note: Note) {
+  updateNoteSelected(note: Note) {
     this.noteSelectedSubject.next(note);
   }
 

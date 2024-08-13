@@ -10,7 +10,6 @@ import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
 import { StorageService } from '../../../shared/services/storage.service';
 import { Subscription } from 'rxjs';
-import { SharedEventService } from '../../../shared/services/shared-event.service';
 import { EventService } from '../../../shared/services/event.service';
 
 @Component({
@@ -23,20 +22,21 @@ import { EventService } from '../../../shared/services/event.service';
 
 
 export class EditorComponent {
-  private noteService        = inject(NoteService);
-  private storageService     = inject(StorageService);
-  private profilService      = inject(ProfilService);
-  private sharedEventService = inject(SharedEventService);
-  private eventService       = inject(EventService);
-  readonly dialog            = inject(MatDialog);
+  private noteService    = inject(NoteService);
+  private eventService   = inject(EventService);
+  private storageService = inject(StorageService);
+  private profilService  = inject(ProfilService);
+  readonly dialog        = inject(MatDialog);
   
   private subscriptions: Subscription[] = [];
   
   //isMobile: boolean = false; //TODO: set mobile breakpoint subscription
   
-  isDevMode    : boolean = false;
-  editorTitle  : string  = ''   ;
-  editorContent: string  = ''   ;
+  isDevMode     : boolean = false;
+  noteSelected  : Note    = {}   ;
+  noteSelectedId: number  = -1   ;
+  editorTitle   : string  = ''   ;
+  editorContent : string  = ''   ;
 
   toolbarOptions = [
     [  'bold', 'italic', 'underline'                ], // toggled buttons
@@ -63,7 +63,15 @@ export class EditorComponent {
 
     // Subscriptions
     this.subscriptions.push(
-      this.noteService.noteSelected$.subscribe(note => this.loadNoteIntoEditor(note)),
+      this.eventService.noteSelected$.subscribe(note => {
+        this.loadNoteIntoEditor(note);
+        console.log("Editor -> EventService -> noteSelected$: ", note);
+      }),
+      this.eventService.eventSaveNote$.subscribe( () => {
+        this.saveNote();
+        console.log("Editor -> EventService -> eventSaveNote$");
+      }),
+      //this.noteService.noteSelected$.subscribe(note => this.loadNoteIntoEditor(note)),
       //this.noteService.notesList$.subscribe(notes => this.updateNotesList(notes)),
       //this.noteService.editorContent$.subscribe(content => this.editorContent = content),
       //this.noteService.editorTitle$.subscribe(title => this.editorTitle = title)
@@ -72,8 +80,26 @@ export class EditorComponent {
   }
 
   loadNoteIntoEditor(note: Note) {
+    if(note) { this.noteSelected = note; }
+    if(note?.id) { this.noteSelectedId = note.id; }
     if(note?.title) { this.editorTitle = note.title; }
     if(note?.content) { this.editorContent = note.content; }
+  }
+
+  private saveNote() {
+    console.log("Editor -> saveNote() -> noteSelectedId: ", this.noteSelectedId);
+    if(this.noteSelectedId !== -1) {
+      this.noteSelected.title   = this.editorTitle;
+      this.noteSelected.content = this.editorContent;
+      this.noteService.updateNote(this.noteSelected);
+    } 
+    else {
+      let noteToCreate: Note = {
+        title  : this.editorTitle,
+        content: this.editorContent
+      }
+      this.noteService.createNote(noteToCreate);
+    }
   }
 
   onEditorContentChange() {

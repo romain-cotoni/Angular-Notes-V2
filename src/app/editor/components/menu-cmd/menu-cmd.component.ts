@@ -9,6 +9,7 @@ import { ProfilService } from '../../../shared/services/profil.service';
 import { StorageService } from '../../../shared/services/storage.service';
 import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
+import { EditorService } from '../../../shared/services/editor.service';
 import { EventService } from '../../../shared/services/event.service';
 
 @Component({
@@ -26,22 +27,23 @@ export class MenuCmdComponent {
   private profilService  = inject(ProfilService);
   private storageService = inject(StorageService);
   private noteService    = inject(NoteService);
+  private editorService  = inject(EditorService);
   private eventService   = inject(EventService);
   readonly dialog        = inject(MatDialog);
 
-  isToolTips   : boolean = false;
-  isDevMode    : boolean = false;
-  editorTitle  : string  = '';
-  editorContent: string  = '';
+  isToolTips : boolean = false;
+  isDevMode  : boolean = false;
+  lock       : boolean = false;
+  editable   : boolean = true;
+  deletable  : boolean = true;
+  sharable   : boolean = true;
 
-  lock     : boolean = false;
-  editable : boolean = true;
-  deletable: boolean = true;
-  sharable : boolean = true;
 
-  selectedNote!: Note;
-  editNote!: Note;
-  notesList: Note[] = [];
+  editorTitle   : string  = '';
+  editorContent : string  = '';
+  noteSelected! : Note;
+  notesList     : Note[] = [];
+
 
   ngOnInit(): void {
     console.log("menu-cmd.component");
@@ -51,91 +53,19 @@ export class MenuCmdComponent {
       this.isToolTips = isToolTips;
     });
 
-    // this.profilService.isDevMode$.subscribe(isDevMode => {
-    //   this.isDevMode = isDevMode;
-    // });
-    
-    /*this.noteService.notesList$.subscribe(notes => {
-      this.notesList = notes;
-    });
-
-    this.noteService.editorTitle$.subscribe(editorTitle => {
-      this.editorTitle = editorTitle;
-    });
-
-    this.noteService.editorContent$.subscribe(editorContent => {
-      this.editorContent = editorContent;
-    });
-    
-    this.noteService.selectedNote$.subscribe(note => {
-      this.selectedNote = note;
+    /*this.profilService.isDevMode$.subscribe(isDevMode => {
+       this.isDevMode = isDevMode;
     });*/
 
+    this.eventService.noteSelected$.subscribe(note => {
+      this.noteSelected = note;
+      console.log("MenuCmd -> EventService -> noteSelected subscription: ", this.noteSelected);
+    })
 
     // Get saved states
     this.isDevMode = this.storageService.getIsDevMode();
     
   }
-
-  /**
-   * Update or create
-   */
-  /*save() {
-    //IF THE NOTE ALREADY EXIST
-    if(this.selectedNote?.id) {
-      this.selectedNote.title   = this.editorTitle;
-      this.selectedNote.content = this.editorContent;
-      this.updateNote(this.selectedNote);
-    } 
-    //IF THE NOTE DOESN'T ALREADY EXIST
-    else {
-      let noteToCreate: Note = {
-        title  : this.editorTitle,
-        content: this.editorContent
-      }
-      this.createNote(noteToCreate);
-    }
-  }
-
-  updateNote(noteToUpdate: Note) {
-    console.log("updateNote: ", noteToUpdate);
-    this.noteService.updateNote(noteToUpdate).subscribe({
-      next: (noteUpdated) => {
-        // update selected note to display
-        this.selectedNote.title   = noteUpdated.title  ; //Change old title with new title
-        this.selectedNote.content = noteUpdated.content; //Change old content with new content
-        this.noteService.updateSelectedNoteObservable(this.selectedNote);
-
-        // update list of notes to display
-        let noteIndex: number = this.notesList.findIndex(note => note.id === noteUpdated.id); //Find note by id in a note list and return it's index
-        this.notesList[noteIndex] = noteUpdated; //Replace note by updated version
-        this.noteService.updateNotesListObservable(this.notesList);
-        
-      },
-      error: (error) => { console.log("Error -> from updateNote(): ", error); }
-    });  
-  }
-
-
-  createNote(noteToCreate: Note) {
-    this.noteService.createNote(noteToCreate).subscribe({
-      next: (noteCreated) => {
-        // update selected note to display
-        this.noteService.updateSelectedNoteObservable(noteCreated);
-
-        // add note to list of notes to display
-        this.notesList.push(noteCreated)
-        this.noteService.updateNotesListObservable(this.notesList);
-      },
-      error: (error) => { console.log("Error -> from createNote(): ", error); },
-    })
-  }
-  
-  
-  share() {
-    this.openDialog();
-  }*/
-  
 
   openDialog(): void {
     const dialogRef = this.dialog.open(ShareNoteComponent, {
@@ -146,27 +76,32 @@ export class MenuCmdComponent {
       console.log('The dialog was closed ', result);
     });
   }
-
-
-  delete() {
-    this.eventService.emitEvent({ type: 'menuCmd', action: 'delete' });
-  }
-
-  clear() {
-    this.eventService.emitEvent({ type: 'menuCmd', action: 'clear' });
-  }
-
-  save() {
-    this.noteService.save();
-  }
-
   
-  share() {
-    this.eventService.emitEvent({ type: 'menuCmd', action: 'share' });
+  saveNote() {
+    /*console.log("saveNote() -> noteSelected subscription: ", this.noteSelected)
+    if(this.noteSelected) {
+      this.noteService.saveNote(this.noteSelected);
+    }*/
+    this.eventService.emitSaveNoteEvent();
   }
   
-  unlock() {
-    //TODO: unlock & lock editor
+  deleteNote() {
+    this.noteService.deleteNote();
+  }
+  
+  shareNote() {
+    //TODO 
+    this.openDialog();
+  }
+  
+  clearEditor() {
+    this.noteService.updateSelectedNoteObservable({});
+    this.noteService.updateEditorContentObservable('');
+    this.noteService.updateEditorTitleObservable('');
+  }
+
+  unlockEditor() {
+    this.editorService.unlock();
   }
 
   sort() {

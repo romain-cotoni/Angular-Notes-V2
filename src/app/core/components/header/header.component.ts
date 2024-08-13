@@ -36,6 +36,7 @@ import { MenuExtraComponent } from '../../../editor/components/menu-extra/menu-e
 export class HeaderComponent {
   @Input() isEditor!: boolean;
   @Input() isToolTips: boolean = false;
+  isMobile : boolean = false;
   isAllowed: boolean = false;
 
 

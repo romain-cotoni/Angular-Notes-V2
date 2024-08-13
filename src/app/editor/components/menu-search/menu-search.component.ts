@@ -16,6 +16,7 @@ import { Note } from '../../../shared/models/note';
 import { Right } from '../../../shared/enums/right';
 import { filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { StorageService } from '../../../shared/services/storage.service';
+import { EventService } from '../../../shared/services/event.service';
 
 
 @Component({
@@ -40,12 +41,13 @@ import { StorageService } from '../../../shared/services/storage.service';
 })
 export class MenuSearchComponent {
   private storageService = inject(StorageService);
-  private profilService = inject(ProfilService);
-  private noteService = inject(NoteService);
+  private profilService  = inject(ProfilService);
+  private noteService    = inject(NoteService);
+  private eventService   = inject(EventService);
 
   noteControl = new FormControl('');
   notes: Note[] | null = null;
-  selectedNote: Note | null = null;
+  //noteSelected: Note | null = null;
   filteredNotesOptions: Observable<Note[]> = of([]);
   editable: boolean = true;
   deletable: boolean = false;
@@ -73,15 +75,13 @@ export class MenuSearchComponent {
 
 
     this.isDevMode = this.storageService.getIsDevMode();
-    
-    //this.getAllNotes(); // from session or db
 
     this.noteService.getNotes().subscribe({
       next: (notes) => {
         this.noteService.updateNotesListObservable(notes)
       },
       error: (error) => {
-        console.log("error menu-search.component getNotes(): ", error);
+        console.log("Error: MenuSearch -> NoteService -> getNotes(): ", error, error);
       },
       complete: () => {
         this.filteredNotesOptions = this.noteControl.valueChanges.pipe(
@@ -123,54 +123,19 @@ export class MenuSearchComponent {
     }
   }
 
-  /*getAllNotes() {
-    if(!this.getNotesFromStorage()) {
-      this.getNotesFromDb();
-    }
-  }
-
-  getNotesFromStorage(): boolean {
-    let notes: Note[] = this.storageService.getNotes();
-    if(notes) {
-      this.getFilteredNotesOptions(notes);
-      console.log("getNotes() from storage: ", notes)
-      return true;
-    } 
-    else {
-      return false;
-    }
-  }
-
-  getNotesFromDb() {
-    this.noteService.getNotes().subscribe({
-      next: (notes) => {
-        this.getFilteredNotesOptions(notes);
-        console.log("getNotes() from db: ", notes)
-        this.noteService.updateNotesListObservable(notes)
-      },
-      error: (error) => {
-        console.log("error menu-search.component getNotes(): ", error);
-      }
-    })
-  }
-
-  getFilteredNotesOptions(options: Note[]) {
-    this.filteredNotesOptions = this.noteControl.valueChanges.pipe(
-      startWith(''),
-      filter(value => typeof value === 'string'),
-      map(value => options?.filter(option => (option.title as string).toLowerCase().includes(value?.toLowerCase() || '') ))
-    );
-  }*/
-
   displayOptionNote(note: Note): string {
     return note ? note.title as string : '';
   }
 
   onNoteOptionsSelectionChanged(event: MatAutocompleteSelectedEvent) {
-    let selectedNote = event.option.value as Note;
-    this.selectedNote = selectedNote;
-    console.log("selectedNote: ", selectedNote);
-    this.noteService.updateSelectedNoteObservable(selectedNote);
+    let noteSelected  : Note   = event.option.value as Note;
+    let noteSelectedId: number = noteSelected.id as number;
+    this.noteService.getNote(noteSelectedId).subscribe({
+      next: (note) => {
+        this.eventService.updateNoteSelected(note);
+      },
+      error: (error) => { console.log("Error: MenuSearch -> NoteService -> getNote(): ", error); }
+    })
   }
 
 }
