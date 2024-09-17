@@ -1,37 +1,25 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonModule, NgIf, NgFor, NgClass } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInput, MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { ProfilService } from '../../../shared/services/profil.service';
 import { Right } from '../../../shared/enums/right';
 import { StorageService } from '../../../shared/services/storage.service';
-//import { MatDialogTitle, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { EventService } from '../../../shared/services/event.service';
+import { distinctUntilChanged, filter, Observable, of, Subscription, switchMap, tap } from 'rxjs';
+import { Note } from '../../../shared/models/note';
+import { Router } from '@angular/router';
+import { NoteService } from '../../../shared/services/note.service';
+import { AccountService } from '../../../shared/services/account.service';
+import { User } from '../../../shared/models/user';
+import { AccountNote } from '../../../shared/models/account-note';
 
-
-export interface User {
-  id?: number;
-  username?: string;
-  password?: string;
-  email?: string;
-  firstname?: string;
-  lastname?: string;
-  role?: string;
-}
-
-export interface UserShared {
-  userId?: number;
-  username?: string;
-  right?: Right;
-}
 
 @Component({
   selector: 'app-share-note',
@@ -51,129 +39,223 @@ export interface UserShared {
             MatChipInput,
             MatChipsModule,
             MatSlideToggle,
-            MatSelectModule,
-            //MatDialogTitle,
-            //MatDialogActions,
-            //MatDialogContent
-            ],
+            MatSelectModule],
   templateUrl: './share-note.component.html',
   styleUrl: './share-note.component.scss'
 })
 export class ShareNoteComponent {
+  private router         = inject(Router);
+  private noteService    = inject(NoteService);
+  private accountService = inject(AccountService);
+  private eventService   = inject(EventService);
   private storageService = inject(StorageService);
+
+  private subscriptions : Subscription[] = [];
+
+  @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   
-  isToolTips: boolean = false;
-  isDevMode: boolean = false;
-  right: Right = Right.READ;
-  selectedRight: any;
+  userControl  = new FormControl('');
+  msgControl   = new FormControl('');
+  filteredUsersOptions: Observable<User[]> = of([]);
+  usersList    : User[]   = [];
+  usersToShare : User[]   = [];
+  chipUsers    : string[] = [];
+  sharedUsers  : AccountNote[] = [];
+  
+  
+  isDevMode  : boolean = false;
+  isToolTips : boolean = false;
 
-  constructor(private profilService: ProfilService) {}
+  noteSelected  : Note | null = null;
+  rightSelected : Right = Right.READ;
+  right = Right;
 
+  
   ngOnInit(): void {
-    this.profilService.isToolTips$.subscribe(value => {
-      this.isToolTips = value;
-    });
-    /*this.profilService.isDevMode$.subscribe(value => {
-      this.isDevMode = value;
-    });*/
-    this.isDevMode = this.storageService.getIsDevMode();
-  }
-  
-  
-  onRightsSelectionChanged(event: MatSelectChange) {
-    this.selectedRight = event.value;
-  }
+    console.log("share-note.component")
 
-  /*
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  readonly currentUser = model('');
-  readonly users = signal(['Lemon']);
-  readonly allUsers: string[] = ['Alice', 'Bob', 'Charlie', 'David', 'Eve'];
-  readonly filteredUsers = computed(() => {
-    const currentUser = this.currentUser().toLowerCase();
-    return currentUser
-      ? this.allUsers.filter(user => user.toLowerCase().includes(currentUser))
-      : this.allUsers.slice();
-  });
+    this.subscriptions.push(
+      this.eventService.noteSelected$.subscribe(note => {
+        this.noteSelected = note;
+      }),
 
-  readonly announcer = inject(LiveAnnouncer);
+      this.eventService.eventIsDevMode$.subscribe(isDevMode => {
+        this.isDevMode = isDevMode;
+      }),
+      
+      this.eventService.eventIsToolTips$.subscribe(isToolTips => {
+        this.isToolTips = isToolTips;
+      }),
+    )
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our user
-    if (value) {
-      this.users.update(users => [...users, value]);
+    if(!this.noteSelected) {
+      this.noteSelected = this.storageService.getSelectedNote();
     }
 
-    // Clear the input value
-    this.currentUser.set('');
+    if(!this.isDevMode) {
+      this.isDevMode = this.storageService.getIsDevMode();
+    }
+
+    if(!this.isToolTips) {
+      this.isToolTips = this.storageService.getIsToolTips();
+    }
+    
+    // If noteSelected is null (after checking subscription or storage) go to editor
+    if(!this.noteSelected) {
+      this.router.navigate(['/editor']);
+    }
+
+    // Initialise user filter search input
+    this.getUsersFiltered("username");
+
+    // Get list of shared users for the note
+    this.getSharedUsers();
+
   }
 
-  remove(user: string): void {
-    this.users.update(users => {
-      const index = users.indexOf(user);
-      if (index < 0) {
-        return users;
-      }
 
-      users.splice(index, 1);
-      this.announcer.announce(`Removed ${user}`);
-      return [...users];
-    });
+  getUsersFiltered(filterType: string) {
+    this.filteredUsersOptions = this.userControl.valueChanges.pipe(
+      distinctUntilChanged(),
+      filter(searchValue => searchValue != null && typeof searchValue === 'string' && searchValue.trim() !== ''),
+      switchMap(value => this.accountService.getUsersByFilter(value as string, filterType)),
+      tap(users => {
+        this.usersList = users;
+      })
+    )  
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.users.update(users => [...users, event.option.viewValue]);
-    this.currentUser.set('');
-    event.option.deselect();
-  }
-
-  */
   
-  /*userControl = new FormControl('');
-  users: string[] = ['Alice', 'Bob', 'Charlie', 'David', 'Eve'];
-  filteredUsers: Observable<string[]>;
-  selectedUsers: string[] = [];
-  chipUsers: string[] = ['rom1', 'rom2', 'rom3'];
-
-  constructor() {
-    this.filteredUsers = this.userControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value ?? '') )
-    );
+  displayOptionUser(user: User): string {
+    return user ? user.username : '';
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.users.filter(user => user.toLowerCase().includes(filterValue));
-  }
-  
-  addChip(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
 
-    if (value) { this.chipUsers.push(value); }
-
-    event.chipInput!.clear();
+  onUserOptionsSelectionChanged(event: MatAutocompleteSelectedEvent) {
+    let userSelected = event.option.viewValue;
+    if(this.chipUsers.find(chipuser => chipuser === userSelected)) return;                // Check if userSelected is not already selected
+    //if(this.sharedUsers.find(sharedUser => sharedUser.username === userSelected)) return; // Check if userSelected is not already shared
+    let user = this.usersList.find(user => user.username === userSelected);
+    if(user) {
+      this.chipUsers.push(userSelected);
+      this.usersToShare.push(user);
+    }
+    this.userInput.nativeElement.value = '';
     this.userControl.setValue(null);
   }
-
-  removeChip(shareduser: string): void {
-    const index = this.chipUsers.indexOf(shareduser);
-
-    if(index >= 0) {
-      this.chipUsers.splice(index, 1);
-    }
-  }*/
-
-  /*constructor(public dialogRef: MatDialogRef<ShareNoteComponent>) {}
   
-  onCancel() {
-    this.dialogRef.close();
+  
+  addChip(event: MatChipInputEvent) {
+    const userTyped = (event.value || '').trim();
+    if(this.chipUsers.find(chipuser => chipuser === userTyped)) return // Check if user typed in input is not already selected
+    //if(this.sharedUsers.find(sharedUser => sharedUser.username === userTyped)) return; // Check if userSelected is not already shared
+    let user = this.usersList.find(user => user.username === userTyped);
+    if(user) {
+      this.chipUsers.push(userTyped);
+      this.usersToShare.push(user);
+    }
+    event.chipInput.clear();
+    this.userControl.setValue(null);
+    this.closeAutocompletePanel();
+  }
+  
+
+  removeChip(sharedUser: string) {
+    const index = this.chipUsers.indexOf(sharedUser);
+    if(index >= 0) {
+      let user = this.usersToShare.find(user => user.username === sharedUser);
+      if(user) {
+        this.chipUsers.splice(index, 1);
+        this.usersToShare.splice(index, 1);
+      }
+    }  
   }
 
-  onOk() {
-    this.dialogRef.close();
-  }*/
+
+  closeAutocompletePanel() {
+    if (this.autocompleteTrigger) {
+      this.autocompleteTrigger.closePanel();
+    }
+  }
+  
+  
+  onRightSelectionChanged(event: MatSelectChange) {
+    this.rightSelected = event.value;
+  }
+
+
+  getSharedUsers() {
+    this.accountService.getUsersByNoteId(this.noteSelected?.id as number).subscribe({
+      next: (users) => {
+        this.sharedUsers = users;
+      },
+      error: (error) => {
+        console.log("Error: AccountService - getUsersByNoteId()", error);
+      }
+    })
+  }
+
+
+  setAccountNoteDto(): AccountNote[] {
+    let accountNotes: AccountNote[] = [];
+    this.usersToShare.forEach(userToShare => {
+      let accountNote = {
+        accountNoteId: { 
+          accountId: userToShare?.id as number,
+          noteId   : this.noteSelected?.id as number 
+        },
+        accountId : userToShare?.id as number,
+        noteId    : this.noteSelected?.id as number,
+        right     : this.rightSelected,
+        message   : this.msgControl.value ?? ""
+      }
+      accountNotes.push(accountNote);
+    })
+    return accountNotes;
+  }
+
+
+  onShareNote() {
+    this.noteService.share(this.setAccountNoteDto()).subscribe({ 
+      next : (shared: boolean) => { 
+        if(shared) {
+          this.getSharedUsers();
+          this.usersToShare = [];
+          this.chipUsers = [];
+          this.userControl.setValue(null);
+        }
+      },
+      error: (error) => {
+        console.log("Error: NoteService - share()", error);
+        this.usersToShare = [];
+        this.chipUsers = [];
+        this.userControl.setValue(null);
+      }
+    })  
+  }
+
+
+  onUnshareNote(sharedUser: AccountNote) {
+    let sharedUsers: AccountNote[] = [];
+    sharedUsers.push(sharedUser);
+    this.noteService.unshare(sharedUsers).subscribe({ 
+      next : (unshared: boolean) => { 
+        if(unshared) {
+          this.getSharedUsers();
+          this.usersToShare = [];
+          this.chipUsers = [];
+          this.userControl.setValue(null);
+        }
+      },
+      error: (error) => {
+        console.log("Error: NoteService - unshare()", error);
+        this.usersToShare = [];
+        this.chipUsers = [];
+        this.userControl.setValue(null);
+      }
+    })  
+  }
+
 
 }

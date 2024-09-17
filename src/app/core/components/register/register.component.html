@@ -1,35 +1,59 @@
-<div class="flex flex-col justify-center items-center w-screen h-screen bg-gray-200">
-    <!--TODO: error message-->
-    <div>
-        <h1 class="mb-8 font-bold text-center text-3xl">Sign up</h1>
-        <form [formGroup]="form" class="flex flex-col items-center">
-            <mat-form-field appearance="outline">
-                <mat-label>Username</mat-label>
-                <input matInput formControlName="usernameControl"/>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Password</mat-label>
-                <input matInput type="password" formControlName="passwordControl"/>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Confirm password</mat-label>
-                <input matInput type="password" formControlName="password2Control"/>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" formControlName="emailControl"/>
-            </mat-form-field>
-            <button mat-raised-button type="submit" color="primary" (click)="onRegister()" class="w-full">
-                <mat-icon>login</mat-icon>
-                Sign up
-            </button>
-        </form>
+<div class="flex flex-col justify-center items-center w-screen min-h-screen bg-gray-200 custom-bg-register">
+    <div *ngIf="isError" class="w-1/3 mb-4">
+        <app-message [isError]="isError" [msg]="errorMsg"></app-message>
     </div>
-    <div class="mt-8 text-center">
+    <h1 class="h-12 mb-8 flex justify-center items-center font-bold text-3xl">Sign up</h1>
+    <form [formGroup]="form" class="flex flex-col items-center">
+        <div class="w-full flex justify-center max-s:flex-col bg-white pt-4">
+            <mat-form-field appearance="outline" class="w-full px-2">
+                <mat-label>Firstname</mat-label>
+                <input matInput formControlName="firstnameControl" (keydown.enter)="onCreateAccount()"/>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full px-2">
+                <mat-label>Lastname</mat-label>
+                <input matInput formControlName="lastnameControl" (keydown.enter)="onCreateAccount()"/>
+            </mat-form-field>
+        </div>
+        <div class="w-full flex justify-center max-s:flex-col bg-white pt-4">
+            <mat-form-field appearance="outline" class="w-full px-2">
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="usernameControl" [required]="true" (keydown.enter)="onCreateAccount()"/>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full px-2">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="emailControl" [required]="true" (keydown.enter)="onCreateAccount()"/>
+            </mat-form-field>
+        </div>
+        <div class="w-full flex justify-center max-s:flex-col bg-white pt-4">
+            <mat-form-field appearance="outline" class="w-full px-2">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'" formControlName="passwordControl" [required]="true" (keydown.enter)="onCreateAccount()"/>
+                <button mat-icon-button
+                    matSuffix
+                    (click)="onHidePassword($event)">
+                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full px-2">
+                <mat-label>Confirm password</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password2Control" [required]="true" (keydown.enter)="onCreateAccount()"/>
+                <button mat-icon-button
+                    matSuffix
+                    (click)="onHidePassword($event)">
+                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button type="submit" color="primary" (click)="onCreateAccount()" (keydown.enter)="onCreateAccount()" class="w-1/2 mt-8">
+            <mat-icon>login</mat-icon>
+            Sign up
+        </button>
+    </form>
+    <div class="mt-8 text-center text-black text-xl">
         Already have an account !
-        <span class="hover:text-sky-400 hover:cursor-pointer"
-              (keydown.enter)="onLogin()" 
-              (click)="onLogin()">
+        <span class="hover:text-sky-700 hover:font-bold hover:cursor-pointer"
+              (keydown.enter)="onGoToLogin()" 
+              (click)="onGoToLogin()">
             Sign In
         </span>
     </div>

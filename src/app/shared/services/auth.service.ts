@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Account } from '../models/account';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
+import { AuthRequestDTO } from '../models/auth-request-dto';
+import { Account } from '../models/account';
 
 const BASE_URL = environment.apiUrl + '/authentication/';
 
@@ -17,38 +18,31 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
-  //private httpClient = inject(HttpClient);
   
-  constructor(private httpClient: HttpClient,
-              private storageService: StorageService) {}
+  private httpClient     = inject(HttpClient);
+  private storageService = inject(StorageService);
   
-  register(account: Account): Observable<Account> {
-    return this.httpClient.post<any>(BASE_URL + 'register', account, httpOptions);
-  }
-  
-  login(account: Account): Observable<string> { 
-    console.log("AuthService login");
+
+  login(auth: AuthRequestDTO): Observable<Account> { 
     const body = new FormData();
-    body.append('username', account.username as string);
-    body.append('password', account.password as string);
-    return this.httpClient.post(BASE_URL + 'login', 
-                                body, 
-                                { withCredentials: true, responseType: 'text' });
+    body.append('username', auth.username as string);
+    body.append('password', auth.password as string);
+    return this.httpClient.post<Account>(BASE_URL + 'login', body, { withCredentials: true, responseType: 'json' });
   }
 
-  logout(): Observable<any> {
-    console.log("AuthService logout");
+
+  logout(): Observable<string> {
     const body = {};
-    return this.httpClient.post(BASE_URL + 'logout', 
-                                body, 
-                                { withCredentials: true, responseType: 'text' });
+    return this.httpClient.post(BASE_URL + 'logout', body, { withCredentials: true, responseType: 'text' });
   }
+
 
   getIsAuthenticated(): boolean {
     const isAuth = this.storageService.getIsAuth();
     if(isAuth) { return true; }
     return false;
   }
+
 
   setIsAuthenticated(authenticated: boolean): void {
     this.storageService.setIsAuth(authenticated);

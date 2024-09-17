@@ -3,40 +3,40 @@
         <app-message [isError]="isError" [msg]="errorMsg"></app-message>
     </div>
     <h1 class="mb-8 font-bold text-center text-3xl">
-        Login
+        Send email to retrieve lost password
     </h1>
     <form [formGroup]="form" class="flex flex-col items-center">
         <mat-form-field appearance="outline" class="w-full bg-white pt-4 px-4">
             <mat-label>Username</mat-label>
-            <input matInput formControlName="usernameControl" (keydown.enter)="onLogin()"/>
+            <input matInput formControlName="usernameControl"/>
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full mb-8 pt-4 px-4 bg-white">
-            <mat-label>Password</mat-label>
-            <input matInput [type]="hide() ? 'password' : 'text'" formControlName="passwordControl" (keydown.enter)="onLogin()"/>
-            <button mat-icon-button
-                    matSuffix
-                    (click)="onHidePassword($event)">
-                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="emailControl"/>
         </mat-form-field>
-        <button mat-raised-button type="submit" color="primary" (click)="onLogin()" class="w-full">
-            <mat-icon>login</mat-icon>
-            Login
+        <button mat-raised-button type="submit" 
+            color="primary" 
+            (keydown.enter)="onLostPwd()"
+            (click)="onLostPwd()" 
+            class="w-full">
+            <mat-icon>outgoing_mail</mat-icon>
+            Send email
         </button>
     </form>
+    <div class="mt-8 text-center text-black text-xl">
+        Already have an account !
+        <span class="hover:text-sky-700 hover:font-bold hover:cursor-pointer"
+              (keydown.enter)="onGoToLogin()" 
+              (click)="onGoToLogin()">
+            Sign In
+        </span>
+    </div>
     <div class="mt-8 text-center text-black text-xl">
         No account yet !
         <span class="hover:text-sky-700 hover:font-bold hover:cursor-pointer"
               (keydown.enter)="onRegister()"
               (click)="onRegister()">
             Sign Up
-        </span>
-    </div>
-    <div class="mt-8 text-center text-black text-xl">
-        <span class="hover:text-sky-700 hover:font-bold hover:cursor-pointer"
-              (keydown.enter)="onLostPassword()"
-              (click)="onLostPassword()">
-            Lost password
         </span>
     </div>
 </div>

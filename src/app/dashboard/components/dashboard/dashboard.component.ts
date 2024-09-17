@@ -1,12 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [MatLabel],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+  
 
+  ngOnInit() {
+    console.log("dashboard.component");
+    
+  } 
+ 
+      
 }

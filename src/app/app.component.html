@@ -1,13 +1,17 @@
 <div class="flex flex-col h-screen">
     <div *ngIf='showComponent("header")'>
-        <app-header [isEditor]="isEditor()"></app-header>
+        <app-header [isEditor]="isEditor()"
+                    [isDevMode]="isDevMode"
+                    [isToolTips]="isToolTips"
+                    [isEditable]="isEditable">
+        </app-header>
     </div>
     <div class="flex-1 overflow-auto" [ngClass]="{ 'overflow-hidden': isEditor() }">
         <router-outlet></router-outlet>
     </div>
     <div *ngIf='showComponent("footer")'>
-        <app-footer></app-footer>
+        <app-footer [isDevMode]="isDevMode"
+                    [isToolTips]="isToolTips">
+        </app-footer>
     </div>
 </div>
-
-<!--(isDevModeEmit)="checkIsDevMode($event)"-->

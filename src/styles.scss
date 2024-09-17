@@ -1,14 +1,10 @@
 
-// Custom Theming for Angular Material (For more information: https://material.angular.io/guide/theming)
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+  
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the theme object.
+
 $Angular-NotesV2-theme: mat.define-theme((
   color: (
     theme-type: light,
@@ -20,12 +16,11 @@ $Angular-NotesV2-theme: mat.define-theme((
   )
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+
 :root {
   @include mat.all-component-themes($Angular-NotesV2-theme);
 }
+
 
 // Tailwind
 @import "tailwindcss/base";
@@ -54,31 +49,25 @@ quill-editor {
   height: 100%;
 }
 
-// quill-editor .ql-container {
-//   background-color: blue;
-// }
+quill-editor .ql-toolbar {
+  border: none;
+}
 
 quill-editor .ql-editor {
-  height: calc(100% - 3rem);
-  overflow: auto;
-  font-size: 18px;
+  height    : calc(100% - 2.9rem);
+  overflow  : auto;
+  font-size : 18px;
+  color     : black;
 }
 
-.custom-editor-bg-color .ql-editor {
-  background-color: rgb(234, 109, 109);
-}
 
 // QUILL-EDITOR TABLET & MOBILE TOOLBAR AND EDITOR BREAKPOINTS FOR DYNAMIC HEIGHT RELATIVE TO SCREEN WIDTH
 @media all and (min-width: 901px) {
   quill-editor .ql-toolbar.ql-snow {
-    min-height: 3rem;
-    max-height: 3rem;
-    display: flex;
+    min-height : 3rem;
+    max-height : 3rem;
+    display    : flex;
     align-items: center;
-  }
-
-  .custom-editor-bg-color .ql-toolbar {
-    background-color: rgb(159, 187, 239);
   }
 }  
 
@@ -86,10 +75,6 @@ quill-editor .ql-editor {
   quill-editor .ql-toolbar.ql-snow {
     min-height: 4rem;
     max-height: 4rem;
-  }
-  
-  .custom-editor-bg-color .ql-toolbar {
-    background-color: aqua;
   }
   
   quill-editor .ql-editor {
@@ -102,10 +87,6 @@ quill-editor .ql-editor {
     min-height: 6rem;
     max-height: 6rem;
   }
-  
-  .custom-editor-bg-color .ql-toolbar {
-    background-color: greenyellow;
-  }
 
   quill-editor .ql-editor{
     height: calc(100% - 6rem);
@@ -116,10 +97,6 @@ quill-editor .ql-editor {
   quill-editor .ql-toolbar.ql-snow {
     min-height: 8rem;
     max-height: 8rem;
-  }
-  
-  .custom-editor-bg-color .ql-toolbar {
-    background-color: palevioletred;
   }
   
   quill-editor .ql-editor {
@@ -160,12 +137,63 @@ button {
 //FLOATING LABEL 
 .custom-floating-label .mdc-text-field .mdc-floating-label {
   transform: translateY(-120%);
-  // top: 50%;
-  // pointer-events: none;
 }
 
 
 
+// BACKGROUND IMAGES
 
-// Comment out the line below if you want to use the pre-defined typography utility classes. // For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
-// @include mat.typography-hierarchy($Angular-NotesV2-theme);
+.custom-bg-header { 
+  background-image    : url('../public/images/background-image-header-footer.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+  border              : none;
+}
+
+.custom-editor-bg .ql-toolbar { 
+  background-image    : url('../public/images/background-image-header-footer.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+  border              : none;
+}
+
+/*.custom-editor-bg-color .ql-editor {
+  background-image    : url('../public/images/background-image-editor.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+}*/
+
+.custom-bg-footer {
+  background-image    : url('../public/images/background-image-header-footer.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+  border              : none;
+}
+
+.custom-bg-profil {
+  background-image    : url('../public/images/background-image-profil.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+  border              : none;
+}
+
+.custom-bg-dashboard {
+  background-image    : url('../public/images/background-image-dashboard.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+  border              : none;
+}
+
+.custom-bg-login, .custom-bg-register {
+  background-image    : url('../public/images/background-image-login.webp');
+  background-size     : cover; 
+  background-repeat   : repeat-x;
+  background-position : center;
+  border              : none;
+}

@@ -4,51 +4,77 @@ import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./core/components/header/header.component";
 import { FooterComponent } from "./core/components/footer/footer.component";
 import { ProfilComponent } from './profil/components/profil/profil.component';
-import { ProfilService } from './shared/services/profil.service';
-import { StorageService } from './shared/services/storage.service';
+import { EventService } from './shared/services/event.service';
+import { Subscription } from 'rxjs';
+import { Account } from './shared/models/account';
+import { AccountService } from './shared/services/account.service';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [NgIf, NgClass, RouterOutlet, HeaderComponent, FooterComponent, ProfilComponent]
+    imports: [NgIf, 
+              NgClass, 
+              RouterOutlet, 
+              HeaderComponent, 
+              FooterComponent, 
+              ProfilComponent]
 })
 export class AppComponent {
-  private router = inject(Router);
-  //private profilService = inject(ProfilService);
-  //private storageService = inject(StorageService);
-
+  private router         = inject(Router);
+  private eventService   = inject(EventService);
+  private accountService = inject(AccountService);
+  
   title = 'notes-write-V2';
-  isDevMode: boolean = false;
-  isToolTips: boolean = false;
 
-  ngOnInit(): void {
-    /*this.profilService.isToolTips$.subscribe(value => {
-      this.isToolTips = value;
-    });*/
-    /*this.profilService.isDevMode$.subscribe(value => {
-      this.isDevMode = value;
-    });*/
-    //this.isDevMode = this.storageService.getIsDevMode();
+  account! : Account;
+
+  isDevMode!  : boolean;
+  isToolTips! : boolean;
+  isEditable! : boolean;
+
+  private subscriptions : Subscription[] = [];
+  
+  ngOnInit() {
+    console.log("app.component");
+
+    this.subscriptions.push(
+      this.eventService.eventIsDevMode$.subscribe(isDevMode => {
+        this.isDevMode = isDevMode;
+      }),
+
+      this.eventService.eventIsToolTips$.subscribe(isToolTips => {
+        this.isToolTips = isToolTips;
+      }),
+
+      this.eventService.eventIsEditable$.subscribe(isEditable => {
+        this.isEditable = isEditable;
+      })
+    )
+
+    this.account = this.accountService.getCurrentAccount();
+      this.isDevMode  = this.account?.isDevMode ;
+      this.isToolTips = this.account?.isToolTips;
+      this.isEditable = this.account?.isEditable;
+    
+
   }
+
 
   showComponent(component:string): boolean {
     if( component === "header" || component === "footer" ) {
       return this.router.url !== "/register" &&
              this.router.url !== "/login" &&
-             this.router.url !== "/logout";
+             this.router.url !== "/logout" &&
+             this.router.url !== "/lost-pwd";
     }
     return false;
   }
 
+
   isEditor() {
     return this.router.url === "/editor";
   }
-
-  /*checkIsDevMode(isDevMode: any) {
-    this.isDevMode = isDevMode;
-  }*/
-
   
 }

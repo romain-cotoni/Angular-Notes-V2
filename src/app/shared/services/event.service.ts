@@ -1,74 +1,94 @@
 import { Injectable } from '@angular/core';
 import { Note } from '../models/note';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
 
-  private eventSubject         = new Subject<any>();
-  private eventSaveNoteSubject = new Subject<boolean>();
-  private noteSelectedSubject  = new Subject<Note>();
-  private notesListSubject     = new Subject<Note[]>();
-  private editorContentSubject = new Subject<string>();
-  private editorTitleSubject   = new Subject<string>();
+  private noteSelectedSubject     = new Subject<Note | null>();
+  private notesListSubject        = new Subject<boolean>();
+  private noteTitleSubject        = new Subject<string>();
+  private eventSaveNoteSubject    = new Subject<string>();
+  private eventDeleteNoteSubject  = new Subject<boolean>();
+  private eventClearEditorSubject = new Subject<boolean>();
+  private eventShareNoteSubject   = new Subject<boolean>();
+  private eventIsLockSubject      = new Subject<boolean>();
+  private eventDownloadPdfSubject = new Subject<boolean>();
+  private eventIsDevModeSubject   = new BehaviorSubject<boolean>(false);
+  private eventIsToolTipsSubject  = new BehaviorSubject<boolean>(false);
+  private eventIsEditableSubject  = new BehaviorSubject<boolean>(false);
 
-  event$         = this.eventSubject.asObservable();
-  eventSaveNote$ = this.eventSaveNoteSubject.asObservable();
-  noteSelected$  = this.noteSelectedSubject.asObservable();
-  notesList$     = this.notesListSubject.asObservable();
-  editorContent$ = this.editorContentSubject.asObservable();
-  editorTitle$   = this.editorTitleSubject.asObservable();
+  noteSelected$     = this.noteSelectedSubject.asObservable();
+  notesList$        = this.notesListSubject.asObservable();
+  noteTitle$        = this.noteTitleSubject.asObservable();
+  eventSaveNote$    = this.eventSaveNoteSubject.asObservable();
+  eventDeleteNote$  = this.eventDeleteNoteSubject.asObservable();
+  eventClearEditor$ = this.eventClearEditorSubject.asObservable();
+  eventShareNote$   = this.eventShareNoteSubject.asObservable();
+  eventIsLock$      = this.eventIsLockSubject.asObservable();
+  eventDownloadPdf$ = this.eventDownloadPdfSubject.asObservable();
+  eventIsDevMode$   = this.eventIsDevModeSubject.asObservable();
+  eventIsToolTips$  = this.eventIsToolTipsSubject.asObservable();
+  eventIsEditable$  = this.eventIsEditableSubject.asObservable();
+  
 
-
-  /**
-   * Emits a generic event with any type of data to subscribers.
-   * @param data The data or event payload to emit.
-   */
-  emitEvent(data: any) {
-    this.eventSubject.next(data);
-  }
-
-  /**
-   * Emits a generic event with any type of data to subscribers.
-   * @param data The data or event payload to emit.
-   */
-  emitSaveNoteEvent() {
-    this.eventSaveNoteSubject.next(true);
-  }
-
-  /**
-   * Emits the selected note to all subscribers.
-   * @param note - The Note object that was selected.
-   */
-  updateNoteSelected(note: Note) {
+  emitUpdateNoteSelected(note: Note | null) {
     this.noteSelectedSubject.next(note);
   }
 
-  /**
-   * Emits the updated list of notes to all subscribers.
-   * @param notes - An array of Note objects representing the updated list.
-   */
-  updateNotesList(notes: Note[]) {
-    this.notesListSubject.next(notes);
+  
+  emitUpdateNotesList() {
+    this.notesListSubject.next(true);
   }
 
-  /**
-   * Emits the updated content of the editor to all subscribers.
-   * @param content - A string representing the updated content in the editor.
-   */
-  updateEditorContent(content: string) {
-    this.editorContentSubject.next(content);
+
+  emitSaveNoteEvent(title: string) {
+    this.eventSaveNoteSubject.next(title);
   }
 
-  /**
-   * Emits the updated title of the editor to all subscribers.
-   * @param title - A string representing the updated title in the editor.
-   */
-  updateEditorTitle(title: string) {
-    this.editorTitleSubject.next(title);
+  
+  emitDeleteNoteEvent() {
+    this.eventDeleteNoteSubject.next(true);
+  }
+  
+  
+  emitClearEditorEvent() {
+    this.eventClearEditorSubject.next(true);
+  }
+  
+  
+  emitShareNoteEvent() {
+    this.eventShareNoteSubject.next(true);
+  }
+  
+  
+  emitLockEvent(isLocked: boolean) {
+    this.eventIsLockSubject.next(isLocked);
+  }
+  
+  
+  emitDownloadPdfEvent() {
+    this.eventDownloadPdfSubject.next(true);
   }
 
+
+  emitIsDevMode(isDevMode: boolean) {
+    this.eventIsDevModeSubject.next(isDevMode);
+  }
+
+  
+  emitIsToolTips(isToolTips: boolean) {
+    this.eventIsToolTipsSubject.next(isToolTips);
+  }
+
+
+  emitIsEditable(isEditable: boolean) {
+    this.eventIsEditableSubject.next(isEditable);
+  }
+  
+  
 
 }

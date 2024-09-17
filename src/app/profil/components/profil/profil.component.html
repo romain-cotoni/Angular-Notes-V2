@@ -1,37 +1,92 @@
+<div class="w-full min-h-full flex flex-col items-center custom-bg-profil">
+    <h1 class="h-12 flex justify-center items-center font-bold text-xl">PROFIL</h1>
 
-<div class="w-full flex flex-col">
-    <h1 class="ms-4 mb-4 font-bold text-2xl">PROFIL</h1>
-    <h2 class="ms-4 mb-2 font-bold text-lg">CONFIGURATION</h2>
+    <div class="flex mt-4 mb-2 ">
+        <h2 class="me-4 font-bold text-lg">IDENTITY</h2>
+        <mat-slide-toggle labelPosition="after" 
+                          class="-mt-1" 
+                          [(ngModel)]="isEdit" 
+                          (change)="onEditToggleChange($event)">
+            Edit
+        </mat-slide-toggle>
+    </div>
+
+    <form *ngIf="isEdit" [formGroup]="form" class="s:w-1/3 flex flex-col justify-center">
+        <h2 class="text-center">Edit identity</h2>
+        <div class="w-100 flex justify-center items-center">
+            <mat-form-field appearance="outline" class="pt-2.5">
+                <mat-label>Firstname</mat-label>
+                <input matInput type="text" formControlName="firstnameControl"/>
+            </mat-form-field>
+        </div>
+        <div class="w-100 flex justify-center items-center">
+            <mat-form-field appearance="outline" class="pt-2.5">
+                <mat-label>Lastname</mat-label>
+                <input matInput type="text" formControlName="lastnameControl"/>
+            </mat-form-field>
+        </div>
+        <div class="w-100 flex justify-center items-center">
+            <mat-form-field appearance="outline" class="pt-2.5">
+                <mat-label>Username</mat-label>
+                <input matInput type="text" formControlName="usernameControl"/>
+            </mat-form-field>
+        </div>
+        <div class="w-100 flex justify-center items-center">
+            <mat-form-field appearance="outline" class="pt-2.5">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="emailControl"/>
+            </mat-form-field>
+        </div>
+        <div class="w-100 flex justify-center items-center">
+            <mat-form-field appearance="outline" class="pt-2.5">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="passwordControl"/>
+            </mat-form-field>
+        </div>
+        <div class="w-100 flex justify-center items-center">
+            <mat-form-field appearance="outline" class="pt-2.5">
+                <mat-label>Confirm password</mat-label>
+                <input matInput type="password" formControlName="password2Control"/>
+            </mat-form-field>
+        </div>
+        <div class="mt-2 flex justify-center items-center">
+            <button mat-raised-button type="submit" color="primary" (click)="onEditAccount()" class="s:w-1/4 max-s:w-2/3">
+                <mat-icon>edit</mat-icon>
+                Edit
+            </button>
+        </div>
+        <div class="self-center">
+            <div *ngIf="isError" class="w-fit max-w-screen my-4 mx-1">
+                <app-message [isError]="isError" [msg]="errorMsg"></app-message>
+            </div>
+        </div>
+    </form>
+
+    <div *ngIf="!isEdit" class="flex flex-col">
+        <mat-label class="ms-4 mb-2 flex"><div class="w-20 me-2 font-bold">Firstname:</div> {{ account.firstname        }}</mat-label>
+        <mat-label class="ms-4 mb-2 flex"><div class="w-20 me-2 font-bold">Lastname: </div> {{ account.lastname         }}</mat-label>
+        <mat-label class="ms-4 mb-2 flex"><div class="w-20 me-2 font-bold">Username: </div> {{ account.username         }}</mat-label>
+        <mat-label class="ms-4 mb-2 flex"><div class="w-20 me-2 font-bold">Email:    </div> {{ account.email            }}</mat-label>
+        <mat-label class="ms-4 mb-2 flex"><div class="w-20 me-2 font-bold">Role:     </div> {{ account.role | lowercase }}</mat-label>
+    </div>
+
+    <h2 class="mt-4 mb-2 font-bold text-lg">CONFIGURATION</h2>
+    <div class="flex flex-col">
     <mat-slide-toggle labelPosition="after" 
-                      class="ms-4 mb-2"
-                      [(ngModel)]="profil.isToolTips"
+                      class="mb-2"
+                      [(ngModel)]="isToolTips"
                       (change)="onToolTipsToggleChange($event)">
         Tooltips
     </mat-slide-toggle>
-    <mat-slide-toggle labelPosition="after"
-                      class="ms-4 mb-2" 
-                      [(ngModel)]="profil.isDevMode"
+    <mat-slide-toggle *ngIf="isAdmin" labelPosition="after"
+                      class="mb-2" 
+                      [(ngModel)]="isDevMode"
                       (change)="onDevModeToggleChange($event)">
         Developer mode
     </mat-slide-toggle>
-    <h2 class="ms-4 mt-4 mb-2 font-bold text-lg">NOTIFICATIONS SUBSCRIPTIONS</h2>
-    <mat-slide-toggle class="ms-4" labelPosition="after"><!--TODO-->
-        Sharing demands
-    </mat-slide-toggle>
-    <h2 class="ms-4 mt-4 mb-2 font-bold text-lg">NOTIFICATION RECEIVED</h2>
-        <mat-label class="ms-4">Demand on note "notetitle" from "username"</mat-label><!--TODO-->
-    <h2 class="ms-4 mt-4 mb-2 font-bold text-lg">IDENTITY</h2>
-    <mat-label class="ms-4 mb-2">Firstname</mat-label>
-    <mat-label class="ms-4 mb-2">Lastname</mat-label>
-    <mat-label class="ms-4 mb-2">Username</mat-label>
-    <mat-label class="ms-4 mb-2">Email</mat-label>
+    </div>
+    <h2 class="mt-4 mb-2 font-bold text-lg">DASHBOARD</h2>
+    <mat-label class="ms-4 mb-2 flex"><div class="w-48 me-2 font-bold">N° of notes :      </div>{{ nbOfNotes       }}</mat-label>
+    <mat-label class="ms-4 mb-2 flex"><div class="w-48 me-2 font-bold">N° of sharednotes :</div>{{ nbOfSharedNotes }}</mat-label>
+    
 </div>
-
-<!-- <div *ngIf="isTest" allResult; else noResult>
-    <ng-template #allResult>
-        <p>all results</p>
-    </ng-template>
-    <ng-template #noResult>
-        <p>no results</p>
-    </ng-template>
-</div> -->

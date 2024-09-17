@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { RegisterComponent } from './core/components/register/register.component';
 import { LoginComponent } from './core/components/login/login.component';
 import { LogoutComponent } from './core/components/logout/logout.component';
+import { LostPwdComponent } from './core/components/lost-pwd/lost-pwd.component';
 import { EditorComponent } from './editor/components/editor/editor.component';
 import { ShareNoteComponent } from './editor/components/share-note/share-note.component';
 import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'register'  , component: RegisterComponent                             },
   { path: 'login'     , component: LoginComponent                                },
   { path: 'logout'    , component: LogoutComponent                               },
+  { path: 'lost-pwd'  , component: LostPwdComponent                              },
   { path: 'editor'    , component: EditorComponent    , canActivate: [AuthGuard] },
   { path: 'share-note', component: ShareNoteComponent , canActivate: [AuthGuard] },
   { path: 'dashboard' , component: DashboardComponent , canActivate: [AuthGuard] },

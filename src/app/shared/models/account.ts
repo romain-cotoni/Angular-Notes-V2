@@ -1,5 +1,11 @@
 export interface Account {
-    email?: string;
-    username?: string;
-    password?: string;
+    id?        : number;
+    firstname? : string;
+    lastname?  : string;
+    username?  : string;
+    email?     : string;
+    role       : string;
+    isDevMode  : boolean;
+    isToolTips : boolean;
+    isEditable : boolean;
 }
