@@ -30,6 +30,7 @@ jobs:
           host: ${{ secrets.OVH_VPS_SSH_HOST }}
           username: ${{ secrets.OVH_VPS_SSH_USER }}
           key: ${{ secrets.OVH_VPS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.OVH_VPS_SSH_PORT }}
           source: dist/angular-notes/*
           target: /var/www/html/angular-notes/
 
@@ -39,5 +40,6 @@ jobs:
           host: ${{ secrets.OVH_VPS_SSH_HOST }}
           username: ${{ secrets.OVH_VPS_SSH_USER }}
           key: ${{ secrets.OVH_VPS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.OVH_VPS_SSH_PORT }}
           script: |
             sudo systemctl restart nginx
