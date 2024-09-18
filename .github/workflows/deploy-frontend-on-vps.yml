@@ -10,6 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clean up old files
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.OVH_VPS_SSH_HOST }}
+          username: ${{ secrets.OVH_VPS_SSH_USER }}
+          key: ${{ secrets.OVH_VPS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.OVH_VPS_SSH_PORT }}
+          script: |
+            sudo rm -rf /var/www/html/*
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -31,8 +41,8 @@ jobs:
           username: ${{ secrets.OVH_VPS_SSH_USER }}
           key: ${{ secrets.OVH_VPS_SSH_PRIVATE_KEY }}
           port: ${{ secrets.OVH_VPS_SSH_PORT }}
-          source: dist/angular-notes/*
-          target: /var/www/html/angular-notes/
+          source: dist/angular-notes/browser/*
+          target: /var/www/html/
 
       - name: Restart Nginx
         uses: appleboy/ssh-action@v0.1.1
