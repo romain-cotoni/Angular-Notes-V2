@@ -1,7 +1,6 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { EventService } from '../../../shared/services/event.service';
 
 @Component({
   selector: 'app-footer',
@@ -11,11 +10,15 @@ import { EventService } from '../../../shared/services/event.service';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-
-  private subscriptions: Subscription[] = [];
+  GITHUB_ICON   = "/images/github.png";
+  GITHUB_URL    = "https://github.com/romain-cotoni";
+  LINKEDIN_ICON = "/images/linkedin.png";
+  LINKEDIN_URL  = "https://www.linkedin.com/in/romain-cotoni/"
   
   @Input() isDevMode : boolean | null = null;
   @Input() isToolTips: boolean = false;
+  
+  private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
     this.subscriptions.push(
