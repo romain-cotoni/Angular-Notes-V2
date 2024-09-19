@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { QuillModule } from 'ngx-quill';
+import { QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { MatDialog } from '@angular/material/dialog';
 import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
@@ -28,14 +28,16 @@ import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layo
 
 
 export class EditorComponent {
-  private router         = inject(Router);
-  private noteService    = inject(NoteService);
-  private accountService = inject(AccountService);
-  private eventService   = inject(EventService);
-  private pdfService     = inject(PdfService);
+  private router             = inject(Router);
+  private noteService        = inject(NoteService);
+  private accountService     = inject(AccountService);
+  private eventService       = inject(EventService);
+  private pdfService         = inject(PdfService);
   private breakpointObserver = inject(BreakpointObserver);
-  readonly dialog        = inject(MatDialog);
+  readonly dialog            = inject(MatDialog);
   
+  @ViewChild('quillEditor', { static: true }) quillEditor!: QuillEditorComponent;
+
   private subscriptions: Subscription[] = [];
   
   account!      : Account;
@@ -73,7 +75,7 @@ export class EditorComponent {
   ngOnInit(): void {
     console.log("editor.component");
 
-    // Choose Quill toolbar based on screen width
+    // Select Quill toolbar based on screen width
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
       this.toolbarOptions = result.matches ? this.toolbarMobileOptions : this.toolbarDesktopOptions;
     });
@@ -102,6 +104,10 @@ export class EditorComponent {
 
       this.eventService.eventDownloadPdf$.subscribe( () => {
         this.downloadPDF();
+      }),
+
+      this.eventService.eventFocusEditor$.subscribe( () => {
+        this.focusEditor();
       }),
 
       this.eventService.eventIsLock$.subscribe(isEditable => {
@@ -216,6 +222,14 @@ export class EditorComponent {
 
   downloadPDF() {
     this.pdfService.convertHtmlToPdf(this.editorContent);
+  }
+
+
+  focusEditor() {
+    const quill = this.quillEditor.quillEditor; // Access Quill editor instance
+    if (quill) {
+      quill.focus(); // Use Quill's focus() method
+    }
   }
   
 

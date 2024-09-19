@@ -43,10 +43,10 @@ import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent, M
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  private router         = inject(Router);
-  private eventService   = inject(EventService);
-  private noteService    = inject(NoteService);
-  private accountService = inject(AccountService);
+  private router               = inject(Router);
+  private eventService         = inject(EventService);
+  private noteService          = inject(NoteService);
+  private accountService       = inject(AccountService);
 
   @ViewChild('noteAutocomplete') noteAutocomplete!: MatAutocomplete;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
@@ -250,6 +250,10 @@ export class HeaderComponent {
     this.router.navigate(['/editor']);
   }
 
+  onMoveCursorToEditor() {
+    this.eventService.emitFocusEditorEvent();
+  }
+
 
   private getAccountNoteRight(note: Note): Right {
     if(this.accountId) {
@@ -263,6 +267,7 @@ export class HeaderComponent {
     } 
     return Right.READ; // Return minimum Read Right only if get Right fail 
   }
+
 
 
 }

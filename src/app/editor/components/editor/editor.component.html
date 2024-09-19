@@ -1,4 +1,5 @@
-<quill-editor class="w-full custom-quill-editor" 
+<quill-editor #quillEditor
+              class="w-full custom-quill-editor" 
               [ngClass]="{ 'custom-editor-bg': isDevMode }" 
               [(ngModel)]="editorContent" 
               [modules]="{ toolbar: toolbarOptions }">

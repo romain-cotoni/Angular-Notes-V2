@@ -17,6 +17,7 @@ export class EventService {
   private eventShareNoteSubject   = new Subject<boolean>();
   private eventIsLockSubject      = new Subject<boolean>();
   private eventDownloadPdfSubject = new Subject<boolean>();
+  private eventFocusEditorSubject = new Subject<boolean>();
   private eventIsDevModeSubject   = new BehaviorSubject<boolean>(false);
   private eventIsToolTipsSubject  = new BehaviorSubject<boolean>(false);
   private eventIsEditableSubject  = new BehaviorSubject<boolean>(false);
@@ -30,6 +31,7 @@ export class EventService {
   eventShareNote$   = this.eventShareNoteSubject.asObservable();
   eventIsLock$      = this.eventIsLockSubject.asObservable();
   eventDownloadPdf$ = this.eventDownloadPdfSubject.asObservable();
+  eventFocusEditor$ = this.eventFocusEditorSubject.asObservable();
   eventIsDevMode$   = this.eventIsDevModeSubject.asObservable();
   eventIsToolTips$  = this.eventIsToolTipsSubject.asObservable();
   eventIsEditable$  = this.eventIsEditableSubject.asObservable();
@@ -72,6 +74,11 @@ export class EventService {
   
   emitDownloadPdfEvent() {
     this.eventDownloadPdfSubject.next(true);
+  }
+
+
+  emitFocusEditorEvent() {
+    this.eventFocusEditorSubject.next(true);
   }
 
 
