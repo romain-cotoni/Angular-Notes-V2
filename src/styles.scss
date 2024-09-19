@@ -73,34 +73,34 @@ quill-editor .ql-editor {
 
 @media all and (max-width: 900px) {
   quill-editor .ql-toolbar.ql-snow {
-    min-height: 4rem;
-    max-height: 4rem;
+    min-height: 3rem;
+    max-height: 3rem;
   }
   
   quill-editor .ql-editor {
-    height: calc(100% - 4rem);
+    height: calc(100% - 3rem);
   }
 }
 
 @media all and (max-width: 470px) {
   quill-editor .ql-toolbar.ql-snow {
-    min-height: 6rem;
-    max-height: 6rem;
+    min-height: 3rem;//6rem;
+    max-height: 3rem;//6rem;
   }
 
   quill-editor .ql-editor{
-    height: calc(100% - 6rem);
+    height: calc(100% - 3rem);
   }
 }
 
 @media all and (max-width: 343px) {
   quill-editor .ql-toolbar.ql-snow {
-    min-height: 8rem;
-    max-height: 8rem;
+    min-height: 3rem;//8rem;
+    max-height: 3rem;//8rem;
   }
   
   quill-editor .ql-editor {
-    height: calc(100% - 8rem);
+    height: calc(100% - 3rem);
   }
 }
 

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { PdfService } from '../../../shared/services/pdf.service';
 import { AccountService } from '../../../shared/services/account.service';
 import { Account } from '../../../shared/models/account';
+import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layout';
 
 
 @Component({
@@ -19,7 +20,10 @@ import { Account } from '../../../shared/models/account';
     standalone: true,
     templateUrl: './editor.component.html',
     styleUrl: './editor.component.scss',
-    imports: [NgClass, FormsModule, QuillModule]
+    imports: [NgClass, 
+              FormsModule, 
+              QuillModule, 
+              LayoutModule]
 })
 
 
@@ -29,6 +33,7 @@ export class EditorComponent {
   private accountService = inject(AccountService);
   private eventService   = inject(EventService);
   private pdfService     = inject(PdfService);
+  private breakpointObserver = inject(BreakpointObserver);
   readonly dialog        = inject(MatDialog);
   
   private subscriptions: Subscription[] = [];
@@ -39,7 +44,8 @@ export class EditorComponent {
   noteSelected  : Note | null = null;
   editorContent : string = '';
 
-  toolbarOptions = [
+
+  toolbarDesktopOptions = [
     [ 'bold', 'italic', 'underline'                   ], // toggled buttons
     [ 'link', 'image'                                 ], // links/images
     [ 'blockquote', 'code-block'                      ], 
@@ -52,12 +58,28 @@ export class EditorComponent {
     [ { 'color' : [] }, { 'background': [] }          ], // dropdown with defaults from theme
     [ { 'font'  : [] }                                ],
   ];
+
+  toolbarMobileOptions = [
+    [ 'bold', 'italic', 'underline'                   ], // toggled buttons
+    [ 'link', 'image'                                 ], // links/images
+    [ 'blockquote', 'code-block'                      ], 
+    [ { 'header': [1, 2, 3, 4, 5, 6, false] }         ],
+  ];
   
 
+  toolbarOptions = this.toolbarDesktopOptions; // default
+
+  
   ngOnInit(): void {
     console.log("editor.component");
 
+    // Choose Quill toolbar based on screen width
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
+      this.toolbarOptions = result.matches ? this.toolbarMobileOptions : this.toolbarDesktopOptions;
+    });
+
     this.subscriptions.push(
+      
       this.eventService.noteSelected$.subscribe(note => {
         if(note?.id) { this.getSelectedNote(note.id); }
       }),
