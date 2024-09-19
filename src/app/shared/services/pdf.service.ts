@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { EventService } from './event.service';
+import { environment } from '../../../../environment';
+
+const BASE_URL = environment.apiUrl + '/pdf';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +18,7 @@ export class PdfService {
 
   convertHtmlToPdf(htmlContent: string) {
     const data = { htmlContent: htmlContent };
-    this.httpClient.post('http://localhost:8080/api/pdf/generate', data, { responseType: 'blob' })
+    this.httpClient.post(`${BASE_URL}/generate`, data, { responseType: 'blob' })
         .subscribe((response) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
