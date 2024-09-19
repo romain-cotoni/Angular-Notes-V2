@@ -66,6 +66,7 @@ export class LoginComponent {
     
     this.authService.login(auth).subscribe({
       next: (account: Account) => {
+        console.log("login response - account : ",account)
         this.authService.setIsAuthenticated(true);
         this.accountService.setCurrentAccount(account);
         this.router.navigate(['/editor']);
