@@ -83,6 +83,7 @@ export class HeaderComponent {
     let currentAccount = this.accountService.getCurrentAccount(); 
     this.accountId = currentAccount?.id;
     this.username  = currentAccount?.username;
+
     // If a new note is created the list is updated
     this.subscriptions.push(
       this.eventService.notesList$.subscribe( () => { 
@@ -98,6 +99,8 @@ export class HeaderComponent {
     if(this.noteSelected?.title) { 
       this.titleControl.setValue(this.noteSelected?.title);
     }
+
+    this.isDeletable = this.noteSelected != null; 
     
   }
 

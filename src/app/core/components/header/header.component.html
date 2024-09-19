@@ -1,13 +1,13 @@
 <div class="flex max-s:flex-col custom-bg-header">
 
-    <div class="max-s:hidden h-12 flex items-center font-bold">
-        <!--<div class="ms-4 pt-1 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/dashboard']">
+    <!--<div class="max-s:hidden h-12 flex items-center font-bold">
+        <div class="ms-4 pt-1 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/dashboard']">
             Dashboard
-        </div>-->
+        </div>
         <div class="mx-4 pt-1 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/editor']">
             Editor
         </div>
-    </div>
+    </div>-->
 
     <div class="h-12 flex items-center">
         <!--MOBILE-->
@@ -15,7 +15,6 @@
             <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>menu</mat-icon>
             </button>
-              
             <mat-menu #menu="matMenu">
                 <!--<button mat-menu-item
                         (click)="onDashboard()" 
@@ -24,13 +23,13 @@
                     <mat-icon class="-mt-1">dashboard</mat-icon>
                     <span>Dashboard</span>
                 </button>-->
-                <button mat-menu-item
+                <!--<button mat-menu-item
                         (click)="onEditor()" 
                         [matTooltipDisabled]="!isToolTips" 
                         matTooltip="Editor">
                     <mat-icon class="-mt-1">editor</mat-icon>
                     <span>Editor</span>
-                </button>
+                </button>-->
                 <div *ngIf="isEditor">
                     <button mat-menu-item
                             (click)="onDeleteNote()" 
@@ -111,11 +110,16 @@
                 <mat-icon>picture_as_pdf</mat-icon>
             </button>
         </div>
-        <div class="s:hidden ms-auto">
+
+        <!--MOBILE-->
+        <div class="s:hidden ms-auto me-2">
+            <span class="align-middle font-bold hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/editor']">editor</span>
+        </div>
+        <div class="s:hidden me-2">
             <span class="align-middle font-bold" [routerLink]="['/profil']">{{ username }}</span>
             <mat-icon *ngIf="hasNotifs" class="align-middle ms-0.5">notifications_active</mat-icon>
         </div>
-        <div class="s:hidden mx-4">
+        <div class="s:hidden me-4">
             <span class="align-middle font-bold" [routerLink]="['/logout']">logout</span>
         </div>
 
@@ -172,14 +176,20 @@
         </div>
     </div>
 
+    <!--DESKTOP-->
     <div class="max-s:hidden h-12 flex items-center ms-auto">
-        <button class="me-1 flex items-center" 
+        <button class="me-4 flex items-center" 
+                [matTooltipDisabled]="!isToolTips" matTooltip="Editor" 
+                [routerLink]="['/editor']">
+            <span class="font-bold hover:text-sky-500 hover:cursor-pointer">editor</span>
+        </button>
+        <button class="me-4 flex items-center" 
                 [matTooltipDisabled]="!isToolTips" matTooltip="Profil" 
                 [routerLink]="['/profil']">
             <span class="font-bold hover:text-sky-500 hover:cursor-pointer">{{ username }}</span>
         </button>
         <mat-icon *ngIf="hasNotifs">notifications_active</mat-icon>
-        <button class="mx-4 flex items-center" 
+        <button class="me-4 flex items-center" 
                 [matTooltipDisabled]="!isToolTips" matTooltip="Logout" 
                 [routerLink]="['/logout']">
             <span class="font-bold hover:text-sky-500 hover:cursor-pointer">logout</span>
