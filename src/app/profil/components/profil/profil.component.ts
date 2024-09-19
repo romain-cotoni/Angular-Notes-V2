@@ -73,8 +73,8 @@ export class ProfilComponent {
       'lastnameControl' : [this.account.lastname , [Validators.required, Validators.pattern("^[a-zéèêàçA-Z' ]{1,}$")]],
       'usernameControl' : [this.account.username , [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
       'emailControl'    : [this.account.email    , [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")]],
-      'passwordControl' : [null                  , [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]],
-      'password2Control': [null                  , [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]]
+      'passwordControl' : [null                  , [Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]],
+      'password2Control': [null                  , [Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]]
     })
   }
 
