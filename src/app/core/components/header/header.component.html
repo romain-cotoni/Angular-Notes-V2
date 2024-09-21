@@ -11,7 +11,7 @@
 
     <div class="h-12 flex items-center">
         <!--MOBILE-->
-        <div class="s:hidden ms-2">
+        <div *ngIf="isEditor" class="s:hidden ms-2">
             <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>menu</mat-icon>
             </button>
@@ -30,7 +30,7 @@
                     <mat-icon class="-mt-1">editor</mat-icon>
                     <span>Editor</span>
                 </button>-->
-                <div *ngIf="isEditor">
+                <div>
                     <button mat-menu-item
                             (click)="onDeleteNote()" 
                             [disabled]="!isDeletable" 

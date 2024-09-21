@@ -65,7 +65,6 @@ export class EditorComponent {
     [ 'bold', 'italic', 'underline'                   ], // toggled buttons
     [ 'link', 'image'                                 ], // links/images
     [ 'blockquote', 'code-block'                      ], 
-    [ { 'header': [1, 2, 3, 4, 5, 6, false] }         ],
   ];
   
 

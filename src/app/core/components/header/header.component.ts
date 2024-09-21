@@ -169,7 +169,7 @@ export class HeaderComponent {
         this.accountNoteRight = this.getAccountNoteRight(note);
         this.isWritable  = this.accountNoteRight === Right.OWNER || this.accountNoteRight === Right.WRITE;
         this.isDeletable = true;
-        this.isSharable  = this.accountNoteRight === Right.OWNER;
+        this.isSharable  = this.accountNoteRight === Right.OWNER || this.accountNoteRight === Right.SHARE;
       },
       error: (error) => { 
         if(this.isDevMode) { 
