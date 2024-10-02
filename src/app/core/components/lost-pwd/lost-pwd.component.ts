@@ -24,9 +24,9 @@ import { MessageComponent } from '../../../shared/components/message/message.com
 })
 export class LostPwdComponent {
 
-  private router         = inject(Router);
-  private formBuilder    = inject(FormBuilder);
-  private accountService = inject(AccountService);
+  readonly router         = inject(Router);
+  readonly formBuilder    = inject(FormBuilder);
+  readonly accountService = inject(AccountService);
 
   form!   : FormGroup;
   isError : boolean = false;

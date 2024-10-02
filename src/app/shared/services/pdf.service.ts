@@ -11,8 +11,8 @@ const BASE_URL = environment.apiUrl + '/pdf';
 export class PdfService {
   
   
-  private httpClient   = inject(HttpClient);
-  private eventService = inject(EventService);
+  readonly httpClient   = inject(HttpClient);
+  readonly eventService = inject(EventService);
 
   constructor() { }
 

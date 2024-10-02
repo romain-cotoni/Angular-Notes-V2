@@ -26,10 +26,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class RegisterComponent {
   
-  private router         = inject(Router);
-  private formBuilder    = inject(FormBuilder);
-  private accountService = inject(AccountService);
-  private storageService = inject(StorageService);
+  readonly router         = inject(Router);
+  readonly formBuilder    = inject(FormBuilder);
+  readonly accountService = inject(AccountService);
+  readonly storageService = inject(StorageService);
 
   form!    : FormGroup;
   isError  : boolean = false;

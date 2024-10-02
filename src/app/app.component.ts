@@ -32,7 +32,6 @@ export class AppComponent {
 
   isDevMode!  : boolean;
   isToolTips! : boolean;
-  isEditable! : boolean;
 
   readonly subscriptions : Subscription[] = [];
   
@@ -47,16 +46,11 @@ export class AppComponent {
       this.eventService.eventIsToolTips$.subscribe(isToolTips => {
         this.isToolTips = isToolTips;
       }),
-
-      this.eventService.eventIsEditable$.subscribe(isEditable => {
-        this.isEditable = isEditable;
-      })
     )
 
     this.account = this.accountService.getCurrentAccount();
       this.isDevMode  = this.account?.isDevMode ;
       this.isToolTips = this.account?.isToolTips;
-      this.isEditable = this.account?.isEditable;
     
 
   }

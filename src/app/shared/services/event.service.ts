@@ -8,20 +8,19 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class EventService {
 
-  private noteSelectedSubject       = new Subject<Note | null>();
-  private notesListSubject          = new Subject<boolean>();
-  private noteTitleSubject          = new Subject<string>();
-  private eventSaveNoteSubject      = new Subject<string>();
-  private eventDeleteNoteSubject    = new Subject<boolean>();
-  private eventClearEditorSubject   = new Subject<boolean>();
-  private eventShareNoteSubject     = new Subject<boolean>();
-  private eventOpenTagDialogSubject = new Subject<boolean>();
-  private eventIsLockSubject        = new Subject<boolean>();
-  private eventDownloadPdfSubject   = new Subject<boolean>();
-  private eventFocusEditorSubject   = new Subject<boolean>();
-  private eventIsDevModeSubject     = new BehaviorSubject<boolean>(false);
-  private eventIsToolTipsSubject    = new BehaviorSubject<boolean>(false);
-  private eventIsEditableSubject    = new BehaviorSubject<boolean>(false);
+  readonly noteSelectedSubject       = new Subject<Note | null>();
+  readonly notesListSubject          = new Subject<boolean>();
+  readonly noteTitleSubject          = new Subject<string>();
+  readonly eventSaveNoteSubject      = new Subject<string>();
+  readonly eventDeleteNoteSubject    = new Subject<boolean>();
+  readonly eventClearEditorSubject   = new Subject<boolean>();
+  readonly eventShareNoteSubject     = new Subject<boolean>();
+  readonly eventOpenTagDialogSubject = new Subject<boolean>();
+  readonly eventDownloadPdfSubject   = new Subject<boolean>();
+  readonly eventFocusEditorSubject   = new Subject<boolean>();
+  readonly eventIsDevModeSubject     = new BehaviorSubject<boolean>(false);
+  readonly eventIsToolTipsSubject    = new BehaviorSubject<boolean>(false);
+  readonly eventIsEditableSubject    = new BehaviorSubject<boolean>(true);
 
   noteSelected$       = this.noteSelectedSubject.asObservable();
   notesList$          = this.notesListSubject.asObservable();
@@ -31,7 +30,6 @@ export class EventService {
   eventClearEditor$   = this.eventClearEditorSubject.asObservable();
   eventShareNote$     = this.eventShareNoteSubject.asObservable();
   eventOpenTagDialog$ = this.eventOpenTagDialogSubject.asObservable();
-  eventIsLock$        = this.eventIsLockSubject.asObservable();
   eventDownloadPdf$   = this.eventDownloadPdfSubject.asObservable();
   eventFocusEditor$   = this.eventFocusEditorSubject.asObservable();
   eventIsDevMode$     = this.eventIsDevModeSubject.asObservable();
@@ -71,11 +69,6 @@ export class EventService {
 
   emitOpenTagDialogEvent() {
     this.eventOpenTagDialogSubject.next(true);
-  }
-  
-  
-  emitLockEvent(isLocked: boolean) {
-    this.eventIsLockSubject.next(isLocked);
   }
   
   

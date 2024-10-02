@@ -122,6 +122,7 @@
         <div class="s:hidden ms-auto flex items-center">
             <button 
                 mat-icon-button
+                *ngIf="isEditor"
                 class="-mt-1.5" 
                 [matTooltipDisabled]="!isToolTips" matTooltip="Editor lock" 
                 (click)="onToggleEditable()">
@@ -187,29 +188,29 @@
     </div>
     
 
-    <!-- <div *ngIf="isEditor" class="flex"> -->
-        <div *ngIf="isEditor" 
-            class="h-12 max-s:mx-auto flex items-center" 
-            matTooltip="Note's title" 
-            [matTooltipDisabled]="!isToolTips">
-            <mat-form-field 
-                appearance="outline" 
-                class="border-0 outline-none rounded-field custom-field-no-bottom-padding custom-floating-label">
-                <input 
-                    matInput type="text" 
-                    placeholder="Title"
-                    [formControl]='titleControl' 
-                    (keyup.enter)="onMoveCursorToEditor()" 
-                    class="font-medium text-lg hover:cursor-pointer" 
-                    value="{{ noteSelected?.title }}"/>
-            </mat-form-field>
-        </div>
-    <!-- </div> -->
+    
+    <div *ngIf="isEditor" 
+        class="h-12 max-s:mx-auto flex items-center" 
+        matTooltip="Note's title" 
+        [matTooltipDisabled]="!isToolTips">
+        <mat-form-field 
+            appearance="outline" 
+            class="border-0 outline-none rounded-field custom-field-no-bottom-padding custom-floating-label">
+            <input 
+                matInput type="text" 
+                placeholder="Title"
+                [formControl]='titleControl' 
+                (keyup.enter)="onMoveCursorToEditor()" 
+                class="font-medium text-lg hover:cursor-pointer" 
+                value="{{ noteSelected?.title }}"/>
+        </mat-form-field>
+    </div>
 
     <!--DESKTOP-->
     <div class="max-s:hidden h-12 ms-auto flex items-center">
         <button 
             mat-icon-button
+            *ngIf="isEditor"
             class="me-2 -mt-1.5 flex items-center" 
             [matTooltipDisabled]="!isToolTips" 
             matTooltip="Editor lock" 

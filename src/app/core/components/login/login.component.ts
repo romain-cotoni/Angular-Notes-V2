@@ -27,10 +27,10 @@ import { NgIf } from '@angular/common';
 })
 export class LoginComponent {
 
-  private router         = inject(Router);
-  private formBuilder    = inject(FormBuilder);
-  private authService    = inject(AuthService);
-  private accountService = inject(AccountService);
+  readonly router         = inject(Router);
+  readonly formBuilder    = inject(FormBuilder);
+  readonly authService    = inject(AuthService);
+  readonly accountService = inject(AccountService);
 
   form!: FormGroup;
 

@@ -2,8 +2,7 @@
     <div *ngIf='showComponent("header")'>
         <app-header [isEditor]="isEditor()"
                     [isDevMode]="isDevMode"
-                    [isToolTips]="isToolTips"
-                    [isEditable]="isEditable">
+                    [isToolTips]="isToolTips">
         </app-header>
     </div>
     <div class="flex-1 overflow-auto" [ngClass]="{ 'overflow-hidden': isEditor() }">

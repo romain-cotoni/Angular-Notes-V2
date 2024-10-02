@@ -7,5 +7,4 @@ export interface Account {
     role       : string;
     isDevMode  : boolean;
     isToolTips : boolean;
-    isEditable : boolean;
 }

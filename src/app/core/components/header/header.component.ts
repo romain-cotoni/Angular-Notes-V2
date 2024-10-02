@@ -19,6 +19,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 
 @Component({
@@ -42,10 +43,11 @@ import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent, M
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  readonly router         = inject(Router);
-  readonly eventService   = inject(EventService);
-  readonly noteService    = inject(NoteService);
-  readonly accountService = inject(AccountService);
+  readonly router             = inject(Router);
+  readonly breakpointObserver = inject(BreakpointObserver);
+  readonly eventService       = inject(EventService);
+  readonly noteService        = inject(NoteService);
+  readonly accountService     = inject(AccountService);
 
   @ViewChild('noteAutocomplete') noteAutocomplete!: MatAutocomplete;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
@@ -53,13 +55,13 @@ export class HeaderComponent {
   @Input() isEditor!   : boolean;
   @Input() isDevMode!  : boolean;
   @Input() isToolTips! : boolean;
-  @Input() isEditable! : boolean;
 
   noteControl  = new FormControl('');
   titleControl = new FormControl('');
   tagsControl  = new FormControl('');
   filteredNotesOptions: Observable<Note[]> = of([]);
 
+  isEditable  : boolean = true;
   isWritable  : boolean = true;
   isDeletable : boolean = false;
   isSharable  : boolean = false;
@@ -78,6 +80,11 @@ export class HeaderComponent {
   
   ngOnInit(): void {
     console.log("header.component");
+
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
+      this.isEditable = !result.matches;
+      //setTimeout(() => { this.eventService.emitIsEditable(this.isEditable);}, 200);
+    });
     
     this.getNotesList();
 
@@ -93,9 +100,9 @@ export class HeaderComponent {
       this.eventService.eventClearEditor$.subscribe( () => {
         this.clearEditor();
       }),
-      this.eventService.eventIsLock$.subscribe( (isEditable) => { 
+      /*this.eventService.eventIsEditable$.subscribe(isEditable => {
         this.isEditable = isEditable;
-      })
+      })*/
     )
 
     // Get the last update of Note Selected
@@ -274,12 +281,8 @@ export class HeaderComponent {
 
   onToggleEditable() {
     this.isEditable = !this.isEditable;
-    this.eventService.emitLockEvent(this.isEditable);
-  }
-
-  onSwitchEditable(isEditable: boolean) {
-    this.isEditable = isEditable;
-    this.eventService.emitLockEvent(this.isEditable);
+    console.log("Header isEditable : ", this.isEditable)
+    this.eventService.emitIsEditable(this.isEditable);
   }
 
 

@@ -19,8 +19,8 @@ const httpOptions = {
 })
 export class AuthService {
   
-  private httpClient     = inject(HttpClient);
-  private storageService = inject(StorageService);
+  readonly httpClient     = inject(HttpClient);
+  readonly storageService = inject(StorageService);
   
 
   login(auth: AuthRequestDTO): Observable<Account> { 

@@ -1,5 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layout';
@@ -22,6 +22,7 @@ import { Note } from '../../../shared/models/note';
     templateUrl: './editor.component.html',
     styleUrl: './editor.component.scss',
     imports: [NgClass, 
+              AsyncPipe,
               FormsModule, 
               QuillModule, 
               LayoutModule]
@@ -36,6 +37,7 @@ export class EditorComponent {
   readonly pdfService         = inject(PdfService);
   readonly breakpointObserver = inject(BreakpointObserver);
   readonly dialog             = inject(MatDialog);
+  readonly changeDetector     = inject(ChangeDetectorRef);  
   
   @ViewChild('quillEditor', { static: true }) quillEditor!: QuillEditorComponent;
 
@@ -43,7 +45,7 @@ export class EditorComponent {
   
   account!      : Account;
   isDevMode!    : boolean;
-  isEditable    : boolean     = true; // Is editor disabled by default
+  isEditable    : boolean = true; // Is editor disabled by default
   noteSelected  : Note | null = null;
   editorContent : string      = '';
 
@@ -75,12 +77,8 @@ export class EditorComponent {
   ngOnInit(): void {
     console.log("editor.component");
 
-    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
-      this.toolbarOptions = result.matches ? this.toolbarMobileOptions : this.toolbarDesktopOptions;
-      this.isEditable = !result.matches;
-      setTimeout(() => { this.eventService.emitIsEditable(this.isEditable) }, 200);
-    });
-
+    
+    
     this.subscriptions.push(
       
       this.eventService.noteSelected$.subscribe(note => {
@@ -115,14 +113,25 @@ export class EditorComponent {
         this.focusEditor();
       }),
 
-      this.eventService.eventIsLock$.subscribe(isEditable => {
-        this.isEditable = isEditable;
-      }),
-
       this.eventService.eventIsDevMode$.subscribe(isDevMode => {
         this.isDevMode = isDevMode;
       }),
+
+      this.eventService.eventIsEditable$.subscribe(isEditable => {
+        this.isEditable = isEditable;
+        this.changeDetector.detectChanges();
+        console.log("changeDetector")
+      }),
+
+
     );
+
+
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
+      this.toolbarOptions = result.matches ? this.toolbarMobileOptions : this.toolbarDesktopOptions;
+      this.isEditable = !result.matches;
+      //setTimeout(() => { this.eventService.emitIsEditable(this.isEditable); }, 200);
+    });
 
 
     let noteSelected = this.noteService.getSelectedNote();

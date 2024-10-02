@@ -47,7 +47,6 @@ export class ProfilComponent {
   isAdmin!    : boolean;
   isDevMode!  : boolean;
   isToolTips! : boolean;
-  isEditable! : boolean;
   
   errorMsg : string  = "";
   isError  : boolean = false;
@@ -63,7 +62,6 @@ export class ProfilComponent {
     this.isAdmin    = this.account.role === "ADMIN";
     this.isDevMode  = this.account.isDevMode;
     this.isToolTips = this.account.isToolTips;
-    this.isEditable = this.account.isEditable;
 
     this.form = this.buildForm();
     this.getNotesList();
@@ -123,11 +121,6 @@ export class ProfilComponent {
   }
 
 
-  onEditableToggleChange(event: MatSlideToggleChange) {
-    this.setEditable(event.checked);
-  }
-
-
   setDevMode(isDevMode: boolean) {
     this.account.isDevMode = isDevMode;
     this.accountService.updateAccount(this.account)
@@ -144,16 +137,6 @@ export class ProfilComponent {
     .subscribe( account => {
       this.accountService.setCurrentAccount(account);
       this.eventService.emitIsToolTips(this.account.isToolTips);
-    });
-  }
-
-
-  setEditable(isEditable: boolean) {
-    this.account.isEditable = isEditable;
-    this.accountService.updateAccount(this.account)
-    .subscribe( account => {
-      this.accountService.setCurrentAccount(account);
-      this.eventService.emitIsEditable(this.account.isEditable);
     });
   }
 
@@ -265,7 +248,7 @@ export class ProfilComponent {
       password  : this.form.get('passwordControl')?.value,
       isDevMode : this.isDevMode,
       isToolTips: this.isToolTips,
-      isEditable: this.isEditable
+      //isEditable: this.isEditable
     }
   }
 

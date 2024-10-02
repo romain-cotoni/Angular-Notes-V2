@@ -17,9 +17,9 @@ const httpOptions = {
 })
 export class TagService {
 
-  private httpClient     = inject(HttpClient);
-  private eventService   = inject(EventService);
-  private storageService = inject(StorageService);
+  readonly httpClient     = inject(HttpClient);
+  readonly eventService   = inject(EventService);
+  readonly storageService = inject(StorageService);
 
   
   getTagsByNoteId(noteId: number): Observable<Tag[]> {

@@ -20,9 +20,9 @@ const httpOptions = {
 })
 export class AccountService {
   
-  private httpClient     = inject(HttpClient);
-  private eventService   = inject(EventService);
-  private storageService = inject(StorageService);
+  readonly httpClient     = inject(HttpClient);
+  readonly eventService   = inject(EventService);
+  readonly storageService = inject(StorageService);
 
   account!: Account;
 
@@ -37,7 +37,6 @@ export class AccountService {
     this.storageService.setCurrentAccount(this.account);
     this.eventService.emitIsDevMode(account.isDevMode);
     this.eventService.emitIsToolTips(account.isToolTips);
-    this.eventService.emitIsEditable(account.isEditable);
   }
 
 
