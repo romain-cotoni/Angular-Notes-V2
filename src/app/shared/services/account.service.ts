@@ -75,7 +75,7 @@ export class AccountService {
   }
 
 
-  deleteAccount(accountId: string) {
+  deleteAccount(accountId: number) {
     return this.httpClient.delete(`${BASE_URL}/${accountId}`, httpOptions);
   }
 

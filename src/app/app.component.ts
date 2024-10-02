@@ -22,9 +22,9 @@ import { AccountService } from './shared/services/account.service';
               ProfilComponent]
 })
 export class AppComponent {
-  private router         = inject(Router);
-  private eventService   = inject(EventService);
-  private accountService = inject(AccountService);
+  readonly router         = inject(Router);
+  readonly eventService   = inject(EventService);
+  readonly accountService = inject(AccountService);
   
   title = 'notes-write-V2';
 
@@ -34,7 +34,7 @@ export class AppComponent {
   isToolTips! : boolean;
   isEditable! : boolean;
 
-  private subscriptions : Subscription[] = [];
+  readonly subscriptions : Subscription[] = [];
   
   ngOnInit() {
     console.log("app.component");

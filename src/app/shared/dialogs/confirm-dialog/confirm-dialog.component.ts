@@ -28,7 +28,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 export class ConfirmDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {title: string, txt1: string, txt2: string}) {}
+              @Inject(MAT_DIALOG_DATA) public data: {title: string, txt1: string, txt2: string, txt3: string}) {}
   
   onConfirm() {
     this.dialogRef.close(true);

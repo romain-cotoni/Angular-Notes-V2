@@ -4,12 +4,12 @@ import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, of, startWith, Subscription } from 'rxjs';
 
-
 import { EventService } from '../../../shared/services/event.service';
 import { NoteService } from '../../../shared/services/note.service';
 import { AccountService } from '../../../shared/services/account.service';
 import { Note } from '../../../shared/models/note';
 import { Right } from '../../../shared/enums/right';
+import { Tag } from '../../../shared/models/tag';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +19,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-
 
 
 @Component({
@@ -43,10 +42,10 @@ import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent, M
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  private router               = inject(Router);
-  private eventService         = inject(EventService);
-  private noteService          = inject(NoteService);
-  private accountService       = inject(AccountService);
+  readonly router         = inject(Router);
+  readonly eventService   = inject(EventService);
+  readonly noteService    = inject(NoteService);
+  readonly accountService = inject(AccountService);
 
   @ViewChild('noteAutocomplete') noteAutocomplete!: MatAutocomplete;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
@@ -58,21 +57,23 @@ export class HeaderComponent {
 
   noteControl  = new FormControl('');
   titleControl = new FormControl('');
+  tagsControl  = new FormControl('');
   filteredNotesOptions: Observable<Note[]> = of([]);
 
   isWritable  : boolean = true;
   isDeletable : boolean = false;
   isSharable  : boolean = false;
+  //isTagable   : boolean = false; 
   isAscending : boolean = true;
   hasNotifs   : boolean = false;
   searchType  : string  = "title";
 
-  noteSelected: Note | null = null;
-  username?: string = "username";
+  noteSelected          : Note | null = null;
+  username?             : string      = "username";
   
   private accountId?        : number;
   private accountNoteRight! : Right;
-  private subscriptions     : Subscription[] = [];
+  readonly subscriptions    : Subscription[] = [];
 
   
   ngOnInit(): void {
@@ -90,7 +91,10 @@ export class HeaderComponent {
         this.getNotesList();
       }),
       this.eventService.eventClearEditor$.subscribe( () => {
-        this.onClearEditor();
+        this.clearEditor();
+      }),
+      this.eventService.eventIsLock$.subscribe( (isEditable) => { 
+        this.isEditable = isEditable;
       })
     )
 
@@ -99,8 +103,11 @@ export class HeaderComponent {
     if(this.noteSelected?.title) { 
       this.titleControl.setValue(this.noteSelected?.title);
     }
+    if(this.noteSelected?.tags && this.noteSelected?.tags?.length > 0) { 
+      this.getTagsNamesList(this.noteSelected.tags);
+    }
 
-    this.isDeletable = this.noteSelected != null; 
+    this.isDeletable = this.noteSelected != null;
     
   }
 
@@ -135,6 +142,9 @@ export class HeaderComponent {
             case 'content': {
               return note.content?.toLowerCase().includes(inputValue);
             }
+            case 'tag': {
+              return note.tags?.some(tag => tag.name.toLowerCase().includes(inputValue.toLowerCase()));
+            }
             case 'title':
             default:
               return note.title?.toLowerCase().includes(inputValue);
@@ -142,7 +152,6 @@ export class HeaderComponent {
         });
 
         // Sort notes ascending or descending order
-        console.log("filteredNotes: ", filteredNotes)
         return filteredNotes.sort(( (previous, next) => {
           const previousTitle = previous.title?.toLowerCase() ?? '';
           const nextTitle     = next.title?.toLowerCase() ?? '';
@@ -169,7 +178,11 @@ export class HeaderComponent {
         this.accountNoteRight = this.getAccountNoteRight(note);
         this.isWritable  = this.accountNoteRight === Right.OWNER || this.accountNoteRight === Right.WRITE;
         this.isDeletable = true;
+        //this.isTagable   = true;
         this.isSharable  = this.accountNoteRight === Right.OWNER || this.accountNoteRight === Right.SHARE;
+
+        // map tags name by Note id
+        this.getTagsNamesList(note.tags as Tag[]);
       },
       error: (error) => { 
         if(this.isDevMode) { 
@@ -177,6 +190,11 @@ export class HeaderComponent {
         } 
       }
     })
+  }
+
+
+  getTagsNamesList(tags: Tag[]) {
+    this.tagsControl.setValue(tags.map(tag => tag.name).join(' '));
   }
 
 
@@ -207,21 +225,31 @@ export class HeaderComponent {
     this.eventService.emitDeleteNoteEvent();
   }
 
+  onClear() {
+    this.clearEditor();
+    this.eventService.emitClearEditorEvent();
+  }
 
-  onClearEditor() {
+  clearEditor() {
     this.isWritable  = true;
     this.isDeletable = false;
     this.isSharable  = false;
+    //this.isTagable   = false;
     this.noteSelected = null;
     this.titleControl.setValue(null);
+    this.tagsControl.setValue(null);
     this.clearSearchInput();
     this.uncheckedAllSearchOptions();
-    this.eventService.emitClearEditorEvent();
   }
 
 
   onDownloadPdf() {
     this.eventService.emitDownloadPdfEvent();
+  }
+
+
+  onOpenTagDialog() {
+    this.eventService.emitOpenTagDialogEvent();
   }
 
 
@@ -244,6 +272,17 @@ export class HeaderComponent {
   }
 
 
+  onToggleEditable() {
+    this.isEditable = !this.isEditable;
+    this.eventService.emitLockEvent(this.isEditable);
+  }
+
+  onSwitchEditable(isEditable: boolean) {
+    this.isEditable = isEditable;
+    this.eventService.emitLockEvent(this.isEditable);
+  }
+
+
   onDashboard() {
     this.router.navigate(['/dashboard']);
   }
@@ -252,6 +291,7 @@ export class HeaderComponent {
   onEditor() {
     this.router.navigate(['/editor']);
   }
+
 
   onMoveCursorToEditor() {
     this.eventService.emitFocusEditorEvent();

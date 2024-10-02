@@ -1,140 +1,161 @@
 <div class="flex max-s:flex-col custom-bg-header">
 
-    <!--<div class="max-s:hidden h-12 flex items-center font-bold">
-        <div class="ms-4 pt-1 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/dashboard']">
-            Dashboard
-        </div>
-        <div class="mx-4 pt-1 hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/editor']">
-            Editor
-        </div>
-    </div>-->
-
     <div class="h-12 flex items-center">
+
         <!--MOBILE-->
         <div *ngIf="isEditor" class="s:hidden ms-2">
-            <button mat-icon-button [matMenuTriggerFor]="menu">
+            <button 
+                mat-icon-button 
+                [matMenuTriggerFor]="menu">
                 <mat-icon>menu</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <!--<button mat-menu-item
-                        (click)="onDashboard()" 
-                        [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Dashboard">
-                    <mat-icon class="-mt-1">dashboard</mat-icon>
-                    <span>Dashboard</span>
-                </button>-->
-                <!--<button mat-menu-item
-                        (click)="onEditor()" 
-                        [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Editor">
-                    <mat-icon class="-mt-1">editor</mat-icon>
-                    <span>Editor</span>
-                </button>-->
                 <div>
-                    <button mat-menu-item
-                            (click)="onDeleteNote()" 
-                            [disabled]="!isDeletable" 
-                            [matTooltipDisabled]="!isToolTips" 
-                            matTooltip="Delete note">
+                    <button 
+                        mat-menu-item
+                        (click)="onDeleteNote()" 
+                        [disabled]="!isDeletable" 
+                        [matTooltipDisabled]="!isToolTips" 
+                        matTooltip="Delete note">
                         <mat-icon class="-mt-1">delete</mat-icon>
                         <span>Delete</span>
                     </button>
-                    <button mat-menu-item 
-                            (click)="onClearEditor()" 
-                            [matTooltipDisabled]="!isToolTips" 
-                            matTooltip="Clear note">
+                    <button 
+                        mat-menu-item 
+                        (click)="onClear()" 
+                        [matTooltipDisabled]="!isToolTips" 
+                        matTooltip="Clear note">
                         <mat-icon class="-mt-1">clear_all</mat-icon>
                         <span>Clear</span>
                     </button>
-                    <button mat-menu-item 
-                            (click)="onSaveNote()" 
-                            [disabled]="!isWritable" 
-                            [matTooltipDisabled]="!isToolTips" 
-                            matTooltip="Save note">
+                    <button 
+                        mat-menu-item 
+                        (click)="onSaveNote()" 
+                        [disabled]="!isWritable" 
+                        [matTooltipDisabled]="!isToolTips" 
+                        matTooltip="Save note">
                         <mat-icon class="-mt-1">save</mat-icon>
                         <span>Save</span>
                     </button>
-                    <button mat-menu-item 
-                            (click)="onShareNote()" 
-                            [disabled]="!isSharable" 
-                            [matTooltipDisabled]="!isToolTips" 
-                            matTooltip="Share note">
+                    <button 
+                        mat-menu-item 
+                        (click)="onShareNote()" 
+                        [disabled]="!isSharable" 
+                        [matTooltipDisabled]="!isToolTips" 
+                        matTooltip="Share note">
                         <mat-icon class="-mt-1">share</mat-icon>
                         <span>Share</span>
                     </button>
-                    <button mat-menu-item 
-                            (click)="onDownloadPdf()" 
-                            [disabled]="!isWritable" 
-                            [matTooltipDisabled]="!isToolTips" 
-                            matTooltip="Download as pdf">
+                    <button 
+                        mat-menu-item 
+                        (click)="onDownloadPdf()" 
+                        [disabled]="!isWritable" 
+                        [matTooltipDisabled]="!isToolTips" 
+                        matTooltip="Download as pdf">
                         <mat-icon class="-mt-1">picture_as_pdf</mat-icon>
                         <span>Pdf</span>
+                    </button>
+                    <button 
+                        mat-menu-item 
+                        (click)="onOpenTagDialog()" 
+                        [disabled]="!isWritable" 
+                        [matTooltipDisabled]="!isToolTips" 
+                        matTooltip="Edit note's tags">
+                        <mat-icon class="-mt-1">label</mat-icon>
+                        <span>Tags</span>
                     </button>
                 </div>
             </mat-menu>
         </div>
 
+        <!--DESKTOP-->
         <div *ngIf="isEditor" class="max-s:hidden">
-            <!--DESKTOP-->
-            <button mat-icon-button 
-                    (click)="onDeleteNote()" 
-                    [disabled]="!isDeletable" 
-                    [matTooltipDisabled]="!isToolTips" 
-                    matTooltip="Delete note">
+            <button 
+                mat-icon-button 
+                (click)="onDeleteNote()" 
+                [disabled]="!isDeletable" 
+                [matTooltipDisabled]="!isToolTips" 
+                matTooltip="Delete note">
                 <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button 
-                    (click)="onClearEditor()" 
-                    [matTooltipDisabled]="!isToolTips" 
-                    matTooltip="Clear note">
+            <button 
+                mat-icon-button 
+                (click)="onClear()" 
+                [matTooltipDisabled]="!isToolTips" 
+                matTooltip="Clear note">
                 <mat-icon>clear_all</mat-icon>
             </button>
-            <button mat-icon-button 
-                    (click)="onSaveNote()" 
-                    [disabled]="!isWritable" 
-                    [matTooltipDisabled]="!isToolTips" 
-                    matTooltip="Save note">
+            <button 
+                mat-icon-button 
+                (click)="onSaveNote()" 
+                [disabled]="!isWritable" 
+                [matTooltipDisabled]="!isToolTips" 
+                matTooltip="Save note">
                 <mat-icon>save</mat-icon>
             </button>
-            <button mat-icon-button 
-                    (click)="onShareNote()" 
-                    [disabled]="!isSharable" 
-                    [matTooltipDisabled]="!isToolTips" 
-                    matTooltip="Share note">
+            <button 
+                mat-icon-button 
+                (click)="onShareNote()" 
+                [disabled]="!isSharable" 
+                [matTooltipDisabled]="!isToolTips" 
+                matTooltip="Share note">
                 <mat-icon>share</mat-icon>
             </button>
-            <button mat-icon-button 
-                    (click)="onDownloadPdf()" 
-                    [matTooltipDisabled]="!isToolTips" 
-                    matTooltip="Download as pdf">
+            <button 
+                mat-icon-button 
+                (click)="onDownloadPdf()" 
+                [matTooltipDisabled]="!isToolTips" 
+                matTooltip="Download as pdf">
                 <mat-icon>picture_as_pdf</mat-icon>
+            </button>
+            <button 
+                mat-icon-button 
+                (click)="onOpenTagDialog()" 
+                [disabled]="!isWritable" 
+                [matTooltipDisabled]="!isToolTips" 
+                matTooltip="Edit note's tags">
+                <mat-icon>label</mat-icon>
             </button>
         </div>
 
         <!--MOBILE-->
-        <div class="s:hidden ms-auto me-2">
-            <span class="align-middle font-bold hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/editor']">editor</span>
+        <div class="s:hidden ms-auto flex items-center">
+            <button 
+                mat-icon-button
+                class="-mt-1.5" 
+                [matTooltipDisabled]="!isToolTips" matTooltip="Editor lock" 
+                (click)="onToggleEditable()">
+                <mat-icon *ngIf="isEditable">lock_open</mat-icon>
+                <mat-icon *ngIf="!isEditable">lock</mat-icon>
+            </button>
+            <div class="me-2">
+                <span class="font-bold hover:text-sky-500 hover:cursor-pointer" [routerLink]="['/editor']">editor</span>
+            </div>
+            <div class="me-2">
+                <span class="font-bold" [routerLink]="['/profil']">{{ username }}</span>
+                <mat-icon *ngIf="hasNotifs" class="align-middle ms-0.5">notifications_active</mat-icon>
+            </div>
+            <div class="me-4">
+                <span class="font-bold" [routerLink]="['/logout']">logout</span>
+            </div>
         </div>
-        <div class="s:hidden me-2">
-            <span class="align-middle font-bold" [routerLink]="['/profil']">{{ username }}</span>
-            <mat-icon *ngIf="hasNotifs" class="align-middle ms-0.5">notifications_active</mat-icon>
-        </div>
-        <div class="s:hidden me-4">
-            <span class="align-middle font-bold" [routerLink]="['/logout']">logout</span>
-        </div>
-
     </div>
 
-    <div *ngIf="isEditor" class="h-12 flex items-center max-s:justify-center">
-        <mat-form-field appearance="outline" class="ms-5 rounded-field custom-field-no-bottom-padding custom-floating-label">
+    <div *ngIf="isEditor" 
+        class="h-12 flex items-center max-s:justify-center">
+        <mat-form-field 
+            appearance="outline" 
+            class="ms-5 rounded-field custom-field-no-bottom-padding custom-floating-label">
             <mat-label>Search by {{ searchType }}</mat-label>
-            <input type="text" 
-                   matInput 
-                   [formControl]='noteControl' 
-                   [matAutocomplete]="noteAutocomplete">
-            <mat-autocomplete #noteAutocomplete="matAutocomplete" 
-                              [displayWith]="displayOptionNote" 
-                              (optionSelected)="onNoteOptionsSelectionChanged($event)">
+            <input 
+                type="text" 
+                matInput 
+                [formControl]='noteControl' 
+                [matAutocomplete]="noteAutocomplete">
+            <mat-autocomplete 
+                #noteAutocomplete="matAutocomplete" 
+                [displayWith]="displayOptionNote" 
+                (optionSelected)="onNoteOptionsSelectionChanged($event)">
                 <mat-option class="custom-listbox" *ngFor="let noteOption of filteredNotesOptions | async" [value]="noteOption">
                     {{noteOption?.title}}
                 </mat-option>
@@ -142,56 +163,80 @@
             <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
         
-        <button mat-icon-button 
-                (click)="onOrder()"
-                [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Order notes by ascending or descending title"
-                class="mx-0.5 pt-1.5">
+        <button 
+            mat-icon-button 
+            (click)="onOrder()"
+            [matTooltipDisabled]="!isToolTips" 
+            matTooltip="Order notes by ascending or descending title"
+            class="mx-0.5 pt-1.5">
             <mat-icon>sort_by_alpha</mat-icon>
         </button>
-        <button mat-icon-button 
-                [matMenuTriggerFor]="menu" 
-                [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Sort notes by title, tag or content" 
-                class="me-4 pt-1.5">
+        <button 
+            mat-icon-button 
+            [matMenuTriggerFor]="menu" 
+            [matTooltipDisabled]="!isToolTips" 
+            matTooltip="Sort notes by title, tag or content" 
+            class="me-4 pt-1.5">
             <mat-icon>sort</mat-icon>
         </button>
         <mat-menu #menu="matMenu" yPosition="below" xPosition="before">
             <button mat-menu-item (click)='onSetSearch("title")'>Search by title</button>
             <button mat-menu-item (click)='onSetSearch("content")'>Search by content</button>
-        </mat-menu>
-        
+            <button mat-menu-item (click)='onSetSearch("tag")'>Search by tag</button>
+        </mat-menu>   
     </div>
+    
 
-    <div *ngIf="isEditor" class="h-12 max-s:mx-auto px-2 flex items-center">
-        <div class="pe-2 font-normal">Title: </div>
-        <div matTooltip="Note's title" [matTooltipDisabled]="!isToolTips">
-            <mat-form-field appearance="outline" class="ms-5 border-0 outline-none rounded-field custom-field-no-bottom-padding custom-floating-label">
-            <input matInput type="text" 
-                   [formControl]='titleControl' 
-                   (keyup.enter)="onMoveCursorToEditor()"
-                   class="font-medium text-lg hover:cursor-pointer" 
-                   value="{{ noteSelected?.title }}"/>
+    <!-- <div *ngIf="isEditor" class="flex"> -->
+        <div *ngIf="isEditor" 
+            class="h-12 max-s:mx-auto flex items-center" 
+            matTooltip="Note's title" 
+            [matTooltipDisabled]="!isToolTips">
+            <mat-form-field 
+                appearance="outline" 
+                class="border-0 outline-none rounded-field custom-field-no-bottom-padding custom-floating-label">
+                <input 
+                    matInput type="text" 
+                    placeholder="Title"
+                    [formControl]='titleControl' 
+                    (keyup.enter)="onMoveCursorToEditor()" 
+                    class="font-medium text-lg hover:cursor-pointer" 
+                    value="{{ noteSelected?.title }}"/>
             </mat-form-field>
         </div>
-    </div>
+    <!-- </div> -->
 
     <!--DESKTOP-->
-    <div class="max-s:hidden h-12 flex items-center ms-auto">
-        <button class="me-4 flex items-center" 
-                [matTooltipDisabled]="!isToolTips" matTooltip="Editor" 
-                [routerLink]="['/editor']">
+    <div class="max-s:hidden h-12 ms-auto flex items-center">
+        <button 
+            mat-icon-button
+            class="me-2 -mt-1.5 flex items-center" 
+            [matTooltipDisabled]="!isToolTips" 
+            matTooltip="Editor lock" 
+            (click)="onToggleEditable()">
+            <mat-icon *ngIf="isEditable">lock_open</mat-icon>
+            <mat-icon *ngIf="!isEditable">lock</mat-icon>
+        </button>
+        <button 
+            class="me-4 flex items-center" 
+            [matTooltipDisabled]="!isToolTips" 
+            matTooltip="Route to editor" 
+            [routerLink]="['/editor']">
             <span class="font-bold hover:text-sky-500 hover:cursor-pointer">editor</span>
         </button>
-        <button class="me-4 flex items-center" 
-                [matTooltipDisabled]="!isToolTips" matTooltip="Profil" 
-                [routerLink]="['/profil']">
+        <button 
+            class="me-4 flex items-center" 
+            [matTooltipDisabled]="!isToolTips" 
+            matTooltip="Route to profil" 
+            [routerLink]="['/profil']">
             <span class="font-bold hover:text-sky-500 hover:cursor-pointer">{{ username }}</span>
         </button>
         <mat-icon *ngIf="hasNotifs">notifications_active</mat-icon>
-        <button class="me-4 flex items-center" 
-                [matTooltipDisabled]="!isToolTips" matTooltip="Logout" 
-                [routerLink]="['/logout']">
+        <button 
+            class="me-4 flex items-center" 
+            [matTooltipDisabled]="!isToolTips" 
+            matTooltip="Logout" 
+            [routerLink]="['/logout']">
             <span class="font-bold hover:text-sky-500 hover:cursor-pointer">logout</span>
         </button>
     </div>

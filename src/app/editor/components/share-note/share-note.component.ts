@@ -24,10 +24,10 @@ import { AccountNote } from '../../../shared/models/account-note';
 @Component({
   selector: 'app-share-note',
   standalone: true,
-  imports: [CommonModule,
-            NgIf,
+  imports: [NgIf,
             NgFor,
             NgClass,
+            CommonModule,
             FormsModule,
             ReactiveFormsModule,
             MatButtonModule,
@@ -44,24 +44,25 @@ import { AccountNote } from '../../../shared/models/account-note';
   styleUrl: './share-note.component.scss'
 })
 export class ShareNoteComponent {
-  private router         = inject(Router);
-  private noteService    = inject(NoteService);
-  private accountService = inject(AccountService);
-  private eventService   = inject(EventService);
-  private storageService = inject(StorageService);
+  readonly router         = inject(Router);
+  readonly noteService    = inject(NoteService);
+  readonly accountService = inject(AccountService);
+  readonly eventService   = inject(EventService);
+  readonly storageService = inject(StorageService);
 
-  private subscriptions : Subscription[] = [];
+  readonly subscriptions : Subscription[] = [];
 
   @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   
   userControl  = new FormControl('');
   msgControl   = new FormControl('');
-  filteredUsersOptions: Observable<User[]> = of([]);
-  usersList    : User[]   = [];
-  usersToShare : User[]   = [];
-  chipUsers    : string[] = [];
-  sharedUsers  : AccountNote[] = [];
+
+  filteredUsersOptions : Observable<User[]> = of([]);
+  usersList            : User[]             = [];
+  usersToShare         : User[]             = [];
+  chipUsers            : string[]           = [];
+  sharedUsers          : AccountNote[]      = [];
   
   
   isDevMode  : boolean = false;

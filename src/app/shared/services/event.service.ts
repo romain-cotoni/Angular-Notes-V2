@@ -8,33 +8,35 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class EventService {
 
-  private noteSelectedSubject     = new Subject<Note | null>();
-  private notesListSubject        = new Subject<boolean>();
-  private noteTitleSubject        = new Subject<string>();
-  private eventSaveNoteSubject    = new Subject<string>();
-  private eventDeleteNoteSubject  = new Subject<boolean>();
-  private eventClearEditorSubject = new Subject<boolean>();
-  private eventShareNoteSubject   = new Subject<boolean>();
-  private eventIsLockSubject      = new Subject<boolean>();
-  private eventDownloadPdfSubject = new Subject<boolean>();
-  private eventFocusEditorSubject = new Subject<boolean>();
-  private eventIsDevModeSubject   = new BehaviorSubject<boolean>(false);
-  private eventIsToolTipsSubject  = new BehaviorSubject<boolean>(false);
-  private eventIsEditableSubject  = new BehaviorSubject<boolean>(false);
+  private noteSelectedSubject       = new Subject<Note | null>();
+  private notesListSubject          = new Subject<boolean>();
+  private noteTitleSubject          = new Subject<string>();
+  private eventSaveNoteSubject      = new Subject<string>();
+  private eventDeleteNoteSubject    = new Subject<boolean>();
+  private eventClearEditorSubject   = new Subject<boolean>();
+  private eventShareNoteSubject     = new Subject<boolean>();
+  private eventOpenTagDialogSubject = new Subject<boolean>();
+  private eventIsLockSubject        = new Subject<boolean>();
+  private eventDownloadPdfSubject   = new Subject<boolean>();
+  private eventFocusEditorSubject   = new Subject<boolean>();
+  private eventIsDevModeSubject     = new BehaviorSubject<boolean>(false);
+  private eventIsToolTipsSubject    = new BehaviorSubject<boolean>(false);
+  private eventIsEditableSubject    = new BehaviorSubject<boolean>(false);
 
-  noteSelected$     = this.noteSelectedSubject.asObservable();
-  notesList$        = this.notesListSubject.asObservable();
-  noteTitle$        = this.noteTitleSubject.asObservable();
-  eventSaveNote$    = this.eventSaveNoteSubject.asObservable();
-  eventDeleteNote$  = this.eventDeleteNoteSubject.asObservable();
-  eventClearEditor$ = this.eventClearEditorSubject.asObservable();
-  eventShareNote$   = this.eventShareNoteSubject.asObservable();
-  eventIsLock$      = this.eventIsLockSubject.asObservable();
-  eventDownloadPdf$ = this.eventDownloadPdfSubject.asObservable();
-  eventFocusEditor$ = this.eventFocusEditorSubject.asObservable();
-  eventIsDevMode$   = this.eventIsDevModeSubject.asObservable();
-  eventIsToolTips$  = this.eventIsToolTipsSubject.asObservable();
-  eventIsEditable$  = this.eventIsEditableSubject.asObservable();
+  noteSelected$       = this.noteSelectedSubject.asObservable();
+  notesList$          = this.notesListSubject.asObservable();
+  noteTitle$          = this.noteTitleSubject.asObservable();
+  eventSaveNote$      = this.eventSaveNoteSubject.asObservable();
+  eventDeleteNote$    = this.eventDeleteNoteSubject.asObservable();
+  eventClearEditor$   = this.eventClearEditorSubject.asObservable();
+  eventShareNote$     = this.eventShareNoteSubject.asObservable();
+  eventOpenTagDialog$ = this.eventOpenTagDialogSubject.asObservable();
+  eventIsLock$        = this.eventIsLockSubject.asObservable();
+  eventDownloadPdf$   = this.eventDownloadPdfSubject.asObservable();
+  eventFocusEditor$   = this.eventFocusEditorSubject.asObservable();
+  eventIsDevMode$     = this.eventIsDevModeSubject.asObservable();
+  eventIsToolTips$    = this.eventIsToolTipsSubject.asObservable();
+  eventIsEditable$    = this.eventIsEditableSubject.asObservable();
   
 
   emitUpdateNoteSelected(note: Note | null) {
@@ -64,6 +66,11 @@ export class EventService {
   
   emitShareNoteEvent() {
     this.eventShareNoteSubject.next(true);
+  }
+
+
+  emitOpenTagDialogEvent() {
+    this.eventOpenTagDialogSubject.next(true);
   }
   
   

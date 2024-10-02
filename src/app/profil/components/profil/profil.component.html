@@ -88,5 +88,14 @@
     <h2 class="mt-4 mb-2 font-bold text-lg">DASHBOARD</h2>
     <mat-label class="ms-4 mb-2 flex"><div class="w-48 me-2 font-bold">N° of notes :      </div>{{ nbOfNotes       }}</mat-label>
     <mat-label class="ms-4 mb-2 flex"><div class="w-48 me-2 font-bold">N° of sharednotes :</div>{{ nbOfSharedNotes }}</mat-label>
-    
+
+
+    <h2 class="mt-8 mb-2 font-bold text-lg text-red-600">DANGER</h2>
+    <div class="flex justify-center items-center">
+        <span class="font-bold text-red-600">Delete account</span>
+        <button mat-icon-button class="-mt-2" (click)="openDeleteDialog()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+
 </div>

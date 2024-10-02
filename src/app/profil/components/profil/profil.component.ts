@@ -14,6 +14,8 @@ import { MessageComponent } from '../../../shared/components/message/message.com
 import { NoteService } from '../../../shared/services/note.service';
 import { Note } from '../../../shared/models/note';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmDialogComponent } from '../../../shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profil',
@@ -32,10 +34,11 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './profil.component.scss'
 })
 export class ProfilComponent {
-  private eventService   = inject(EventService);
-  private accountService = inject(AccountService);
-  private noteService    = inject(NoteService);
-  private formBuilder    = inject(FormBuilder);
+  readonly router         = inject(Router);
+  readonly eventService   = inject(EventService);
+  readonly accountService = inject(AccountService);
+  readonly noteService    = inject(NoteService);
+  readonly formBuilder    = inject(FormBuilder);
   readonly dialog        = inject(MatDialog);
 
   form! : FormGroup;
@@ -177,6 +180,29 @@ export class ProfilComponent {
     })
   }
 
+
+  openDeleteDialog() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: "Confirmation to delete",
+              txt1 : "You're about to delete your account !",
+              txt2 : "Do you wish to proceed ?"
+      },
+    });
+    dialogRef.afterClosed().subscribe((choice: boolean) => {
+      if(choice) {
+        this.deleteAccount();
+      }
+    });
+  }
+
+
+  deleteAccount() {
+    this.accountService.deleteAccount(this.account.id as number).subscribe({
+      next: () => { this.router.navigate(['/login']); },
+      error: (error) => { console.log("Error: Profil -> AccountService -> deleteAccount(): " + error); }
+    })
+  }
+  
 
   private checkError() {
     this.isError = false;

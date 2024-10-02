@@ -1,0 +1,61 @@
+<h1 *ngIf="data?.title" 
+    mat-dialog-title 
+    class="h-12 flex justify-center items-center font-bold text-xl bg-blue-100">
+    Manage #Tags
+</h1>
+<h2 class="h-12 flex justify-center items-start text-lg font-bold text-blue-600 bg-blue-100">
+    {{data.title}}
+</h2>
+<mat-dialog-content class="text-center">
+    <h2 class="h-12 mx-2 flex justify-center items-center text-lg">
+        Select or create a tag for the note
+    </h2>
+    <form class="flex flex-col justify-center mt-2 -mb-6">
+        <mat-form-field appearance="outline" class="mx-2 mt-2">
+            <mat-label>Add a tag</mat-label>
+            <mat-chip-grid #chipGrid>
+                <mat-chip-row *ngFor="let tagChip of tagChips" (removed)="removeChip(tagChip)">
+                    {{ tagChip }}
+                    <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+            </mat-chip-grid>
+            <input 
+                placeholder="New Tag..." 
+                [formControl]="tagControl"
+                [matChipInputFor]="chipGrid" 
+                [matAutocomplete]="auto"
+                (matChipInputTokenEnd)="addChip($event)"
+                (focus)="onInputFocus()"/> <!--#tagInput-->
+            <mat-autocomplete 
+                #auto="matAutocomplete" 
+                [displayWith]="displayTagOption" 
+                (optionSelected)="onOptionSelectionChange($event)">
+                <mat-option *ngFor="let tagOption of filteredTagOptions | async" [value]="tagOption">
+                    {{ tagOption?.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </form>
+    <mat-dialog-actions align="center">
+        <button mat-raised-button mat-dialog-close (click)="onAdd()">Save Tags</button>
+    </mat-dialog-actions>
+    
+    <h2 class="h-12 mx-2 flex justify-center items-center text-lg ">
+        List of tags for the note
+    </h2>
+    <div class="min-h-52 p-4 border-2">
+        <div *ngFor="let tag of this.noteTags" class="grid grid-cols-3 mx-2 mt-3">
+            <div class="col-start-1 col-span-2 flex items-center ps-2 bg-blue-300">#{{ tag.name | titlecase }}</div>
+            <div class="flex justify-center items-center bg-green-100">
+                <button mat-icon-button onkeypress="" (click)="onDeleteTag(tag)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-raised-button mat-dialog-close (click)="onClose()">Close</button>
+</mat-dialog-actions>

@@ -1,18 +1,19 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { QuillEditorComponent, QuillModule } from 'ngx-quill';
-import { MatDialog } from '@angular/material/dialog';
-import { NoteService } from '../../../shared/services/note.service';
-import { Note } from '../../../shared/models/note';
-import { Subscription } from 'rxjs';
-import { EventService } from '../../../shared/services/event.service';
-import { ConfirmDialogComponent } from '../../../shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { QuillEditorComponent, QuillModule } from 'ngx-quill';
+import { ConfirmDialogComponent } from '../../../shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { TagDialogComponent } from '../../../shared/dialogs/tag-dialog/tag-dialog.component';
+import { EventService } from '../../../shared/services/event.service';
 import { PdfService } from '../../../shared/services/pdf.service';
 import { AccountService } from '../../../shared/services/account.service';
+import { NoteService } from '../../../shared/services/note.service';
 import { Account } from '../../../shared/models/account';
-import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layout';
+import { Note } from '../../../shared/models/note';
 
 
 @Component({
@@ -28,23 +29,23 @@ import { BreakpointObserver, Breakpoints, LayoutModule } from '@angular/cdk/layo
 
 
 export class EditorComponent {
-  private router             = inject(Router);
-  private noteService        = inject(NoteService);
-  private accountService     = inject(AccountService);
-  private eventService       = inject(EventService);
-  private pdfService         = inject(PdfService);
-  private breakpointObserver = inject(BreakpointObserver);
-  readonly dialog            = inject(MatDialog);
+  readonly router             = inject(Router);
+  readonly noteService        = inject(NoteService);
+  readonly accountService     = inject(AccountService);
+  readonly eventService       = inject(EventService);
+  readonly pdfService         = inject(PdfService);
+  readonly breakpointObserver = inject(BreakpointObserver);
+  readonly dialog             = inject(MatDialog);
   
   @ViewChild('quillEditor', { static: true }) quillEditor!: QuillEditorComponent;
 
-  private subscriptions: Subscription[] = [];
+  readonly subscriptions: Subscription[] = [];
   
   account!      : Account;
   isDevMode!    : boolean;
-  isEditable!   : boolean; // Is editor disabled by default
+  isEditable    : boolean     = true; // Is editor disabled by default
   noteSelected  : Note | null = null;
-  editorContent : string = '';
+  editorContent : string      = '';
 
 
   toolbarDesktopOptions = [
@@ -68,15 +69,16 @@ export class EditorComponent {
   ];
   
 
-  toolbarOptions = this.toolbarDesktopOptions; // default
+  toolbarOptions = this.toolbarDesktopOptions; // default toolbar
 
   
   ngOnInit(): void {
     console.log("editor.component");
 
-    // Select Quill toolbar based on screen width
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
       this.toolbarOptions = result.matches ? this.toolbarMobileOptions : this.toolbarDesktopOptions;
+      this.isEditable = !result.matches;
+      setTimeout(() => { this.eventService.emitIsEditable(this.isEditable) }, 200);
     });
 
     this.subscriptions.push(
@@ -95,6 +97,10 @@ export class EditorComponent {
       
       this.eventService.eventShareNote$.subscribe( () => {
         this.shareNote();
+      }),
+
+      this.eventService.eventOpenTagDialog$.subscribe( () => {
+        this.openTagDialog();
       }),
 
       this.eventService.eventClearEditor$.subscribe( () => {
@@ -127,7 +133,7 @@ export class EditorComponent {
       
     this.account    = this.accountService.getCurrentAccount();
     this.isDevMode  = this.account.isDevMode;
-    this.isEditable = this.account.isEditable;
+
   }
 
 
@@ -198,6 +204,25 @@ export class EditorComponent {
       dialogRef.afterClosed().subscribe((choice: boolean) => {
         if(choice) {
           this.deleteNote();
+        }
+      });
+    }
+  }
+
+
+  openTagDialog() {
+    if(this.noteSelected) {
+      const dialogRef = this.dialog.open(TagDialogComponent, {
+        autoFocus : false, // Prevents automatic focus on input field
+        maxWidth  : '80vw',
+        maxHeight : '80vh',
+        data      : { 
+          title: this.noteSelected.title,
+        },
+      });
+      dialogRef.afterClosed().subscribe((choice: boolean) => {
+        if(choice) {
+          
         }
       });
     }

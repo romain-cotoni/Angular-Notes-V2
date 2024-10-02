@@ -78,6 +78,11 @@ export class NoteService {
     return this.httpClient.get<Note[]>(`${BASE_URL}`);
   }
 
+
+  getNotesByTagId(tagId: number): Observable<Note[]> {
+    return this.httpClient.get<Note[]>(`${BASE_URL}/tag/${tagId}`);
+  }
+
   
   getNote(noteId: number): Observable<Note> {
     return this.httpClient.get<Note>(`${BASE_URL}/${noteId}`);

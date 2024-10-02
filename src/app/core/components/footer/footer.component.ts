@@ -18,7 +18,7 @@ export class FooterComponent {
   @Input() isDevMode : boolean | null = null;
   @Input() isToolTips: boolean = false;
   
-  private subscriptions: Subscription[] = [];
+  readonly subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
     this.subscriptions.push(
