@@ -95,6 +95,9 @@ export class TagDialogComponent {
 
 
   public onAdd() {
+    console.log("tagToCreate : ", this.tagToCreate)
+    console.log("tagToAdd    : ", this.tagToAdd)
+    console.log("tagChips    : ", this.tagChips)
     if (this.tagToCreate.length > 0) {
       const createTagObservables = this.tagToCreate.map(tagName => this.tagService.create(tagName));
 
@@ -110,6 +113,8 @@ export class TagDialogComponent {
 
           // Update note
           this.noteService.updateNote(this.noteSelected as Note);
+          this.tagToAdd    = [];
+          this.tagToCreate = [];
         },
         error: (error) => {
           console.log("Error - create tags", error);
@@ -124,7 +129,11 @@ export class TagDialogComponent {
 
       // Update note
       this.noteService.updateNote(this.noteSelected as Note);
-    }    
+      this.tagToAdd    = [];
+      this.tagToCreate = [];
+    }
+    this.tagChips    = [];
+    this.tagControl.setValue('');
   }
 
 
@@ -140,6 +149,7 @@ export class TagDialogComponent {
 
   public onOptionSelectionChange(event: MatAutocompleteSelectedEvent) {
     let tagSelected = event.option.viewValue;
+    console.log("tagSelected : ", tagSelected)
     if(this.tagChips.find(tagChip => tagChip === tagSelected)) { return }; // Check if tag selected is not already selected
     if(this.noteTags.find(tag => tag.name === tagSelected)) { return }; // Check if Tag is already associated with selected note
     let tag = this.tagList.find(tag => tag.name === tagSelected); // Get tag by tag name
@@ -201,10 +211,11 @@ export class TagDialogComponent {
   }
 
 
-  public onDeleteTag(tag: Tag) {
+  public onDeleteTag(tagToDelete: Tag) {
     // Find index of noteSelected.tags array where noteSelected.tags[index] equal tag
-    const index = this.noteSelected?.tags?.findIndex(el => el === tag);
-    if(index && index >= 0) {
+    const index: number = this.noteSelected?.tags?.findIndex(tag => tag.name.toLowerCase === tagToDelete.name.toLowerCase) ?? -1;
+    console.log("onDelete tagToDelete : ", index)
+    if(index > -1) {
       this.noteSelected?.tags?.splice(index, 1);
       this.noteService.updateNote(this.noteSelected as Note);
     }
