@@ -99,7 +99,38 @@ export class TagDialogComponent {
     console.log("tagToAdd    : ", this.tagToAdd)
     console.log("tagChips    : ", this.tagChips)
     if (this.tagToCreate.length > 0) {
-      const createTagObservables = this.tagToCreate.map(tagName => this.tagService.create(tagName));
+      this.tagToCreate.forEach(tagName => {
+        // Set new tag
+        let tag = {
+          'name' : tagName
+        }
+        // Add tag to create to tagToAdd list
+        this.tagToAdd.push(tag);
+      });  
+    }
+    if(this.tagToAdd.length > 0) {
+      // If no tags to create, proceed directly with updating the note
+      this.tagToAdd.forEach((tag) => {
+        this.noteSelected?.tags?.push(tag);
+      });
+
+      // Update note
+      this.noteService.updateNote(this.noteSelected as Note);
+      this.tagToAdd    = [];
+      this.tagToCreate = [];
+      console.log("noteSelected : ", this.noteSelected)
+    }
+    this.tagChips    = [];
+    this.tagControl.setValue('');
+  }
+
+  /*public onAdd() {
+    console.log("tagToCreate : ", this.tagToCreate)
+    console.log("tagToAdd    : ", this.tagToAdd)
+    console.log("tagChips    : ", this.tagChips)
+    if (this.tagToCreate.length > 0) {
+      const createTagObservables = this.tagToCreate.map(tagName =>
+          this.tagService.create(tagName));
 
       forkJoin(createTagObservables).subscribe({
         next: (createdTags) => {
@@ -115,6 +146,7 @@ export class TagDialogComponent {
           this.noteService.updateNote(this.noteSelected as Note);
           this.tagToAdd    = [];
           this.tagToCreate = [];
+          console.log("noteSelected : ", this.noteSelected)
         },
         error: (error) => {
           console.log("Error - create tags", error);
@@ -131,10 +163,11 @@ export class TagDialogComponent {
       this.noteService.updateNote(this.noteSelected as Note);
       this.tagToAdd    = [];
       this.tagToCreate = [];
+      console.log("noteSelected : ", this.noteSelected)
     }
     this.tagChips    = [];
     this.tagControl.setValue('');
-  }
+  }*/
 
 
   public onClose() {
@@ -149,15 +182,16 @@ export class TagDialogComponent {
 
   public onOptionSelectionChange(event: MatAutocompleteSelectedEvent) {
     let tagSelected = event.option.viewValue;
-    console.log("tagSelected : ", tagSelected)
-    if(this.tagChips.find(tagChip => tagChip === tagSelected)) { return }; // Check if tag selected is not already selected
-    if(this.noteTags.find(tag => tag.name === tagSelected)) { return }; // Check if Tag is already associated with selected note
-    let tag = this.tagList.find(tag => tag.name === tagSelected); // Get tag by tag name
+    // Check if tag selected is not already selected
+    if(this.tagChips.find(tagChip => tagChip.toLowerCase() === tagSelected.toLowerCase())) { return };
+    // Check if Tag is already associated with selected note
+    if(this.noteTags.find(tag => tag.name.toLowerCase() === tagSelected.toLowerCase())) { return };
+    // Get tag by tag name
+    let tag = this.tagList.find(tag => tag.name.toLowerCase() === tagSelected.toLowerCase());
     if(tag) { // If tag exist in list of all tags already saved in db
       this.tagChips.push(tagSelected); // Add to list of tag chips displayed in the input
       this.tagToAdd.push(tag); // Add to list of tag to associate to Note
-    } 
-    //this.tagInput.nativeElement.value = '';
+    }
     this.tagControl.setValue('');
     this.closeAutocompletePanel();
   }
@@ -165,14 +199,17 @@ export class TagDialogComponent {
 
   public addChip(event: MatChipInputEvent) {
     const tagNameTyped = (event.value).trim();
-    if(tagNameTyped === '') return;
-    if(this.tagChips.find(tagChip => tagChip === tagNameTyped)) return; // Check if tag typed in input is not already selected
-    let tag = this.tagList.find(tag => tag.name === tagNameTyped); // Check if Tag exist in list of tags already saved in db
+    if(tagNameTyped === '') { return };
+    // Check if tag typed in input is not already selected
+    if(this.tagChips.find(tagChip => tagChip.toLowerCase() === tagNameTyped.toLowerCase())) { return };
+    // Check if Tag exist in list of tags already saved in db
+    let tag = this.tagList.find(tag => tag.name.toLowerCase() === tagNameTyped.toLowerCase());
     if(tag) {
-      if(this.noteTags.find(tag => tag.name === tagNameTyped)) return; // Check if Tag is already associated with note selected
+      // Check if Tag is already associated with note selected
+      if(this.noteTags.find(tag => tag.name.toLowerCase() === tagNameTyped.toLowerCase())) return;
       this.tagToAdd.push(tag); // Add to list of tag to associate to Note
     } else {
-      this.tagToCreate.push(tagNameTyped); // Add to list of tag to create before associating to Note
+      this.tagToCreate.push(tagNameTyped.toLowerCase()); // Add to list of tag to create before associating to Note
     }
     this.tagChips.push(tagNameTyped); // Add to list of tag chips displayed in the input
     event.chipInput.clear();
@@ -213,10 +250,11 @@ export class TagDialogComponent {
 
   public onDeleteTag(tagToDelete: Tag) {
     // Find index of noteSelected.tags array where noteSelected.tags[index] equal tag
-    const index: number = this.noteSelected?.tags?.findIndex(tag => tag.name.toLowerCase === tagToDelete.name.toLowerCase) ?? -1;
+    const index: number = this.noteSelected?.tags?.findIndex(tag => tag.name.toLowerCase() === tagToDelete.name.toLowerCase()) ?? -1;
     console.log("onDelete tagToDelete : ", index)
     if(index > -1) {
       this.noteSelected?.tags?.splice(index, 1);
+      console.log("this.noteSelected?.tags : ", this.noteSelected?.tags)
       this.noteService.updateNote(this.noteSelected as Note);
     }
   }
@@ -233,7 +271,7 @@ export class TagDialogComponent {
   private getTagsFiltered(filterType: string) {
     this.filteredTagOptions = this.tagControl.valueChanges.pipe(
       distinctUntilChanged(),
-      filter(searchValue => searchValue != null && typeof searchValue === 'string'), //&& searchValue.trim() !== ''
+      filter(searchValue => searchValue != null && typeof searchValue === 'string'),
       switchMap(value => this.tagService.getTagsByFilter(value as string, filterType)),
     )  
   }

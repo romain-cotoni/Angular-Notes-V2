@@ -33,7 +33,7 @@
                 [displayWith]="displayTagOption" 
                 (optionSelected)="onOptionSelectionChange($event)">
                 <mat-option *ngFor="let tagOption of filteredTagOptions | async" [value]="tagOption">
-                    {{ tagOption?.name }}
+                    {{ tagOption?.name | titlecase }}
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>

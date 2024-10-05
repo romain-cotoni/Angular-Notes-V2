@@ -6,6 +6,7 @@ import { EventService } from './event.service';
 import { Observable } from 'rxjs';
 import { AccountNote } from '../models/account-note';
 import { StorageService } from './storage.service';
+import { TagService } from './tag.service';
 
 const BASE_URL = environment.apiUrl + '/notes';
 
@@ -19,10 +20,10 @@ const httpOptions = {
 
 export class NoteService {
 
-  private httpClient     = inject(HttpClient);
-  private eventService   = inject(EventService);
-  private storageService = inject(StorageService);
-
+  readonly httpClient     = inject(HttpClient);
+  readonly eventService   = inject(EventService);
+  readonly storageService = inject(StorageService);
+  readonly tagService     = inject(TagService);
 
   selectedNote!: Note | null; 
 

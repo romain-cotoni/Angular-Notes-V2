@@ -69,15 +69,12 @@ export class EditorComponent {
     [ 'link', 'image'                                 ], // links/images
     [ 'blockquote', 'code-block'                      ], 
   ];
-  
 
   toolbarOptions = this.toolbarDesktopOptions; // default toolbar
 
   
   ngOnInit(): void {
     console.log("editor.component");
-
-    
     
     this.subscriptions.push(
       
@@ -120,17 +117,13 @@ export class EditorComponent {
       this.eventService.eventIsEditable$.subscribe(isEditable => {
         this.isEditable = isEditable;
         this.changeDetector.detectChanges();
-        console.log("changeDetector")
       }),
-
-
     );
 
 
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
       this.toolbarOptions = result.matches ? this.toolbarMobileOptions : this.toolbarDesktopOptions;
       this.isEditable = !result.matches;
-      //setTimeout(() => { this.eventService.emitIsEditable(this.isEditable); }, 200);
     });
 
 
@@ -154,6 +147,7 @@ export class EditorComponent {
   private getSelectedNote(noteId: number) {
     this.noteService.getNote(noteId).subscribe({
       next: (note) => {
+        console.log("selectednote : ", note);
         this.noteSelected = note;
         this.noteService.setSelectedNote(note);
         this.loadNoteIntoEditor(note);
