@@ -38,7 +38,7 @@ export class EditorComponent {
   readonly breakpointObserver = inject(BreakpointObserver);
   readonly dialog             = inject(MatDialog);
   readonly changeDetector     = inject(ChangeDetectorRef);  
-  
+   
   @ViewChild('quillEditor', { static: true }) quillEditor!: QuillEditorComponent;
 
   readonly subscriptions: Subscription[] = [];
@@ -71,7 +71,7 @@ export class EditorComponent {
   ];
 
   toolbarOptions = this.toolbarDesktopOptions; // default toolbar
-
+  
   
   ngOnInit(): void {
     console.log("editor.component");

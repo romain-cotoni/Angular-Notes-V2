@@ -44,64 +44,35 @@ input {
   user-select:text;
 }
 
+
 // QUILL EDITOR OVERRIDE CSS
 quill-editor {
-  height: 100%;
+  height: calc(100% - 3rem);
 }
 
-quill-editor .ql-toolbar {
+
+quill-editor .ql-toolbar.ql-snow {
+  height: 3rem;
   border: none;
 }
 
+
+quill-editor .ql-container {
+  height: calc(100% - 3rem);
+}
+
+
+quill-editor .ql-container.ql-snow {
+  height: 100%;
+  border: none;
+}
+
+
 quill-editor .ql-editor {
-  height    : calc(100% - 2.9rem);
-  overflow  : auto;
-  font-size : 18px;
-  color     : black;
-}
-
-
-// QUILL-EDITOR TABLET & MOBILE TOOLBAR AND EDITOR BREAKPOINTS FOR DYNAMIC HEIGHT RELATIVE TO SCREEN WIDTH
-@media all and (min-width: 901px) {
-  quill-editor .ql-toolbar.ql-snow {
-    min-height : 3rem;
-    max-height : 3rem;
-    display    : flex;
-    align-items: center;
-  }
-}  
-
-@media all and (max-width: 900px) {
-  quill-editor .ql-toolbar.ql-snow {
-    min-height: 3rem;
-    max-height: 3rem;
-  }
-  
-  quill-editor .ql-editor {
-    height: calc(100% - 3rem);
-  }
-}
-
-@media all and (max-width: 470px) {
-  quill-editor .ql-toolbar.ql-snow {
-    min-height: 3rem;//6rem;
-    max-height: 3rem;//6rem;
-  }
-
-  quill-editor .ql-editor{
-    height: calc(100% - 3rem);
-  }
-}
-
-@media all and (max-width: 343px) {
-  quill-editor .ql-toolbar.ql-snow {
-    min-height: 3rem;//8rem;
-    max-height: 3rem;//8rem;
-  }
-  
-  quill-editor .ql-editor {
-    height: calc(100% - 3rem);
-  }
+  height   : 100%;
+  overflow : auto;
+  font-size: 18px;
+  color    : black;
 }
 
 
@@ -158,13 +129,6 @@ button {
   background-position : center;
   border              : none;
 }
-
-/*.custom-editor-bg-color .ql-editor {
-  background-image    : url('../public/images/background-image-editor.webp');
-  background-size     : cover; 
-  background-repeat   : repeat-x;
-  background-position : center;
-}*/
 
 .custom-bg-footer {
   background-image    : url('../public/images/background-image-header-footer.webp');

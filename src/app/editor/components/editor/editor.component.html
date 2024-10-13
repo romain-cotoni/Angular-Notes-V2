@@ -1,8 +1,10 @@
 <quill-editor 
     #quillEditor 
-    class="w-full custom-quill-editor" 
-    [ngClass]="{ 'custom-editor-bg': isDevMode }" 
-    [readOnly]="!isEditable"
+    class="custom-editor-bg custom-quill-editor w-full" 
+    [readOnly]="!isEditable" 
     [(ngModel)]="editorContent" 
     [modules]="{ toolbar: toolbarOptions }">
 </quill-editor>
+
+
+
