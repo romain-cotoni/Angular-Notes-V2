@@ -71,7 +71,7 @@ export class EditorComponent {
   ];
 
   toolbarOptions = this.toolbarDesktopOptions; // default toolbar
-  
+
   
   ngOnInit(): void {
     console.log("editor.component");

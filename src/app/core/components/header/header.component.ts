@@ -1,4 +1,4 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, Input, ViewChild } from '@angular/core';
 import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -59,19 +59,19 @@ export class HeaderComponent {
   noteControl  = new FormControl('');
   titleControl = new FormControl('');
   tagsControl  = new FormControl('');
-  filteredNotesOptions: Observable<Note[]> = of([]);
+
+  filteredNotesOptions : Observable<Note[]> = of([]);
 
   isEditable  : boolean = true;
   isWritable  : boolean = true;
   isDeletable : boolean = false;
   isSharable  : boolean = false;
-  //isTagable   : boolean = false; 
   isAscending : boolean = true;
   hasNotifs   : boolean = false;
   searchType  : string  = "title";
 
-  noteSelected          : Note | null = null;
-  username?             : string      = "username";
+  noteSelected : Note | null = null;
+  username?    : string      = "username";
   
   private accountId?        : number;
   private accountNoteRight! : Right;
@@ -83,7 +83,6 @@ export class HeaderComponent {
 
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
       this.isEditable = !result.matches;
-      //setTimeout(() => { this.eventService.emitIsEditable(this.isEditable);}, 200);
     });
     
     this.getNotesList();
@@ -99,10 +98,7 @@ export class HeaderComponent {
       }),
       this.eventService.eventClearEditor$.subscribe( () => {
         this.clearEditor();
-      }),
-      /*this.eventService.eventIsEditable$.subscribe(isEditable => {
-        this.isEditable = isEditable;
-      })*/
+      })
     )
 
     // Get the last update of Note Selected
@@ -121,6 +117,59 @@ export class HeaderComponent {
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.ctrlKey) {
+      if (event.shiftKey) {
+        switch (event.key.toLowerCase()) {
+          case 'd' : {
+            event.preventDefault();
+            this.onDeleteNote();
+            return;
+          }
+          case 's' : {
+            event.preventDefault();
+            this.onShareNote();
+            return;
+          }
+          case 'p' : {
+            event.preventDefault();
+            this.onDownloadPdf();
+            return;
+          }
+        }
+      } else if (event.altKey && event.key.toLowerCase()) {
+          event.preventDefault();
+          this.onOpenTagDialog();
+          return;
+      } else {
+        switch (event.key.toLowerCase()) {
+          case 'c' : {
+            event.preventDefault();
+            this.onClear();
+            return;
+          }
+          case 's' : {
+            event.preventDefault();
+            this.onSaveNote();
+            return;
+          }
+          case 'e' : {
+            event.preventDefault();
+            this.onEditor();
+            return;
+          }
+          case 'p' : {
+            event.preventDefault();
+            this.onProfil();
+            return;
+          }
+        }
+      }
+    }
   }
 
 
@@ -185,7 +234,6 @@ export class HeaderComponent {
         this.accountNoteRight = this.getAccountNoteRight(note);
         this.isWritable  = this.accountNoteRight === Right.OWNER || this.accountNoteRight === Right.WRITE;
         this.isDeletable = true;
-        //this.isTagable   = true;
         this.isSharable  = this.accountNoteRight === Right.OWNER || this.accountNoteRight === Right.SHARE;
 
         // map tags name by Note id
@@ -241,7 +289,6 @@ export class HeaderComponent {
     this.isWritable  = true;
     this.isDeletable = false;
     this.isSharable  = false;
-    //this.isTagable   = false;
     this.noteSelected = null;
     this.titleControl.setValue(null);
     this.tagsControl.setValue(null);
@@ -295,9 +342,24 @@ export class HeaderComponent {
     this.router.navigate(['/editor']);
   }
 
-
+  
   onMoveCursorToEditor() {
     this.eventService.emitFocusEditorEvent();
+  }
+  
+  
+  private onProfil() {
+    this.router.navigate(['/profil']);
+  }
+
+
+  private onArrowUp() {
+    this.onOpenTagDialog();    
+  }
+
+
+  private onArrowDown() {
+    this.onOpenTagDialog();
   }
 
 
