@@ -1,7 +1,7 @@
 <div class="flex justify-end items-center custom-bg-footer">
   <div *ngIf="message.length>0" 
-       class="mx-auto w-1/6 text-center text-white font-medium" 
-       [ngClass]="{ 'bg-red-400': isError, 'bg-green-400': !isError }">
+       class="mx-auto w-1/6 text-center font-medium" 
+       [ngClass]="isError ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'">
        {{ message }}
    </div>
   <a href={{LINKEDIN_URL}} target=”_blank”>
