@@ -151,6 +151,7 @@ export class ProfilComponent {
         this.account = this.accountService.getCurrentAccount();
         this.form = this.buildForm();
         this.isEdit = false;
+        this.eventService.emitMessageEvent("Profil updated", false);
       },
       error: (error: HttpErrorResponse) => { 
         console.log("Error - Profil edit Account: ", error);

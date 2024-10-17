@@ -1,5 +1,4 @@
 <div class="flex max-s:flex-col custom-bg-header">
-
     <div class="h-12 flex items-center">
 
         <!--MOBILE-->
@@ -16,7 +15,7 @@
                         (click)="onDeleteNote()" 
                         [disabled]="!isDeletable" 
                         [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Delete note">
+                        matTooltip="Delete note. ctrl + shift + d">
                         <mat-icon class="-mt-1">delete</mat-icon>
                         <span>Delete</span>
                     </button>
@@ -24,7 +23,7 @@
                         mat-menu-item 
                         (click)="onClear()" 
                         [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Clear note">
+                        matTooltip="Clear note. ctrl + c">
                         <mat-icon class="-mt-1">clear_all</mat-icon>
                         <span>Clear</span>
                     </button>
@@ -33,7 +32,7 @@
                         (click)="onSaveNote()" 
                         [disabled]="!isWritable" 
                         [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Save note">
+                        matTooltip="Save note. ctrl + s">
                         <mat-icon class="-mt-1">save</mat-icon>
                         <span>Save</span>
                     </button>
@@ -42,7 +41,7 @@
                         (click)="onShareNote()" 
                         [disabled]="!isSharable" 
                         [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Share note">
+                        matTooltip="Share note. ctrl + shift + s">
                         <mat-icon class="-mt-1">share</mat-icon>
                         <span>Share</span>
                     </button>
@@ -51,7 +50,7 @@
                         (click)="onDownloadPdf()" 
                         [disabled]="!isWritable" 
                         [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Download as pdf">
+                        matTooltip="Download as pdf. ctrl + shift + p">
                         <mat-icon class="-mt-1">picture_as_pdf</mat-icon>
                         <span>Pdf</span>
                     </button>
@@ -60,7 +59,7 @@
                         (click)="onOpenTagDialog()" 
                         [disabled]="!isWritable" 
                         [matTooltipDisabled]="!isToolTips" 
-                        matTooltip="Edit note's tags">
+                        matTooltip="Edit note's tags. ctrl + alt + t">
                         <mat-icon class="-mt-1">label</mat-icon>
                         <span>Tags</span>
                     </button>
@@ -75,14 +74,14 @@
                 (click)="onDeleteNote()" 
                 [disabled]="!isDeletable" 
                 [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Delete note">
+                matTooltip="Delete note. ctrl + shift + d">
                 <mat-icon>delete</mat-icon>
             </button>
             <button 
                 mat-icon-button 
                 (click)="onClear()" 
                 [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Clear note">
+                matTooltip="Clear note. ctrl + c">
                 <mat-icon>clear_all</mat-icon>
             </button>
             <button 
@@ -90,7 +89,7 @@
                 (click)="onSaveNote()" 
                 [disabled]="!isWritable" 
                 [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Save note">
+                matTooltip="Save note. ctrl + s">
                 <mat-icon>save</mat-icon>
             </button>
             <button 
@@ -98,14 +97,14 @@
                 (click)="onShareNote()" 
                 [disabled]="!isSharable" 
                 [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Share note">
+                matTooltip="Share note. ctrl + shift + s">
                 <mat-icon>share</mat-icon>
             </button>
             <button 
                 mat-icon-button 
                 (click)="onDownloadPdf()" 
                 [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Download as pdf">
+                matTooltip="Download as pdf. ctrl + shift + p">
                 <mat-icon>picture_as_pdf</mat-icon>
             </button>
             <button 
@@ -113,7 +112,7 @@
                 (click)="onOpenTagDialog()" 
                 [disabled]="!isWritable" 
                 [matTooltipDisabled]="!isToolTips" 
-                matTooltip="Edit note's tags">
+                matTooltip="Edit note's tags. ctrl + alt + t">
                 <mat-icon>label</mat-icon>
             </button>
         </div>

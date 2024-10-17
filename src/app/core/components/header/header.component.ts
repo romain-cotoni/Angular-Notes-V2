@@ -72,6 +72,8 @@ export class HeaderComponent {
 
   noteSelected : Note | null = null;
   username?    : string      = "username";
+
+  message : string = "hello";
   
   private accountId?        : number;
   private accountNoteRight! : Right;
@@ -98,7 +100,7 @@ export class HeaderComponent {
       }),
       this.eventService.eventClearEditor$.subscribe( () => {
         this.clearEditor();
-      })
+      }),
     )
 
     // Get the last update of Note Selected
@@ -141,7 +143,7 @@ export class HeaderComponent {
             return;
           }
         }
-      } else if (event.altKey && event.key.toLowerCase()) {
+      } else if (event.altKey && event.key.toLowerCase() === 't') {
           event.preventDefault();
           this.onOpenTagDialog();
           return;

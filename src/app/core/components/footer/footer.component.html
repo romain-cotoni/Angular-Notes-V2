@@ -1,8 +1,10 @@
 <div class="flex justify-end items-center custom-bg-footer">
-    <!-- <a href={{GITHUB_URL}} target=”_blank”>
-       <img src={{GITHUB_ICON}} alt="github icon" class="w-5 py-1 me-1"/>
-    </a> -->
-    <a href={{LINKEDIN_URL}} target=”_blank”>
-       <img src={{LINKEDIN_ICON}} alt="linkedin icon" class="w-5 py-1 me-1"/>
-    </a>
+  <div *ngIf="message.length>0" 
+       class="mx-auto w-1/6 text-center text-white font-medium" 
+       [ngClass]="{ 'bg-red-400': isError, 'bg-green-400': !isError }">
+       {{ message }}
+   </div>
+  <a href={{LINKEDIN_URL}} target=”_blank”>
+     <img src={{LINKEDIN_ICON}} alt="linkedin icon" class="w-5 py-1 me-1"/>
+   </a>
 </div>

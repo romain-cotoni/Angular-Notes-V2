@@ -143,7 +143,7 @@ export class EditorComponent {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-
+  
   private getSelectedNote(noteId: number) {
     this.noteService.getNote(noteId).subscribe({
       next: (note) => {

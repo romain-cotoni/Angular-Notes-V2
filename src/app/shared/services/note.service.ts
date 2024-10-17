@@ -44,6 +44,7 @@ export class NoteService {
       next: (noteUpdated) => {
         this.eventService.emitUpdateNoteSelected(noteUpdated); // Update selected note to display
         this.eventService.emitUpdateNotesList();               // Get updated list of notes
+        this.eventService.emitMessageEvent("Note updated", false);
       },
       error: (error) => { console.log("Error: NoteService - update(): ", error); }
     });  
@@ -55,6 +56,7 @@ export class NoteService {
       next: (noteCreated) => {       
         this.eventService.emitUpdateNoteSelected(noteCreated); // Update selected note to display
         this.eventService.emitUpdateNotesList();               // Get updated list of notes
+        this.eventService.emitMessageEvent("Note created", false);
       },
       error: (error) => { console.log("Error: NoteService - create(): ", error); },
     })
@@ -66,6 +68,7 @@ export class NoteService {
       next: () => { 
           this.eventService.emitUpdateNoteSelected(null); // Update selected note to empty
           this.eventService.emitUpdateNotesList();        // Get updated list of notes
+          this.eventService.emitMessageEvent("Note deleted", false);
       },
       error: (error) => { console.log("Error: NoteService - delete()", error) }
     });

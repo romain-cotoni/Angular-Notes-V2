@@ -18,6 +18,7 @@ export class EventService {
   readonly eventOpenTagDialogSubject = new Subject<boolean>();
   readonly eventDownloadPdfSubject   = new Subject<boolean>();
   readonly eventFocusEditorSubject   = new Subject<boolean>();
+  readonly eventMessageSubject       = new Subject<[string, boolean]>();
   readonly eventIsDevModeSubject     = new BehaviorSubject<boolean>(false);
   readonly eventIsToolTipsSubject    = new BehaviorSubject<boolean>(false);
   readonly eventIsEditableSubject    = new BehaviorSubject<boolean>(true);
@@ -35,7 +36,7 @@ export class EventService {
   eventIsDevMode$     = this.eventIsDevModeSubject.asObservable();
   eventIsToolTips$    = this.eventIsToolTipsSubject.asObservable();
   eventIsEditable$    = this.eventIsEditableSubject.asObservable();
-  
+  eventMessage$       = this.eventMessageSubject.asObservable();
 
   emitUpdateNoteSelected(note: Note | null) {
     this.noteSelectedSubject.next(note);
@@ -97,5 +98,9 @@ export class EventService {
   }
   
   
+  emitMessageEvent(msg: string, isError: boolean) {
+    this.eventMessageSubject.next([msg, isError]);
+  }
+
 
 }

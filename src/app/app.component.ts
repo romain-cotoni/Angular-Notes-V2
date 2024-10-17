@@ -42,15 +42,14 @@ export class AppComponent {
       this.eventService.eventIsDevMode$.subscribe(isDevMode => {
         this.isDevMode = isDevMode;
       }),
-
       this.eventService.eventIsToolTips$.subscribe(isToolTips => {
         this.isToolTips = isToolTips;
       }),
     )
 
-    this.account = this.accountService.getCurrentAccount();
-      this.isDevMode  = this.account?.isDevMode ;
-      this.isToolTips = this.account?.isToolTips;
+    this.account    = this.accountService.getCurrentAccount();
+    this.isDevMode  = this.account?.isDevMode ;
+    this.isToolTips = this.account?.isToolTips;
     
 
   }
@@ -70,5 +69,6 @@ export class AppComponent {
   isEditor() {
     return this.router.url === "/editor";
   }
+
   
 }
