@@ -10,6 +10,7 @@
 
   <div class="flex items-center">
     <button mat-icon-button
+      *ngIf="isEditor()"
       class="custom-small-icon-btn"
       (click)="onArrowUp()"
       [matTooltipDisabled]="!isToolTips"
@@ -18,6 +19,7 @@
     </button>
 
     <button mat-icon-button
+      *ngIf="isEditor()"
       class="custom-small-icon-btn" 
       (click)="onArrowDown()" 
       [matTooltipDisabled]="!isToolTips"

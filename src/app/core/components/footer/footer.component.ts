@@ -5,6 +5,7 @@ import { EventService } from '../../../shared/services/event.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -26,6 +27,7 @@ export class FooterComponent {
   @Input() isDevMode : boolean | null = null;
   @Input() isToolTips: boolean = false;
   
+  readonly router       = inject(Router);
   readonly eventService = inject(EventService);
   readonly subscriptions: Subscription[] = [];
 
@@ -46,6 +48,11 @@ export class FooterComponent {
   }
 
 
+  isEditor() {
+    return this.router.url === "/editor";
+  }
+
+
   displayMessage(msg: [string, boolean]) {
     this.message = msg[0];
     this.isError = msg[1];
@@ -57,10 +64,12 @@ export class FooterComponent {
     
   }
 
+
   onArrowUp() {
     this.eventService.emitPreviousTitleEvent();
   }
 
+  
   onArrowDown() {
     this.eventService.emitNextTitleEvent();
   }
