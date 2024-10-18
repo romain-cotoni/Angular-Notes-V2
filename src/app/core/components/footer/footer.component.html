@@ -1,10 +1,32 @@
-<div class="flex justify-end items-center custom-bg-footer">
-  <div *ngIf="message.length>0" 
-       class="mx-auto w-1/6 text-center font-medium" 
-       [ngClass]="isError ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'">
-       {{ message }}
-   </div>
-  <a href={{LINKEDIN_URL}} target=”_blank”>
-     <img src={{LINKEDIN_ICON}} alt="linkedin icon" class="w-5 py-1 me-1"/>
-   </a>
+<div class="relative flex justify-end items-center custom-bg-footer">
+
+  <div class="absolute inset-x-0 flex justify-center items-center h-full">
+    <div *ngIf="message.length>0"
+      class="w-1/6 text-center font-medium" 
+      [ngClass]="isError ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'">
+      {{ message }}
+    </div>
+  </div>
+
+  <div class="flex items-center">
+    <button mat-icon-button
+      class="custom-small-icon-btn"
+      (click)="onArrowUp()"
+      [matTooltipDisabled]="!isToolTips"
+      matTooltip="Move to previous title. ctrl + arrow_up">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+
+    <button mat-icon-button
+      class="custom-small-icon-btn" 
+      (click)="onArrowDown()" 
+      [matTooltipDisabled]="!isToolTips"
+      matTooltip="Move to next title. ctrl + arrow_down">
+      <mat-icon>arrow_downward</mat-icon>
+    </button>
+    
+    <a href={{LINKEDIN_URL}} target=”_blank”>
+      <img src={{LINKEDIN_ICON}} alt="linkedin icon" class="w-5 py-1 ms-4 me-1"/>
+    </a>
+  </div>
 </div>

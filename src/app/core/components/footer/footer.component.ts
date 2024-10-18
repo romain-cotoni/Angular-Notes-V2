@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { EventService } from '../../../shared/services/event.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-footer',
@@ -11,7 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [NgIf, 
             NgClass,
             MatButtonModule,
-            MatIconModule],
+            MatIconModule,
+            MatTooltipModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'
 })
@@ -53,6 +55,14 @@ export class FooterComponent {
       clearInterval(timer);
     }, 5000);
     
+  }
+
+  onArrowUp() {
+    this.eventService.emitPreviousTitleEvent();
+  }
+
+  onArrowDown() {
+    this.eventService.emitNextTitleEvent();
   }
 
 

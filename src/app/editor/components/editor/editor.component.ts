@@ -54,7 +54,7 @@ export class EditorComponent {
     [ 'bold', 'italic', 'underline'                   ], // toggled buttons
     [ 'link', 'image'                                 ], // links/images
     [ 'blockquote', 'code-block'                      ], 
-    [ { 'header': 1 }, { 'header': 2 }                ], // custom button values
+    [ { 'header': 1 },{ 'header': 2 },{ 'header': 3 } ], // custom button values
     [ { 'header': [1, 2, 3, 4, 5, 6, false] }         ],
     [ { 'list'  : 'ordered' }, { 'list': 'bullet' }   ],
     [ { 'script': 'sub' }, { 'script': 'super' }      ], // superscript/subscript
@@ -110,6 +110,14 @@ export class EditorComponent {
         this.focusEditor();
       }),
 
+      this.eventService.eventPreviousTitle$.subscribe( () => {
+        this.moveToPreviousHeading();
+      }),
+
+      this.eventService.eventNextTitle$.subscribe( () => {
+        this.moveToNextHeading();
+      }),
+
       this.eventService.eventIsDevMode$.subscribe(isDevMode => {
         this.isDevMode = isDevMode;
       }),
@@ -143,7 +151,7 @@ export class EditorComponent {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  
+
   private getSelectedNote(noteId: number) {
     this.noteService.getNote(noteId).subscribe({
       next: (note) => {
@@ -256,6 +264,84 @@ export class EditorComponent {
     const quill = this.quillEditor.quillEditor; // Access Quill editor instance
     if (quill) {
       quill.focus(); // Use Quill's focus() method
+    }
+  }
+
+
+  moveToPreviousHeading(): void {
+    const headings: Element[] = Array.from(document.querySelectorAll('h1, h2, h3'));
+    
+    if (headings.length === 0) return;
+    
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      this.moveToHeading(headings[headings.length - 1]);
+      return;
+    }
+    
+    const currentNode = selection.getRangeAt(0).startContainer;
+    
+    let previousHeading: Element | null = null;
+    for (let i = headings.length - 1; i >= 0; i--) {
+      if (headings[i].compareDocumentPosition(currentNode) & Node.DOCUMENT_POSITION_FOLLOWING) {
+        previousHeading = headings[i];
+        break;
+      }
+    }
+    
+    if (previousHeading) {
+      this.moveToHeading(previousHeading);
+    } else {
+      this.moveToHeading(headings[headings.length - 1]);
+    }
+  }
+
+
+  moveToNextHeading(): void {
+    // Get all h1, h2 and h3 elements
+    const headings: Element[] = Array.from(document.querySelectorAll('h1, h2, h3'));
+    
+    // No headings found in the document
+    if (headings.length === 0) {
+      return;
+    }
+
+    // Get the current cursor position
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    
+    const currentNode = selection.getRangeAt(0).startContainer;
+    
+    // Find the next heading after the current position
+    let nextHeading: Element | null = null;
+    for (const heading of headings) {
+      if (heading.compareDocumentPosition(currentNode) & Node.DOCUMENT_POSITION_PRECEDING) {
+        nextHeading = heading;
+        break;
+      }
+    }
+    
+    // If a next heading is found, move the cursor to it
+    if (nextHeading) {
+      this.moveToHeading(nextHeading);
+    } else {
+      this.moveToHeading(headings[0]);
+    }
+  }
+
+
+  private moveToHeading(heading: Element): void {
+    const range = document.createRange();
+    range.setStart(heading, 0);
+    range.collapse(true);
+      
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+      
+      // Scroll the heading into view
+      heading.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
   

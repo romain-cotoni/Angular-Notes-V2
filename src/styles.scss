@@ -76,10 +76,36 @@ quill-editor .ql-editor {
 }
 
 
-//ANGULAR MATERIAL COMPONENTS
+//ANGULAR MATERIAL COMPONENTS OVERRIDE
 button {
   font-size: 1rem;
   font-weight: 700;
+}
+
+//SMALL MAT ICON BTN
+.custom-small-icon-btn {
+  display         : inline-flex !important;
+  align-items     : center !important;
+  justify-content : center !important;
+  width           : 24px !important;
+  height          : 24px !important;
+  margin          : 0 !important;
+  padding         : 0 !important;
+}
+
+.custom-small-icon-btn .mat-icon {
+  display        : inline-flex !important;
+  align-items    : center !important;
+  justify-content: center !important;
+  width          : 100% !important;
+  height         : 100% !important;
+  font-size      : 16px !important;
+  line-height    : 16px !important;
+}
+
+.custom-small-icon-btn .mat-mdc-button-touch-target {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 //MAT-LABEL -> TAILWIND BUG FIX
