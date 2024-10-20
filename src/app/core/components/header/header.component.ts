@@ -143,11 +143,36 @@ export class HeaderComponent {
             return;
           }
         }
-      } else if (event.altKey && event.key.toLowerCase() === 't') {
+      } 
+      else if (event.altKey) {
+        switch (event.key) {
+          case 't' :
+          case 'T' : {
+            event.preventDefault();
+            this.onOpenTagDialog();
+            return;
+          }
+          case 'ArrowUp' : {
+            event.preventDefault();
+            this.eventService.emitPreviousTitleEvent();
+            return;
+          }
+          case 'ArrowDown' : {
+            event.preventDefault();
+            this.eventService.emitNextTitleEvent();
+            return;
+          }
+        }
+      }
+      /*else if (event.altKey && event.key.toLowerCase() === 't') {
           event.preventDefault();
           this.onOpenTagDialog();
           return;
-      } else {
+      } else if(event.altKey && event.key === 'ArrowDown') {
+        event.preventDefault();
+        this.eventService.emitNextTitleEvent();
+        return;
+      }*/ else {
         switch (event.key.toLowerCase()) {
           case 'c' : {
             event.preventDefault();
@@ -168,7 +193,7 @@ export class HeaderComponent {
             event.preventDefault();
             this.onProfil();
             return;
-          }
+          }          
         }
       }
     }

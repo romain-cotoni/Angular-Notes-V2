@@ -44,7 +44,7 @@ export class LoginComponent {
     console.log("login.component");
     
     this.form = this.formBuilder.group({
-      'usernameControl': ['rom1', [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
+      'usernameControl': [''    , [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
       'passwordControl': ['ssap', [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]],
       'roleControl'    : ['USER', [Validators.required, Validators.pattern("^(GUEST|USER|ADMIN)$")]],   
     })
