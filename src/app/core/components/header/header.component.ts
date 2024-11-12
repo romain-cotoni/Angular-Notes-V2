@@ -127,6 +127,11 @@ export class HeaderComponent {
     if (event.ctrlKey) {
       if (event.shiftKey) {
         switch (event.key.toLowerCase()) {
+          case 'c' : {
+            event.preventDefault();
+            this.onClear();
+            return;
+          }
           case 'd' : {
             event.preventDefault();
             this.onDeleteNote();
@@ -143,8 +148,7 @@ export class HeaderComponent {
             return;
           }
         }
-      } 
-      else if (event.altKey) {
+      } else if (event.altKey) {
         switch (event.key) {
           case 't' :
           case 'T' : {
@@ -163,22 +167,8 @@ export class HeaderComponent {
             return;
           }
         }
-      }
-      /*else if (event.altKey && event.key.toLowerCase() === 't') {
-          event.preventDefault();
-          this.onOpenTagDialog();
-          return;
-      } else if(event.altKey && event.key === 'ArrowDown') {
-        event.preventDefault();
-        this.eventService.emitNextTitleEvent();
-        return;
-      }*/ else {
+      } else {
         switch (event.key.toLowerCase()) {
-          case 'c' : {
-            event.preventDefault();
-            this.onClear();
-            return;
-          }
           case 's' : {
             event.preventDefault();
             this.onSaveNote();
