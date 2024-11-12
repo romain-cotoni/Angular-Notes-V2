@@ -42,12 +42,12 @@ export class RegisterComponent {
   ngOnInit() {
     console.log("register.component")
     this.form = this.formBuilder.group({ 
-      'firstnameControl': ['john'        , [Validators.required, Validators.pattern("^[a-zéèêàçA-Z' ]{1,}$")]],
-      'lastnameControl' : ['doe'         , [Validators.required, Validators.pattern("^[a-zéèêàçA-Z' ]{1,}$")]],
-      'usernameControl' : ['jdoe'        , [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
-      'emailControl'    : ['jdoe@mail.fr', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")]],
-      'passwordControl' : ['ssap'        , [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]],
-      'password2Control': ['ssap'        , [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]]
+      'firstnameControl': ['', [Validators.required, Validators.pattern("^[a-zéèêàçA-Z' ]{1,}$")]],
+      'lastnameControl' : ['', [Validators.required, Validators.pattern("^[a-zéèêàçA-Z' ]{1,}$")]],
+      'usernameControl' : ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
+      'emailControl'    : ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")]],
+      'passwordControl' : ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]],
+      'password2Control': ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9_?!=.*+-]{4,}$")]]
     })
   }
 

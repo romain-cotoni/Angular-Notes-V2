@@ -36,8 +36,8 @@ export class LostPwdComponent {
     console.log("login.component");
     
     this.form = this.formBuilder.group({
-      'usernameControl': ['rom1', [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
-      'emailControl'   : ['romain.cotoni.2@gmail.com', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")]],
+      'usernameControl': ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9_]{3,}$")]],
+      'emailControl'   : ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")]],
     })
   }
 
